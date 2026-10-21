@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Slot classica</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#000;overflow:hidden}
+body{display:flex;justify-content:center;color:#f3e9d2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;cursor:pointer}
+.app{--cell:min(12.2vh,25vw,118px);height:100vh;height:100dvh;width:100%;max-width:480px;overflow:hidden;display:flex;flex-direction:column;gap:1.25vh;padding:max(1.2vh,env(safe-area-inset-top)) 3.5vw max(.8vh,env(safe-area-inset-bottom))}
+@supports (height:1dvh){.app{--cell:min(12.2dvh,25vw,118px);gap:1.25dvh}}
+
+/* Insegna */
+.marquee{flex:none;background:radial-gradient(ellipse at 50% 40%,#6a1010,#2a0404 75%);border:3px solid #d4a017;border-radius:14px;padding:.7vh 8px;box-shadow:0 0 14px rgba(212,160,23,.35),inset 0 0 12px rgba(0,0,0,.7)}
+.bulbs{display:flex;justify-content:space-between;padding:0 4px}
+.bulbs i{width:clamp(6px,1vh,9px);height:clamp(6px,1vh,9px);border-radius:50%;background:#ffd76a;box-shadow:0 0 6px #ffcf4d;animation:blink 1.2s steps(1) infinite}
+.bulbs i:nth-child(even){animation-delay:.6s}
+.app.festa .bulbs i{animation-duration:.32s}
+.app.festa .bulbs i:nth-child(even){animation-delay:.16s}
+@keyframes blink{0%{opacity:1}50%{opacity:.22}}
+h1{margin:.35vh 0;white-space:nowrap;text-align:center;font:900 clamp(20px,min(4.4vh,7.4vw),40px)/1.05 Impact,"Arial Black",system-ui,sans-serif;letter-spacing:.08em;background:linear-gradient(#fff8d0,#f7c948 48%,#b07d0a 52%,#f2c443);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #3a0000) drop-shadow(0 0 6px rgba(255,190,60,.45))}
+
+/* Display */
+.led{flex:none;display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:2vw}
+.led div{background:#0d0202;border:2px solid #4a3a12;border-radius:10px;padding:.5vh 6px .6vh;text-align:center;box-shadow:inset 0 0 10px #000}
+.led small{display:block;font-size:clamp(10px,1.45vh,13px);letter-spacing:.12em;color:#d4a017;font-weight:700}
+.led b{display:block;font:700 clamp(20px,3.5vh,32px)/1.1 "Courier New",ui-monospace,monospace;color:#ff6a3d;text-shadow:0 0 6px rgba(255,90,40,.75);font-variant-numeric:tabular-nums;white-space:nowrap}
+.led b.verde{color:#7dff7a;text-shadow:0 0 6px rgba(80,255,80,.7)}
+
+/* Mobile con i rulli */
+.cabinet{flex:none;position:relative;padding:1.1vh 3vw;border-radius:16px;background:linear-gradient(180deg,#e9e9e9,#8d8d8d 18%,#cfcfcf 50%,#7b7b7b 82%,#d8d8d8);border:3px solid #d4a017;box-shadow:0 0 16px rgba(212,160,23,.3)}
+.reels{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:2vw;background:#1a1a1a;border-radius:10px;padding:5px;box-shadow:inset 0 0 10px #000}
+.reel{position:relative;height:calc(var(--cell)*3);overflow:hidden;border-radius:6px;background:linear-gradient(180deg,#a8a294,#fffdf4 22%,#fffdf4 78%,#a8a294)}
+.reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,0) 26%,rgba(0,0,0,0) 74%,rgba(0,0,0,.45))}
+.strip{will-change:transform}
+.reel.moving .strip{filter:blur(1.3px)}
+.cell{height:var(--cell);display:flex;align-items:center;justify-content:center;font-size:calc(var(--cell)*.6);line-height:1;font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif}
+.cell.win{animation:pulse .42s ease-in-out infinite alternate;background:radial-gradient(circle,rgba(255,226,90,.95),rgba(255,226,90,0) 68%)}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.12)}}
+.bar{display:inline-block;background:#111;color:#fff;font:900 calc(var(--cell)*.25)/1 Impact,"Arial Black",sans-serif;padding:.2em .32em;border-radius:.18em;border:2px solid #d4a017;letter-spacing:.06em}
+.sette{font:900 calc(var(--cell)*.8)/1 Georgia,"Times New Roman",serif;color:#e01b1b;-webkit-text-stroke:2px #7a0000;text-shadow:0 3px 0 #f7c948}
+.payline{position:absolute;left:-1.5vw;right:-1.5vw;top:50%;height:3px;margin-top:-1.5px;background:rgba(220,20,20,.75);box-shadow:0 0 6px rgba(255,40,40,.8);pointer-events:none;z-index:2}
+.payline::before,.payline::after{content:"";position:absolute;top:50%;margin-top:-8px;border:8px solid transparent}
+.payline::before{left:-6px;border-left-color:#e01b1b}
+.payline::after{right:-6px;border-right-color:#e01b1b}
+
+/* Messaggio */
+.msg{flex:none;min-height:calc(2 * clamp(14px,2.3vh,19px) * 1.25);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:clamp(14px,2.3vh,19px);line-height:1.25;color:#f7d774;padding:0 4px}
+.msg.vinto{color:#7dff7a;animation:lampeggio .5s steps(1) 6}
+.msg.grande{color:#ffe14d;font-size:clamp(16px,2.7vh,22px);text-shadow:0 0 8px rgba(255,200,40,.8)}
+@keyframes lampeggio{50%{opacity:.35}}
+
+/* Comandi */
+.puntata{flex:none;display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:2.5vw}
+.btn{height:clamp(44px,6.6vh,60px);border:0;border-radius:14px;font-weight:800;font-size:clamp(15px,2.3vh,20px);background:linear-gradient(#3b3b3b,#1d1d1d);border:2px solid #6e5a1e;color:#f3e9d2;box-shadow:0 4px 0 #000;transition:transform .08s,box-shadow .08s,filter .15s}
+.btn.segno{font-size:clamp(26px,4vh,36px);line-height:1}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #000}
+.btn:disabled,.gira:disabled{filter:grayscale(1) brightness(.55);cursor:default}
+.gira{flex:none;width:100%;height:clamp(58px,9.5vh,88px);border:3px solid #ffd76a;border-radius:999px;font:900 clamp(26px,4.6vh,40px)/1 Impact,"Arial Black",system-ui,sans-serif;letter-spacing:.14em;color:#fff;text-shadow:0 2px 0 #6b0000;background:radial-gradient(ellipse at 50% 25%,#ff6b5a,#d01414 55%,#8e0000);box-shadow:0 7px 0 #5a0000,0 0 16px rgba(255,60,40,.45);transition:transform .08s,box-shadow .08s,filter .15s}
+.gira:active:not(:disabled){transform:translateY(5px);box-shadow:0 2px 0 #5a0000,0 0 10px rgba(255,60,40,.4)}
+.extra{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:2.5vw}
+.extra .btn{height:clamp(40px,5.6vh,50px);font-size:clamp(13px,1.9vh,16px);font-weight:700;border-color:#4a3e1a}
+.extra .btn.arma{background:linear-gradient(#8a1a1a,#4d0b0b);border-color:#ff8a6a}
+.piede{flex:none;margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#7d776c}
+.piede i{color:#d9955a}
+
+/* Tabella vincite */
+.velo{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.velo.aperto{display:flex}
+.tab{--cell:34px;width:100%;max-width:400px;max-height:94vh;overflow:auto;background:#160e0e;border:2px solid #d4a017;border-radius:16px;padding:12px 16px 14px;position:relative}
+.tab h2{margin:0 0 6px;font:900 21px/1.2 Impact,"Arial Black",sans-serif;letter-spacing:.06em;color:#f7c948}
+.chiudi{position:absolute;top:6px;right:8px;width:40px;height:40px;border:0;background:none;color:#d8cfbf;font-size:26px;line-height:1}
+.riga{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #33261a;padding:2px 0}
+.riga .simboli{display:flex;gap:2px}
+.riga .simboli span.c{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#fffdf4;border-radius:5px;font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif}
+.riga .simboli .sette{-webkit-text-stroke:1px #7a0000;text-shadow:0 2px 0 #f7c948}
+.riga .simboli .bar{border-width:1px}
+.riga b{font:700 19px "Courier New",ui-monospace,monospace;color:#ff6a3d}
+.nota{margin:8px 0 0;font-size:13px;line-height:1.4;color:#b9b0a1}
+.stat{margin:6px 0 0;font-size:13px;color:#d8cfbf}
+@media (prefers-reduced-motion:reduce){.bulbs i{animation:none}.msg.vinto{animation:none}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="marquee">
+    <div class="bulbs" id="bulbs1"></div>
+    <h1>SLOT CLASSICA</h1>
+    <div class="bulbs" id="bulbs2"></div>
+  </header>
+
+  <section class="led">
+    <div><small>CREDITO</small><b id="credito">100</b></div>
+    <div><small>PUNTATA</small><b id="puntata">1</b></div>
+    <div><small>VINCITA</small><b id="vincita" class="verde">0</b></div>
+  </section>
+
+  <section class="cabinet">
+    <div class="reels">
+      <div class="reel"><div class="strip"></div></div>
+      <div class="reel"><div class="strip"></div></div>
+      <div class="reel"><div class="strip"></div></div>
+      <div class="payline"></div>
+    </div>
+  </section>
+
+  <div class="msg" id="msg">Scegli la puntata e tocca GIRA</div>
+
+  <section class="puntata">
+    <button class="btn segno" id="meno" aria-label="Diminuisci puntata">−</button>
+    <button class="btn" id="max">PUNTATA MAX</button>
+    <button class="btn segno" id="piu" aria-label="Aumenta puntata">+</button>
+  </section>
+
+  <button class="gira" id="gira">GIRA</button>
+
+  <section class="extra">
+    <button class="btn" id="apriTab">Vincite</button>
+    <button class="btn" id="suono">Suono sì</button>
+    <button class="btn" id="reset">Ricomincia</button>
+  </section>
+
+  <footer class="piede"><span>Solo crediti virtuali</span><i>ByCSD</i></footer>
+</div>
+
+<div class="velo" id="velo">
+  <div class="tab" role="dialog" aria-label="Tabella vincite">
+    <button class="chiudi" id="chiudiTab" aria-label="Chiudi">×</button>
+    <h2>TABELLA VINCITE</h2>
+    <div id="righe"></div>
+    <p class="nota">Conta solo la linea rossa centrale. La vincita è la puntata moltiplicata per il numero indicato: con puntata 5 e tre campane vinci 100 crediti.</p>
+    <p class="stat" id="stat"></p>
+  </div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const SYM=[
+  {nome:'ciliegie',h:'🍒',w:6,p:6},
+  {nome:'limoni',h:'🍋',w:5,p:8},
+  {nome:'arance',h:'🍊',w:5,p:10},
+  {nome:'angurie',h:'🍉',w:4,p:15},
+  {nome:'campane',h:'🔔',w:3,p:20},
+  {nome:'stelle',h:'⭐',w:2,p:30},
+  {nome:'BAR',h:'<span class="bar">BAR</span>',w:2,p:50},
+  {nome:'sette',h:'<span class="sette">7</span>',w:1,p:100}
+];
+const MAXBET=10, START=100, KEY='slot-classica-bycsd-v1';
+const BAG=[];SYM.forEach((s,i)=>{for(let k=0;k<s.w;k++)BAG.push(i)});
+const rint=n=>{if(window.crypto&&crypto.getRandomValues){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}return Math.floor(Math.random()*n)};
+const pick=()=>BAG[rint(BAG.length)];
+const $=id=>document.getElementById(id);
+
+let st={credit:START,bet:1,sound:true,spins:0,best:0};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')Object.assign(st,s)}catch(e){}
+const intOk=(v,d)=>Number.isFinite(v)&&v>=0?Math.floor(v):d;
+st.credit=intOk(st.credit,START);st.bet=Math.min(MAXBET,Math.max(1,intOk(st.bet,1)));st.spins=intOk(st.spins,0);st.best=intOk(st.best,0);st.sound=st.sound!==false;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+
+const app=$('app'),reels=[...document.querySelectorAll('.reel')],strips=reels.map(r=>r.querySelector('.strip'));
+const elC=$('credito'),elP=$('puntata'),elV=$('vincita'),elM=$('msg');
+const bGira=$('gira'),bMeno=$('meno'),bPiu=$('piu'),bMax=$('max'),bReset=$('reset'),bSuono=$('suono');
+let spinning=false,shownCredit=st.credit,lastWin=0,resetArmed=false,resetTimer=0,countTimer=0,festaTimer=0;
+
+// luci dell'insegna
+['bulbs1','bulbs2'].forEach(id=>{$(id).innerHTML='<i></i>'.repeat(14)});
+
+const cellHTML=i=>'<div class="cell">'+SYM[i].h+'</div>';
+let cur=[0,1,2].map(()=>[pick(),pick(),pick()]);
+strips.forEach((s,i)=>{s.innerHTML=cur[i].map(cellHTML).join('')});
+
+// suoni
+let ac=null;
+function getAC(){
+  try{
+    if(!ac){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;try{ac=new C({latencyHint:'interactive'})}catch(e){ac=new C()}}
+    if(ac.state==='suspended')ac.resume();
+    return ac;
+  }catch(e){return null}
+}
+// sblocco dell'audio al primo tocco (Chrome su Android)
+function unlock(){
+  if(!st.sound||(ac&&ac.state==='running'))return;
+  const c=getAC();if(!c)return;
+  try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0)}catch(e){}
+}
+['pointerdown','touchend','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{capture:true,passive:true}));
+
+// rulli meccanici: moto e suono calcolati dalla stessa legge, così il suono segue i rulli
+const TA=.2,TD=.5,RV=.22,BOUNCE=.15,OVER=.09;
+function reelPlan(D,T){return{D,T,v:D/(TA/2+(T-TA-TD)+(1+RV)/2*TD)}}
+function reelPos(p,t){
+  if(t<=0)return 0;
+  const v=p.v,tc=p.T-TD;
+  if(t<TA)return v*t*t/(2*TA);
+  let x=v*TA/2;
+  if(t<tc)return x+v*(t-TA);
+  x+=v*(tc-TA);
+  if(t<p.T){const u=t-tc;return x+v*u-v*(1-RV)/TD*u*u/2}
+  const u=(t-p.T)/BOUNCE;
+  return u>=1?p.D:p.D+OVER*Math.sin(Math.PI*u)*(1-u);
+}
+function reelVel(p,t){
+  if(t<=0||t>=p.T)return 0;
+  const tc=p.T-TD;
+  if(t<TA)return p.v*t/TA;
+  if(t<tc)return p.v;
+  return p.v-p.v*(1-RV)/TD*(t-tc);
+}
+// istanti in cui ogni simbolo si allinea sulla linea rossa: uno scatto del cricchetto per simbolo
+function clickTimes(p){
+  const out=[];
+  for(let k=1;k<p.D;k++){let a=0,b=p.T;for(let j=0;j<32;j++){const m=(a+b)/2;if(reelPos(p,m)<k)a=m;else b=m}out.push((a+b)/2)}
+  return out;
+}
+const bufCache=new WeakMap();
+function mkBuf(c,dur,fn){
+  const sr=c.sampleRate,n=Math.ceil(dur*sr),b=c.createBuffer(1,n,sr),d=b.getChannelData(0);let pk=0;
+  for(let i=0;i<n;i++){d[i]=fn(i/sr);const a=Math.abs(d[i]);if(a>pk)pk=a}
+  if(pk>0)for(let i=0;i<n;i++)d[i]*=.95/pk;
+  return b;
+}
+function buffers(c){
+  let B=bufCache.get(c);if(B)return B;
+  const TAU=Math.PI*2,sr=c.sampleRate;
+  // scatto del cricchetto: colpo secco metallico
+  const tick=f=>{let lp=0;return t=>{const n=Math.random()*2-1;lp+=.3*(n-lp);
+    return (n-lp)*Math.exp(-t/.0022)+.5*Math.sin(TAU*f*t)*Math.exp(-t/.009)+.28*Math.sin(TAU*f*1.59*t)*Math.exp(-t/.005)+.4*Math.sin(TAU*690*t)*Math.exp(-t/.007)}};
+  // fermo del rullo: tonfo pesante e clac del freno
+  const clunk=()=>{let ph=0,lp=0,lp2=0;return t=>{const f=55+85*Math.exp(-t/.025);ph+=TAU*f/sr;const n=Math.random()*2-1;lp+=.18*(n-lp);lp2+=.6*(n-lp2);
+    return 1.0*Math.sin(ph)*Math.exp(-t/.075)+.75*lp*4*Math.exp(-t/.022)+.45*(n-lp2)*Math.exp(-t/.004)+.12*Math.sin(TAU*1870*t)*Math.exp(-t/.05)+.08*Math.sin(TAU*3050*t)*Math.exp(-t/.035)}};
+  // ronzio del motore
+  const motor=()=>{let br=0;return t=>{const n=Math.random()*2-1;br=(br+.02*n)/1.02;
+    return .5*Math.sin(TAU*50*t)+.3*Math.sin(TAU*100*t+.4)+.18*Math.sin(TAU*150*t+1.1)+.1*Math.sin(TAU*200*t)+br*6}};
+  B={ticks:[2450,2700,2950].map(f=>mkBuf(c,.032,tick(f))),clunk:mkBuf(c,.3,clunk()),motor:mkBuf(c,1,motor())};
+  bufCache.set(c,B);return B;
+}
+// programma tutti i suoni di un giro: base = istante audio in cui i rulli partono
+function scheduleSpin(c,dest,base,plans,notBefore){
+  const B=buffers(c),nb=notBefore||0,end=Math.max(...plans.map(p=>p.T));
+  const play=(buf,at,vol,rate,pan)=>{
+    if(at<nb)return;
+    const s=c.createBufferSource(),g=c.createGain();s.buffer=buf;s.playbackRate.value=rate||1;g.gain.value=vol;
+    let out=g;if(pan&&c.createStereoPanner){const pn=c.createStereoPanner();pn.pan.value=pan;g.connect(pn);out=pn}
+    s.connect(g);out.connect(dest);s.start(at);
+  };
+  // leva: lo sgancio che fa partire i rulli
+  play(B.clunk,base,.32,1.6,0);
+  play(B.ticks[1],base,.5,.55,0);
+  // motore: il volume e il timbro seguono la velocità dei rulli
+  if(base+end>nb){
+    const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+    s.buffer=B.motor;s.loop=true;f.type='lowpass';f.Q.value=.7;
+    const st0=Math.max(base,nb),N=Math.max(2,Math.ceil((base+end-st0)/.02)+1),gc=new Float32Array(N),fc=new Float32Array(N),vm=Math.max(...plans.map(p=>p.v));
+    for(let k=0;k<N;k++){const t=st0-base+(base+end-st0)*k/(N-1);let sp=0;plans.forEach(p=>{sp+=reelVel(p,t)/vm});sp/=plans.length;gc[k]=.055*Math.sqrt(sp);fc[k]=180+1400*sp}
+    gc[N-1]=0;
+    g.gain.value=gc[0];g.gain.setValueCurveAtTime(gc,st0,base+end-st0);
+    f.frequency.value=fc[0];f.frequency.setValueCurveAtTime(fc,st0,base+end-st0);
+    s.connect(f).connect(g).connect(dest);s.start(st0);s.stop(base+end+.05);
+  }
+  // scatti di ogni rullo e tonfo quando si ferma
+  plans.forEach((p,i)=>{
+    const pan=(i-1)*.3;
+    p.clicks.forEach(t=>{const sp=reelVel(p,t)/p.v;play(B.ticks[i],base+t,.17+.07*(1-sp),.96+Math.random()*.08,pan)});
+    play(B.clunk,base+p.T,.62,1,pan);
+    play(B.ticks[i],base+p.T,.3,.7,pan);
+  });
+}
+// istante audio che si sente quando lo schermo è al tempo perfMs (performance.now)
+function ctxAt(c,perfMs){
+  try{if(c.getOutputTimestamp){const o=c.getOutputTimestamp();if(o&&o.contextTime>0&&o.performanceTime>0)return o.contextTime+(perfMs-o.performanceTime)/1000+.016}}catch(e){}
+  return c.currentTime+(perfMs-performance.now())/1000-(c.outputLatency||c.baseLatency||0)+.016;
+}
+let spinBus=null;
+const audioLog=window.__slotAudioLog=[];
+function spinSound(plans,t0){
+  if(!st.sound)return;
+  const c=getAC();if(!c)return;
+  const go=()=>{
+    try{
+      if(spinBus)try{spinBus.disconnect()}catch(e){}
+      spinBus=c.createGain();spinBus.gain.value=st.sound?1:0;spinBus.connect(c.destination);
+      const base=ctxAt(c,t0);
+      scheduleSpin(c,spinBus,base,plans,c.currentTime+.005);
+      audioLog.push({t0,base,ctxNow:c.currentTime,perfNow:performance.now(),lat:c.outputLatency||c.baseLatency||0,stops:plans.map(p=>base+p.T)});
+    }catch(e){}
+  };
+  if(c.state==='running')go();else c.resume().then(go,()=>{});
+}
+function tone(f,d,type='square',vol=.04,delay=0){
+  if(!st.sound)return;
+  try{
+    if(!getAC())return;
+    const t=ac.currentTime+delay,o=ac.createOscillator(),g=ac.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch(e){}
+}
+const buzz=ms=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
+
+function msg(t,cls){elM.className='msg'+(cls?' '+cls:'');void elM.offsetWidth;elM.textContent=t}
+function showCredit(){elC.textContent=shownCredit}
+function render(){
+  showCredit();elP.textContent=st.bet;elV.textContent=lastWin;
+  bSuono.textContent=st.sound?'Suono sì':'Suono no';
+  const can=!spinning&&st.credit>=st.bet&&st.credit>0;
+  bGira.disabled=!can;
+  bMeno.disabled=spinning||st.bet<=1;
+  bPiu.disabled=spinning||st.bet>=Math.min(MAXBET,Math.max(1,st.credit));
+  bMax.disabled=spinning||st.credit<1||st.bet===Math.min(MAXBET,st.credit);
+  bReset.disabled=spinning;
+}
+function countTo(to){
+  clearInterval(countTimer);
+  const from=shownCredit,steps=Math.min(30,Math.max(1,to-from));let k=0;
+  if(to<=from){shownCredit=to;showCredit();return}
+  countTimer=setInterval(()=>{k++;shownCredit=Math.round(from+(to-from)*k/steps);showCredit();if(k%2)tone(1200,.03,'square',.02);if(k>=steps)clearInterval(countTimer)},28);
+}
+function fitBet(){if(st.credit>0&&st.bet>st.credit)st.bet=Math.min(MAXBET,st.credit);if(st.bet<1)st.bet=1}
+
+function evaluate(line){
+  if(line[0]===line[1]&&line[1]===line[2])return{mult:SYM[line[0]].p,text:'Tris di '+SYM[line[0]].nome,cells:[0,1,2]};
+  const ch=[0,1,2].filter(i=>line[i]===0);
+  if(ch.length===2)return{mult:3,text:'Due ciliegie',cells:ch};
+  if(ch.length===1)return{mult:1,text:'Una ciliegia',cells:ch};
+  return{mult:0,cells:[]};
+}
+
+function spin(){
+  if(spinning||st.credit<st.bet||st.credit<1)return;
+  spinning=true;
+  clearTimeout(festaTimer);app.classList.remove('festa');
+  clearInterval(countTimer);
+  st.credit-=st.bet;st.spins++;lastWin=0;shownCredit=st.credit;save();render();
+  msg('I rulli girano…');
+  buzz(12);
+  const res=[0,1,2].map(()=>[pick(),pick(),pick()]);
+  const cell=reels[0].querySelector('.cell').getBoundingClientRect().height;
+  const plans=strips.map((s,i)=>{
+    const items=cur[i].slice();
+    const n=16+i*7;for(let k=0;k<n;k++)items.push(pick());
+    items.push(...res[i]);
+    s.style.transition='none';s.style.transform='translateY(0)';
+    s.innerHTML=items.map(cellHTML).join('');
+    const p=reelPlan(items.length-3,(1300+i*450)/1000);
+    p.clicks=clickTimes(p);p.hit=false;p.done=false;p.blur=true;
+    reels[i].classList.add('moving');
+    return p;
+  });
+  let lead=60;
+  if(st.sound){const c=getAC();if(c){const lat=c.outputLatency||c.baseLatency||0;lead=Math.min(400,Math.max(60,lat*1000+45))}}
+  const t0=performance.now()+lead;
+  spinSound(plans,t0);
+  const vlog=window.__slotVisLog=[];
+  let stopped=0,ended=false;
+  function frame(now){
+    if(ended)return;
+    const t=(now-t0)/1000;
+    plans.forEach((p,i)=>{
+      if(p.done)return;
+      const s=strips[i];
+      if(t>=p.T+BOUNCE){
+        s.style.transform='translateY(0)';
+        s.innerHTML=res[i].map(cellHTML).join('');
+        cur[i]=res[i];p.done=true;
+        if(++stopped===3){ended=true;finish(res)}
+        return;
+      }
+      if(p.blur&&t>=p.T-.32){p.blur=false;reels[i].classList.remove('moving')}
+      if(!p.hit&&t>=p.T){p.hit=true;buzz(18);vlog.push({reel:i,frame:now,planned:t0+p.T*1000})}
+      s.style.transform='translate3d(0,'+(-reelPos(p,t)*cell).toFixed(2)+'px,0)';
+    });
+    if(!ended)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  // se la pagina va in secondo piano, i rulli si fermano comunque
+  setTimeout(()=>{if(!ended)frame(performance.now())},lead+(Math.max(...plans.map(p=>p.T))+BOUNCE)*1000+250);
+}
+
+function finish(res){
+  const r=evaluate(res.map(x=>x[1]));
+  const win=r.mult*st.bet;
+  r.cells.forEach(i=>strips[i].children[1].classList.add('win'));
+  if(win>0){
+    st.credit+=win;lastWin=win;if(win>st.best)st.best=win;
+    countTo(st.credit);
+    if(r.mult>=20){
+      msg('GRANDE VINCITA! '+r.text+': +'+win+' crediti','vinto grande');
+      app.classList.add('festa');festaTimer=setTimeout(()=>app.classList.remove('festa'),4000);
+      [523,659,784,1047,784,1047,1319].forEach((f,k)=>tone(f,.16,'square',.05,k*.12));buzz([60,40,60,40,120]);
+    }else{
+      msg(r.text+': +'+win+(win===1?' credito':' crediti'),'vinto');
+      [659,784,988].forEach((f,k)=>tone(f,.12,'square',.045,k*.1));buzz(40);
+    }
+  }else{
+    if(st.credit<1)msg('Crediti finiti. Tocca Ricomincia per ripartire da '+START);
+    else msg('Niente questa volta. Ritenta!');
+  }
+  fitBet();save();spinning=false;render();
+  if(fitPending)fit();
+}
+
+function setBet(b){if(spinning)return;st.bet=Math.max(1,Math.min(MAXBET,Math.max(1,st.credit),b));save();render();tone(600,.04,'square',.03)}
+bMeno.addEventListener('click',()=>setBet(st.bet-1));
+bPiu.addEventListener('click',()=>setBet(st.bet+1));
+bMax.addEventListener('click',()=>setBet(MAXBET));
+bGira.addEventListener('click',spin);
+bSuono.addEventListener('click',()=>{st.sound=!st.sound;save();render();if(spinBus&&ac)try{spinBus.gain.setTargetAtTime(st.sound?1:0,ac.currentTime,.01)}catch(e){}tone(700,.06,'square',.04)});
+bReset.addEventListener('click',()=>{
+  if(spinning)return;
+  if(!resetArmed){
+    resetArmed=true;bReset.textContent='Conferma?';bReset.classList.add('arma');
+    resetTimer=setTimeout(()=>{resetArmed=false;bReset.textContent='Ricomincia';bReset.classList.remove('arma')},3000);
+    return;
+  }
+  clearTimeout(resetTimer);resetArmed=false;bReset.textContent='Ricomincia';bReset.classList.remove('arma');
+  clearInterval(countTimer);
+  st.credit=START;st.bet=1;st.spins=0;st.best=0;lastWin=0;shownCredit=START;save();
+  document.querySelectorAll('.cell.win').forEach(c=>c.classList.remove('win'));
+  msg('Si riparte con '+START+' crediti');render();
+});
+
+// tabella vincite
+const righe=SYM.slice().reverse().map(s=>'<div class="riga"><div class="simboli">'+('<span class="c">'+s.h+'</span>').repeat(3)+'</div><b>×'+s.p+'</b></div>').join('')
+  +'<div class="riga"><div class="simboli"><span class="c">🍒</span><span class="c">🍒</span></div><b>×3</b></div>'
+  +'<div class="riga"><div class="simboli"><span class="c">🍒</span></div><b>×1</b></div>';
+$('righe').innerHTML=righe;
+const velo=$('velo');
+const apri=()=>{$('stat').textContent='Giri fatti: '+st.spins+' · Vincita più alta: '+st.best+(st.best===1?' credito':' crediti');velo.classList.add('aperto')};
+const chiudi=()=>velo.classList.remove('aperto');
+$('apriTab').addEventListener('click',apri);
+$('chiudiTab').addEventListener('click',chiudi);
+velo.addEventListener('click',e=>{if(e.target===velo)chiudi()});
+
+// adatta i rulli all'altezza dello schermo, senza scorrere
+let fitPending=false;
+function fit(){
+  if(spinning){fitPending=true;return}
+  fitPending=false;
+  app.style.removeProperty('--cell');
+  const cell=reels[0].getBoundingClientRect().height/3;
+  const over=app.scrollHeight-app.clientHeight;
+  if(over>0)app.style.setProperty('--cell',Math.max(40,Math.floor(cell-over/3-1))+'px');
+}
+window.addEventListener('resize',fit);
+
+fitBet();render();fit();
+if(st.credit<1)msg('Crediti finiti. Tocca Ricomincia per ripartire da '+START);
+})();
+</script>
+<script>(function(){var d=document,e=d.documentElement;function on(){return d.fullscreenElement||d.webkitFullscreenElement}function go(){if(on())return;var r=e.requestFullscreen||e.webkitRequestFullscreen;if(!r)return;try{var p=r.call(e,{navigationUI:'hide'});if(p&&p.catch)p.catch(function(){})}catch(x){}}d.addEventListener('pointerdown',go,true);d.addEventListener('keydown',go,true)})();</script></body>
+</html>

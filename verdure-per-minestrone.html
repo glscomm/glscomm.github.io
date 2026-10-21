@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verdure per minestrone</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap">
+<style>
+:root{--ground:#F1F0EE;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"Source Serif 4",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:0 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+.masthead{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.masthead::before{content:"";display:block;width:74px;height:12px;background:var(--ink);-webkit-mask:url(https://app.sesame.com/brand/sesame-wordmark.svg) left center/contain no-repeat;mask:url(https://app.sesame.com/brand/sesame-wordmark.svg) left center/contain no-repeat}
+h1{font:400 clamp(34px,8vw,48px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}
+.kicker{font:13px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}
+.updated{font:11px/1.4 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:6px 0 14px}
+p{margin:0 0 10px}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+.group{font:14px/1.4 var(--sans);color:var(--muted);margin:26px 0 2px}
+ul.check{list-style:none;padding:0;margin:0}
+ul.check li{display:flex;align-items:center;border-bottom:1px solid var(--rule);margin:0}
+ul.check label{flex:1;display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;cursor:pointer;font-size:17px}
+ul.check input{appearance:none;-webkit-appearance:none;margin:0;width:22px;height:22px;border:1.5px solid var(--muted);border-radius:5px;display:grid;place-content:center}
+ul.check input:checked{background:var(--ink);border-color:var(--ink)}
+ul.check input:checked::after{content:"\2715";color:var(--ground);font-size:13px;line-height:1}
+ul.check input:checked+span{text-decoration:line-through;color:var(--muted)}
+ul.check small{font:12px/1 var(--mono);color:var(--muted)}
+.x{border:0;background:none;color:var(--muted);font-size:18px;padding:0 4px 0 12px;cursor:pointer}
+form.add{display:flex;gap:8px;margin:16px 0 0}form.add input{flex:1;min-width:0;font:15px var(--sans);padding:10px 16px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink)}
+.tools{display:flex;gap:8px;margin:10px 0 0}
+.tbtn{font:13px/1 var(--sans);border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 13px;cursor:pointer}
+.tools{flex-wrap:wrap;align-items:center}
+.msg{font:12px/1.2 var(--mono);color:var(--muted)}
+.box{display:grid;gap:8px;margin:10px 0 0}.box[hidden]{display:none}
+.box textarea{width:100%;font:13px/1.4 var(--mono);padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body><div class="wrap">
+<div class="masthead" aria-label="Sesame"></div>
+<h1>Verdure per il minestrone</h1>
+<p class="updated">Aggiornata l'11 ott 2026, 18:40</p>
+<p class="kicker">54 voci, da supermercato e discount, con la stagione accanto</p>
+
+<p class="group">La base (soffritto)</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Cipolla</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Carota</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Sedano</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Porro</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Aglio</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Scalogno</span><small>tutto l'anno</small></label></li>
+</ul>
+
+<p class="group">Tuberi e radici</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Patate</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Rapa</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Sedano rapa</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Barbabietola</span><small>colora di rosso</small></label></li>
+<li><label><input type="checkbox"><span>Topinambur</span><small>autunno-inverno</small></label></li>
+</ul>
+
+<p class="group">Zucche e zucchine</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Zucchine</span><small>estate, tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Zucca</span><small>autunno-inverno</small></label></li>
+</ul>
+
+<p class="group">Cavoli</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Cavolo verza</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cavolo cappuccio</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cavolo nero</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cavolfiore</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Broccoli</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cavolo romanesco</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cavolini di Bruxelles</span><small>autunno-inverno</small></label></li>
+</ul>
+
+<p class="group">Verdure a foglia</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Bietola (coste)</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Erbette</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Spinaci</span><small>autunno-primavera</small></label></li>
+<li><label><input type="checkbox"><span>Cicoria</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Scarola</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Cime di rapa</span><small>autunno-inverno</small></label></li>
+</ul>
+
+<p class="group">Ortaggi estivi e primaverili</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Fagiolini</span><small>estate</small></label></li>
+<li><label><input type="checkbox"><span>Piselli freschi</span><small>primavera</small></label></li>
+<li><label><input type="checkbox"><span>Fave fresche</span><small>primavera</small></label></li>
+<li><label><input type="checkbox"><span>Pomodori</span><small>estate</small></label></li>
+<li><label><input type="checkbox"><span>Peperoni</span><small>estate</small></label></li>
+<li><label><input type="checkbox"><span>Melanzane</span><small>estate</small></label></li>
+</ul>
+
+<p class="group">Altri ortaggi</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Finocchio</span><small>autunno-inverno</small></label></li>
+<li><label><input type="checkbox"><span>Carciofi</span><small>inverno-primavera</small></label></li>
+<li><label><input type="checkbox"><span>Funghi champignon</span><small>tutto l'anno</small></label></li>
+</ul>
+
+<p class="group">Legumi (secchi o in scatola)</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Fagioli borlotti</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Fagioli cannellini</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Fagioli dall'occhio</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Ceci</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Lenticchie</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Fave secche</span><small>tutto l'anno</small></label></li>
+</ul>
+
+<p class="group">Erbe aromatiche</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Prezzemolo</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Basilico</span><small>estate, in vaso sempre</small></label></li>
+<li><label><input type="checkbox"><span>Rosmarino</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Salvia</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Alloro</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Timo</span><small>tutto l'anno</small></label></li>
+</ul>
+
+<p class="group">Surgelati e conserve</p>
+<ul class="check">
+<li><label><input type="checkbox"><span>Minestrone surgelato</span><small>già misto</small></label></li>
+<li><label><input type="checkbox"><span>Soffritto surgelato</span><small>già tritato</small></label></li>
+<li><label><input type="checkbox"><span>Piselli surgelati</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Spinaci surgelati</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Fagiolini surgelati</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Passata di pomodoro</span><small>tutto l'anno</small></label></li>
+<li><label><input type="checkbox"><span>Pomodori pelati</span><small>tutto l'anno</small></label></li>
+</ul>
+
+</div>
+<script>(()=>{const T=document.title,K='sesame-list:minestrone',L=[...document.querySelectorAll('ul.check')];if(!L.length)return;const row=(t,q,c)=>{const li=document.createElement('li');li.innerHTML='<label><input type="checkbox"><span></span><small></small></label><button class="x" aria-label="Rimuovi">×</button>';li.querySelector('span').textContent=t;li.querySelector('small').textContent=q||'';li.querySelector('input').checked=!!c;return li};const read=u=>[...u.children].map(li=>[li.querySelector('span').textContent,(li.querySelector('small')||{}).textContent||'',li.querySelector('input').checked]);const save=()=>{try{localStorage.setItem(K,JSON.stringify(L.map(read)))}catch(e){}};const apply=s=>L.forEach((u,i)=>{const it=s&&Array.isArray(s[i])?s[i]:read(u);u.replaceChildren(...it.map(a=>row(...a)))});let s=null;try{s=JSON.parse(localStorage.getItem(K))}catch(e){}if(!s){try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k!==K&&k.indexOf('sesame-list:')===0&&k.slice(-(T.length+1))===':'+T){s=JSON.parse(localStorage.getItem(k));break}}}catch(e){}}apply(s);if(s)save();const last=L[L.length-1],f=document.createElement('form');f.className='add';f.innerHTML='<input placeholder="Aggiungi una voce"><button class="tbtn">Aggiungi</button>';last.after(f);const t=document.createElement('div');t.className='tools';t.innerHTML='<button type="button" class="tbtn">Azzera</button><button type="button" class="tbtn">Esporta</button><button type="button" class="tbtn">Importa</button><span class="msg"></span>';f.after(t);const box=document.createElement('div');box.className='box';box.hidden=true;box.innerHTML='<textarea rows="5"></textarea><button type="button" class="tbtn">Carica</button>';t.after(box);const ta=box.querySelector('textarea'),ld=box.querySelector('button'),msg=t.querySelector('.msg'),flash=m=>{msg.textContent=m;setTimeout(()=>msg.textContent='',2500)};const [bR,bE,bI]=t.querySelectorAll('button');document.addEventListener('change',e=>{if(e.target.closest('ul.check'))save()});document.addEventListener('click',e=>{const x=e.target.closest('ul.check .x');if(x){x.parentElement.remove();save()}});f.addEventListener('submit',e=>{e.preventDefault();const v=f.querySelector('input').value.trim();if(v){last.append(row(v,'',false));f.querySelector('input').value='';save()}});bR.addEventListener('click',()=>{L.forEach(u=>u.querySelectorAll('input').forEach(c=>c.checked=false));save()});bE.addEventListener('click',()=>{const j=JSON.stringify({lista:T,dati:L.map(read)});const show=()=>{box.hidden=false;ld.hidden=true;ta.value=j;ta.select();flash('Copia il testo qui sotto')};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(j).then(()=>{box.hidden=true;flash('Copiata negli appunti')},show)}else show()});bI.addEventListener('click',()=>{box.hidden=false;ld.hidden=false;ta.value='';ta.placeholder='Incolla qui il testo esportato';ta.focus()});ld.addEventListener('click',()=>{try{const o=JSON.parse(ta.value);const d=Array.isArray(o)?o:o.dati;if(!Array.isArray(d))throw 0;apply(d);save();box.hidden=true;flash('Lista importata')}catch(e){flash('Testo non valido')}})})()</script>
+<script>(function(){var d=document,e=d.documentElement;function on(){return d.fullscreenElement||d.webkitFullscreenElement}function go(){if(on())return;var r=e.requestFullscreen||e.webkitRequestFullscreen;if(!r)return;try{var p=r.call(e,{navigationUI:'hide'});if(p&&p.catch)p.catch(function(){})}catch(x){}}d.addEventListener('pointerdown',go,true);d.addEventListener('keydown',go,true)})();</script></body></html>

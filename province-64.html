@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#6C5EB5">
+<title>Province 64 - Le targhe d'Italia</title>
+<style>
+html,body{margin:0;height:100%;background:#6C5EB5;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+#cv{position:absolute;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<script>
+/* SAM - Software Automatic Mouth (Don't Ask Software, 1982). Port JavaScript: sam-js 0.3.1 di Christian Schiffler (github.com/discordier/sam), incluso qui per funzionare senza Internet. */
+(function(){
+/**
+ * This is SamJs.js v0.3.0
+ *
+ * A Javascript port of "SAM Software Automatic Mouth".
+ *
+ * (c) 2017-2024 Christian Schiffler
+ *
+ * @link(https://github.com/discordier/sam)
+ *
+ * @author 2017 Christian Schiffler <c.schiffler@cyberspectrum.de>
+ */
+function H(){let Y=(H,e)=>0!=(H&e),r=H=>{let A=new Uint8Array(H.length);return H.split("").forEach((H,e)=>{A[e]=H.charCodeAt(0)}),A},t=H=>{var e=new Uint8Array(4);return e[0]=H,e[1]=H>>8,e[2]=H>>16,e[3]=H>>24,e},O=H=>{var e=new Uint8Array(2);return e[0]=H,e[1]=H>>8,e},I=null,R=H=>{let e=new Uint8Array(44+H.length),A=0,E=H=>{e.set(H,A),A+=H.length};return E(r("RIFF")),E(t(H.length+12+16+8-8)),E(r("WAVE")),E(r("fmt ")),E(t(16)),E(O(1)),E(O(1)),E(t(22050)),E(t(22050)),E(O(1)),E(O(8)),E(r("data")),E(t(H.length)),E(H),e},l={" ":0,"!":2,'"':2,"#":2,$:2,"%":2,"&":2,"'":130,"(":0,")":0,"*":2,"+":2,",":2,"-":2,".":2,"/":2,0:3,1:3,2:3,3:3,4:3,5:3,6:3,7:3,8:3,9:3,":":2,";":2,"<":2,"=":2,">":2,"?":2,"@":2,A:192,B:168,C:176,D:172,E:192,F:160,G:184,H:160,I:192,J:188,K:160,L:172,M:168,N:172,O:192,P:160,Q:160,R:172,S:180,T:164,U:192,V:168,W:168,X:176,Y:192,Z:188,"[":0,"\\":0,"]":0,"^":2,_:0,"`":32},n=128,U=(H,e)=>0!=(l[H]&e),N=(H,e,A)=>U(H[e],A),W=(H,e)=>-1!==e.indexOf(H),A=H=>{let e=H.split("="),E=e.pop(),A=e.join("=").split("("),r=A.pop().split(")"),t=A[0],O=r[0],R=r[1],I=["T","C","S"],Y=["E","I","Y"],l=(H,e,A)=>{if(H.startsWith(O,e)&&((e,A)=>{for(let H=t.length-1;-1<H;H--){var E=t[H];if(U(E,n)){if(e[--A]!==E)return!1}else if(!{" ":()=>!N(e,--A,n),"#":()=>N(e,--A,64),".":()=>N(e,--A,8),"&":()=>N(e,--A,16)||W(e.substr(--A,2),["CH","SH"]),"@":()=>{var H;return!!N(e,--A,4)||"H"===(H=e[A])&&!!W(H,I)},"^":()=>N(e,--A,32),"+":()=>W(e[--A],Y),":":()=>{for(;0<=A&&N(e,A-1,32);)A--;return!0}}[E]())return!1}return!0})(H,e)&&((e,A)=>{for(let H=0;H<R.length;H++){var E=R[H];if(U(E,n)){if(e[++A]!==E)return!1}else if(!{" ":()=>!N(e,++A,n),"#":()=>N(e,++A,64),".":()=>N(e,++A,8),"&":()=>N(e,++A,16)||W(e.substr(++A-2,2),["HC","HS"]),"@":()=>{var H;return!!N(e,++A,4)||"H"===(H=e[A])&&!!W(H,I)},"^":()=>N(e,++A,32),"+":()=>W(e[++A],Y),":":()=>{for(;N(e,A+1,32);)A++;return!0},"%":()=>{if("E"!==e[A+1])return"ING"===e.substr(A+1,3)&&(A+=3,!0);if(N(e,A+2,n)){if(!W(e[A+2],["R","S","D"]))return"L"!==e[A+2]?"FUL"===e.substr(A+2,3)&&(A+=4,!0):"Y"===e[A+3]&&(A+=3,!0);A+=2}else A++;return!0}}[E]())return!1}return!0})(H,e+(O.length-1)))return A(E,O.length),!0};return l.c=O[0],l},S={},f=(" (A.)=EH4Y. |(A) =AH| (ARE) =AAR| (AR)O=AXR|(AR)#=EH4R| ^(AS)#=EY4S|(A)WA=AX|(AW)=AO5| :(ANY)=EH4NIY|(A)^+#=EY5|#:(ALLY)=ULIY| (AL)#=UL|(AGAIN)=AXGEH4N|#:(AG)E=IHJ|(A)^%=EY|(A)^+:#=AE| :(A)^+ =EY4| (ARR)=AXR|(ARR)=AE4R| ^(AR) =AA5R|(AR)=AA5R|(AIR)=EH4R|(AI)=EY4|(AY)=EY5|(AU)=AO4|#:(AL) =UL|#:(ALS) =ULZ|(ALK)=AO4K|(AL)^=AOL| :(ABLE)=EY4BUL|(ABLE)=AXBUL|(A)VO=EY4|(ANG)+=EY4NJ|(ATARI)=AHTAA4RIY|(A)TOM=AE|(A)TTI=AE| (AT) =AET| (A)T=AH|(A)=AE| (B) =BIY4| (BE)^#=BIH|(BEING)=BIY4IHNX| (BOTH) =BOW4TH| (BUS)#=BIH4Z|(BREAK)=BREY5K|(BUIL)=BIH4L|(B)=B| (C) =SIY4| (CH)^=K|^E(CH)=K|(CHA)R#=KEH5|(CH)=CH| S(CI)#=SAY4|(CI)A=SH|(CI)O=SH|(CI)EN=SH|(CITY)=SIHTIY|(C)+=S|(CK)=K|(COMMODORE)=KAA4MAHDOHR|(COM)=KAHM|(CUIT)=KIHT|(CREA)=KRIYEY|(C)=K| (D) =DIY4| (DR.) =DAA4KTER|#:(DED) =DIHD|.E(D) =D|#:^E(D) =T| (DE)^#=DIH| (DO) =DUW| (DOES)=DAHZ|(DONE) =DAH5N|(DOING)=DUW4IHNX| (DOW)=DAW|#(DU)A=JUW|#(DU)^#=JAX|(D)=D| (E) =IYIY4|#:(E) =|':^(E) =| :(E) =IY|#(ED) =D|#:(E)D =|(EV)ER=EH4V|(E)^%=IY4|(ERI)#=IY4RIY|(ERI)=EH4RIH|#:(ER)#=ER|(ERROR)=EH4ROHR|(ERASE)=IHREY5S|(ER)#=EHR|(ER)=ER| (EVEN)=IYVEHN|#:(E)W=|@(EW)=UW|(EW)=YUW|(E)O=IY|#:&(ES) =IHZ|#:(E)S =|#:(ELY) =LIY|#:(EMENT)=MEHNT|(EFUL)=FUHL|(EE)=IY4|(EARN)=ER5N| (EAR)^=ER5|(EAD)=EHD|#:(EA) =IYAX|(EA)SU=EH5|(EA)=IY5|(EIGH)=EY4|(EI)=IY4| (EYE)=AY4|(EY)=IY|(EU)=YUW5|(EQUAL)=IY4KWUL|(E)=EH| (F) =EH4F|(FUL)=FUHL|(FRIEND)=FREH5ND|(FATHER)=FAA4DHER|(F)F=|(F)=F| (G) =JIY4|(GIV)=GIH5V| (G)I^=G|(GE)T=GEH5|SU(GGES)=GJEH4S|(GG)=G| B#(G)=G|(G)+=J|(GREAT)=GREY4T|(GON)E=GAO5N|#(GH)=| (GN)=N|(G)=G| (H) =EY4CH| (HAV)=/HAE6V| (HERE)=/HIYR| (HOUR)=AW5ER|(HOW)=/HAW|(H)#=/H|(H)=| (IN)=IHN| (I) =AY4|(I) =AY|(IN)D=AY5N|SEM(I)=IY| ANT(I)=AY|(IER)=IYER|#:R(IED) =IYD|(IED) =AY5D|(IEN)=IYEHN|(IE)T=AY4EH|(I')=AY5| :(I)^%=AY5| :(IE) =AY4|(I)%=IY|(IE)=IY4| (IDEA)=AYDIY5AH|(I)^+:#=IH|(IR)#=AYR|(IZ)%=AYZ|(IS)%=AYZ|I^(I)^#=IH|+^(I)^+=AY|#:^(I)^+=IH|(I)^+=AY|(IR)=ER|(IGH)=AY4|(ILD)=AY5LD| (IGN)=IHGN|(IGN) =AY4N|(IGN)^=AY4N|(IGN)%=AY4N|(ICRO)=AY4KROH|(IQUE)=IY4K|(I)=IH| (J) =JEY4|(J)=J| (K) =KEY4| (K)N=|(K)=K| (L) =EH4L|(LO)C#=LOW|L(L)=|#:^(L)%=UL|(LEAD)=LIYD| (LAUGH)=LAE4F|(L)=L| (M) =EH4M| (MR.) =MIH4STER| (MS.)=MIH5Z| (MRS.) =MIH4SIXZ|(MOV)=MUW4V|(MACHIN)=MAHSHIY5N|M(M)=|(M)=M| (N) =EH4N|E(NG)+=NJ|(NG)R=NXG|(NG)#=NXG|(NGL)%=NXGUL|(NG)=NX|(NK)=NXK| (NOW) =NAW4|N(N)=|(NON)E=NAH4N|(N)=N| (O) =OH4W|(OF) =AHV| (OH) =OW5|(OROUGH)=ER4OW|#:(OR) =ER|#:(ORS) =ERZ|(OR)=AOR| (ONE)=WAHN|#(ONE) =WAHN|(OW)=OW| (OVER)=OW5VER|PR(O)V=UW4|(OV)=AH4V|(O)^%=OW5|(O)^EN=OW|(O)^I#=OW5|(OL)D=OW4L|(OUGHT)=AO5T|(OUGH)=AH5F| (OU)=AW|H(OU)S#=AW4|(OUS)=AXS|(OUR)=OHR|(OULD)=UH5D|(OU)^L=AH5|(OUP)=UW5P|(OU)=AW|(OY)=OY|(OING)=OW4IHNX|(OI)=OY5|(OOR)=OH5R|(OOK)=UH5K|F(OOD)=UW5D|L(OOD)=AH5D|M(OOD)=UW5D|(OOD)=UH5D|F(OOT)=UH5T|(OO)=UW5|(O')=OH|(O)E=OW|(O) =OW|(OA)=OW4| (ONLY)=OW4NLIY| (ONCE)=WAH4NS|(ON'T)=OW4NT|C(O)N=AA|(O)NG=AO| :^(O)N=AH|I(ON)=UN|#:(ON)=UN|#^(ON)=UN|(O)ST=OW|(OF)^=AO4F|(OTHER)=AH5DHER|R(O)B=RAA|^R(O):#=OW5|(OSS) =AO5S|#:^(OM)=AHM|(O)=AA| (P) =PIY4|(PH)=F|(PEOPL)=PIY5PUL|(POW)=PAW4|(PUT) =PUHT|(P)P=|(P)S=|(P)N=|(PROF.)=PROHFEH4SER|(P)=P| (Q) =KYUW4|(QUAR)=KWOH5R|(QU)=KW|(Q)=K| (R) =AA5R| (RE)^#=RIY|(R)R=|(R)=R| (S) =EH4S|(SH)=SH|#(SION)=ZHUN|(SOME)=SAHM|#(SUR)#=ZHER|(SUR)#=SHER|#(SU)#=ZHUW|#(SSU)#=SHUW|#(SED)=ZD|#(S)#=Z|(SAID)=SEHD|^(SION)=SHUN|(S)S=|.(S) =Z|#:.E(S) =Z|#:^#(S) =S|U(S) =S| :#(S) =Z|##(S) =Z| (SCH)=SK|(S)C+=|#(SM)=ZUM|#(SN)'=ZUM|(STLE)=SUL|(S)=S| (T) =TIY4| (THE) #=DHIY| (THE) =DHAX|(TO) =TUX| (THAT)=DHAET| (THIS) =DHIHS| (THEY)=DHEY| (THERE)=DHEHR|(THER)=DHER|(THEIR)=DHEHR| (THAN) =DHAEN| (THEM) =DHAEN|(THESE) =DHIYZ| (THEN)=DHEHN|(THROUGH)=THRUW4|(THOSE)=DHOHZ|(THOUGH) =DHOW|(TODAY)=TUXDEY|(TOMO)RROW=TUMAA5|(TO)TAL=TOW5| (THUS)=DHAH4S|(TH)=TH|#:(TED)=TIXD|S(TI)#N=CH|(TI)O=SH|(TI)A=SH|(TIEN)=SHUN|(TUR)#=CHER|(TU)A=CHUW| (TWO)=TUW|&(T)EN =|(T)=T| (U) =YUW4| (UN)I=YUWN| (UN)=AHN| (UPON)=AXPAON|@(UR)#=UH4R|(UR)#=YUH4R|(UR)=ER|(U)^ =AH|(U)^^=AH5|(UY)=AY5| G(U)#=|G(U)%=|G(U)#=W|#N(U)=YUW|@(U)=UW|(U)=YUW| (V) =VIY4|(VIEW)=VYUW5|(V)=V| (W) =DAH4BULYUW| (WERE)=WER|(WA)SH=WAA|(WA)ST=WEY|(WA)S=WAH|(WA)T=WAA|(WHERE)=WHEHR|(WHAT)=WHAHT|(WHOL)=/HOWL|(WHO)=/HUW|(WH)=WH|(WAR)#=WEHR|(WAR)=WAOR|(WOR)^=WER|(WR)=R|(WOM)A=WUHM|(WOM)E=WIHM|(WEA)R=WEH|(WANT)=WAA5NT|ANS(WER)=ER|(W)=W| (X) =EH4KR| (X)=Z|(X)=KS| (Y) =WAY4|(YOUNG)=YAHNX| (YOUR)=YOHR| (YOU)=YUW| (YES)=YEHS| (Y)=Y|F(Y)=AY|PS(YCH)=AYK|#:^(Y)=IY|#:^(Y)I=IY| :(Y) =AY| :(Y)#=AY| :(Y)^+:#=IH| :(Y)^#=AY|(Y)=IH| (Z) =ZIY4|(Z)=Z".split("|").map(H=>{var e=(H=A(H)).c;S[e]=S[e]||[],S[e].push(H)}),'(A)=|(!)=.|(") =-AH5NKWOWT-|(")=KWOW4T-|(#)= NAH4MBER|($)= DAA4LER|(%)= PERSEH4NT|(&)= AEND|(\')=|(*)= AE4STERIHSK|(+)= PLAH4S|(,)=,| (-) =-|(-)=|(.)= POYNT|(/)= SLAE4SH|(0)= ZIY4ROW| (1ST)=FER4ST| (10TH)=TEH4NTH|(1)= WAH4N| (2ND)=SEH4KUND|(2)= TUW4| (3RD)=THER4D|(3)= THRIY4|(4)= FOH4R| (5TH)=FIH4FTH|(5)= FAY4V| (64) =SIH4KSTIY FOHR|(6)= SIH4KS|(7)= SEH4VUN| (8TH)=EY4TH|(8)= EY4T|(9)= NAY4N|(:)=.|(;)=.|(<)= LEH4S DHAEN|(=)= IY4KWULZ|(>)= GREY4TER DHAEN|(?)=?|(@)= AE6T|(^)= KAE4RIXT'.split("|").map(A)),T="*12345678".split(""),E=" *.*?*,*-*IYIHEHAEAAAHAOUHAXIXERUXOHRXLXWXYXWHR*L*W*Y*M*N*NXDXQ*S*SHF*TH/H/XZ*ZHV*DHCH**J*******EYAYOYAWOWUWB*****D*****G*****GX****P*****T*****K*****KX****ULUMUN".match(/.{1,2}/g),i=[32768,49408,49408,49408,49408,164,164,164,164,164,164,132,132,164,164,132,132,132,132,132,132,132,68,4164,4164,4164,4164,2124,3148,2124,1096,16460,9280,8256,8256,9280,64,64,9284,8260,8260,9284,8264,8256,76,8260,0,0,180,180,180,148,148,148,78,78,78,1102,1102,1102,78,78,78,78,78,78,75,75,75,1099,1099,1099,75,75,75,75,75,75,128,193,193],o=[0,4626,4626,4626,2056,2824,2312,2824,3592,3851,2822,4108,3082,1541,1541,3595,3082,3594,3082,2825,2056,2055,2825,2567,2310,2056,2054,2055,2055,2055,770,1285,514,514,514,514,514,514,1542,1542,2055,1542,1542,514,2312,1027,513,286,3597,3852,3852,3852,3598,3593,2054,513,514,1797,513,257,1798,513,514,1798,513,514,2056,514,514,1540,514,514,1798,513,1028,1798,257,1028,1479,1535],Z=(e,A)=>{var H=E.findIndex(H=>H===e+A&&"*"!==H[1]);return-1!==H&&H},P=e=>{var H=E.findIndex(H=>H===e+"*");return-1!==H&&H},b=(r,t,O)=>{for(let E=0;E<r.length;E++){let H=r[E],e=r[E+1]||"",A;if(!1!==(A=Z(H,e)))E++,t(A);else if(!1!==(A=P(H)))t(A);else{for(A=T.length;H!==T[A]&&0<A;)--A;if(0===A)throw Error();O(A)}}},D=(H,e)=>Y(i[H],e),B=23,V=57,w=69,m=1,y=2,J=8192,k=4096,Q=2048,x=1024,j=256,a=128,u=64,s=32,$=16,_=8,L=4,G=2,h=1,q=(A,E,r,t)=>{let H=(H,e)=>{switch(H){case 53:D(r(e-1),x)&&E(e,16);break;case 42:A(e+1,43,t(e));break;case 44:A(e+1,45,t(e))}},e=(H,e)=>{E(H,13),A(H+1,e,t(H))},O=-1,R;for(;null!==(R=r(++O));)if(0!==R)if(D(R,$))A(O+1,D(R,s)?21:20,t(O)),H(R,O);else if(78===R)e(O,24);else if(79===R)e(O,27);else if(80===R)e(O,28);else if(D(R,a)&&t(O))0===r(O+1)&&null!==(R=r(O+2))&&D(R,a)&&t(O+2)&&A(O+2,31,0);else{var I,Y=0===O?null:r(O-1);if(R===B)switch(Y){case w:E(O-1,42);break;case V:E(O-1,44);break;default:D(Y,a)&&E(O,18)}else 24===R&&D(Y,a)?E(O,19):60===Y&&32===R?E(O,38):60===R?(I=r(O+1),D(I,s)||null===I||E(O,63)):(72===R&&(I=r(O+1),D(I,s)&&null!==I||(E(O,75),R=75)),D(R,h)&&32===Y?E(O,R-12):D(R,h)||H(R,O),69!==R&&57!==R||0<O&&D(r(O-1),a)&&(0===(R=r(O+1))&&(R=r(O+2)),D(R,a))&&!t(O+1)&&E(O,30))}},z=(r,t,O)=>{for(let H=0;null!==r(H);H++)if(D(r(H),j)){for(var e,A=H;1<--H&&!D(r(H),a););if(0===H)break;for(;H<A;H++)D(r(H),J)&&!D(r(H),L)||(e=O(H),t(H,(e>>1)+e+1))}let R=-1,I;for(;null!==(I=r(++R));){let H=R,e,A,E;if(D(I,a))I=r(++H),D(I,u)?(e=null===I?u|h:i[I],Y(e,L)?(E=O(R),t(R,(E>>2)+E+1)):Y(e,h)&&(A=O(R),t(R,A-(A>>3)))):18!==I&&19!==I||!D(r(++H),u)||t(R,O(R)-1);else if(D(I,Q))null!==(I=r(++H))&&D(I,G)&&(t(H,6),t(H-1,5));else if(D(I,G)){for(;0===(I=r(++H)););null!==I&&D(I,G)&&(t(H,1+(O(H)>>1)),t(R,1+(O(R)>>1)))}else 0<H&&D(I,k)&&D(r(H-1),G)&&t(H,O(H)-2)}},H1=(H,e,A)=>{let E=0;for(var r;null!==(r=H(E));)D(r,u)&&null!==(r=H(E+1))&&D(r,a)&&0!==(r=e(E+1))&&r<128&&A(E,r+1),++E},e1=(H,e,A)=>{let E=0;for(var r;null!==(r=H(E));){var t=e(E);A(E,0===t||127<t?255&o[r]:o[r]>>8),E++}},A1=(A,H,e)=>{let E=-1;for(var r;null!==(r=A(++E));)if(D(r,G)){if(D(r,h)){let H,e=E;for(;0===(H=A(++e)););if(null!==H&&(D(H,_)||36===H||37===H))continue}H(E+1,r+1,e(E),255&o[r+1]),H(E+2,r+2,e(E),255&o[r+2]),E+=2}},E1=[24,26,23,23,23],r1=[0,224,230,236,243,249,0,6,12,6],M=[0,31,31,31,31,2,2,2,2,2,2,2,2,2,5,5,2,10,2,8,5,5,11,10,9,8,8,160,8,8,23,31,18,18,18,18,30,30,20,20,20,20,23,23,26,26,29,29,2,2,2,2,2,2,26,29,27,26,29,27,26,29,27,26,29,27,23,29,23,23,29,23,23,29,23,23,29,23,23,23],d=[0,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,3,2,4,4,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,0,1,0,1,0,5,5,5,5,5,4,4,2,0,1,2,0,1,2,0,1,2,0,1,2,0,2,2,0,1,3,0,2,3,0,2,160,160],K=[0,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,4,4,3,3,3,3,3,1,2,3,2,1,3,3,3,3,1,1,3,3,3,2,2,3,2,3,0,0,5,5,5,5,4,4,2,0,2,2,0,3,2,0,4,2,0,3,2,0,2,2,0,2,3,0,3,3,0,3,176,160],t1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,241,226,211,187,124,149,1,2,3,3,0,114,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,0,0,25,0,0,0,0,0,0,0,0,0],O1=[0,5980947,5980947,5980947,5980947,7230474,6113550,5980947,5783320,5842971,5712919,5775125,5383440,5844244,6113550,4075794,5383182,5774866,4076306,7218448,5250317,6112527,5904395,3944978,7216654,5904395,7230217,5320198,7943686,6641158,7943686,5980945,6506758,6967046,5315078,7946758,6113550,5383440,6107913,6767114,4990984,6106890,6639366,6639366,7946758,6639365,7958022,0,5916691,5777179,5775125,5778203,5774866,5382669,5315078,5315078,5315078,7946758,7946758,7946758,7368198,7237126,7237126,6181894,6181894,6181894,5315078,5315078,5315078,7946758,7946758,7946758,6647046,6641162,7367946,6181894,6181894,6181894,556844,98067],C=[0,0,0,0,0,526861,461581,527630,527887,68879,68623,3087,68367,2316,461581,330508,68623,3087,396301,67597,2061,461838,2061,330252,67597,2061,526861,780,2313,198153,0,0,0,0,0,0,0,0,779,66827,779,1035,0,0,1,66827,920064,66050,593422,68879,3087,68879,3087,2061,2,260,0,2,260,0,1,260,0,1,260,0,0,0,0,0,0,0,0,461324,0,0,330240,0,1245199,1048591],R1=[56,132,107,25,198,99,24,134,115,152,198,177,28,202,49,140,199,49,136,194,48,152,70,49,24,198,53,12,202,49,12,198,33,16,36,105,18,194,49,20,196,113,8,74,34,73,171,106,168,172,73,81,50,213,82,136,147,108,148,34,21,84,210,37,150,212,80,165,70,33,8,133,107,24,196,99,16,206,107,24,140,113,25,140,99,53,12,198,51,153,204,108,181,78,162,153,70,33,40,130,149,46,227,48,156,197,48,156,162,177,156,103,49,136,102,89,44,83,24,132,103,80,202,227,10,172,171,48,172,98,48,140,99,16,148,98,177,140,130,40,150,51,152,214,181,76,98,41,165,74,181,156,198,49,20,214,56,156,75,180,134,101,24,174,103,28,166,99,25,150,35,25,132,19,8,166,82,172,202,34,137,110,171,25,140,98,52,196,98,25,134,99,24,196,35,88,214,163,80,66,84,74,173,74,37,17,107,100,137,74,99,57,138,35,49,42,234,162,169,68,197,18,205,66,52,140,98,24,140,99,17,72,102,49,157,68,51,29,70,49,156,198,177,12,205,50,136,196,115,24,134,115,8,214,99,88,7,129,224,240,60,7,135,144,60,124,15,199,192,192,240,124,30,7,128,128,0,28,120,112,241,199,31,192,12,254,28,31,31,14,10,122,192,113,242,131,143,3,15,15,12,0,121,248,97,224,67,15,131,231,24,249,193,19,218,233,99,143,15,131,131,135,195,31,60,112,240,225,225,227,135,184,113,14,32,227,141,72,120,28,147,135,48,225,193,193,228,120,33,131,131,195,135,6,57,229,195,135,7,14,28,28,112,244,113,156,96,54,50,195,30,60,243,143,14,60,112,227,199,143,15,15,14,60,120,240,227,135,6,240,227,7,193,153,135,15,24,120,112,112,252,243,16,177,140,140,49,124,112,225,134,60,100,108,176,225,227,15,35,143,15,30,62,56,60,56,123,143,7,14,60,244,23,30,60,120,242,158,114,73,227,37,54,56,88,57,226,222,60,120,120,225,199,97,225,225,176,240,240,195,199,14,56,192,240,206,115,115,24,52,176,225,199,142,28,60,248,56,240,225,193,139,134,143,28,120,112,240,120,172,177,143,57,49,219,56,97,195,14,14,56,120,115,23,30,57,30,56,100,225,241,193,78,15,64,162,2,197,143,129,161,252,18,8,100,224,60,34,224,69,7,142,12,50,144,240,31,32,73,224,248,12,96,240,23,26,65,170,164,208,141,18,130,30,30,3,248,62,3,12,115,128,112,68,38,3,36,225,62,4,78,4,28,193,9,204,158,144,33,7,144,67,100,192,15,198,144,156,193,91,3,226,29,129,224,94,29,3,132,184,44,15,128,177,131,224,48,65,30,67,137,131,80,252,36,46,19,131,241,124,76,44,201,13,131,176,181,130,228,232,6,156,7,160,153,29,7,62,130,143,112,48,116,64,202,16,228,232,15,146,20,63,6,248,132,136,67,129,10,52,57,65,198,227,28,71,3,176,184,19,10,194,100,248,24,249,96,179,192,101,32,96,166,140,195,129,32,48,38,30,28,56,211,1,176,38,64,244,11,195,66,31,133,50,38,96,64,201,203,1,236,17,40,64,250,4,52,224,112,76,140,29,7,105,3,22,200,4,35,232,198,154,11,26,3,224,118,6,5,207,30,188,88,49,113,102,0,248,63,4,252,12,116,39,138,128,113,194,58,38,6,192,31,5,15,152,64,174,1,127,192,7,255,0,14,254,0,3,223,128,3,239,128,27,241,194,0,231,224,24,252,224,33,252,128,60,252,64,14,126,0,63,62,0,15,254,0,31,255,0,62,240,7,252,0,126,16,63,255,0,63,56,14,124,1,135,12,252,199,0,62,4,15,62,31,15,15,31,15,2,131,135,207,3,135,15,63,192,7,158,96,63,192,3,254,0,63,224,119,225,192,254,224,195,224,1,223,248,3,7,0,126,112,0,124,56,24,254,12,30,120,28,124,62,14,31,30,30,62,0,127,131,7,219,135,131,7,199,7,16,113,255,0,63,226,1,224,193,195,225,0,127,192,5,240,32,248,240,112,254,120,121,248,2,63,12,143,3,15,159,224,193,199,135,3,195,195,176,225,225,193,227,224,113,240,0,252,112,124,12,62,56,14,28,112,195,199,3,129,193,199,231,0,15,199,135,25,9,239,196,51,224,193,252,248,112,240,120,248,240,97,199,0,31,248,1,124,248,240,120,112,60,124,206,14,33,131,207,8,7,143,8,193,135,143,128,199,227,0,7,248,224,239,0,57,247,128,14,248,225,227,248,33,159,192,255,3,248,7,192,31,248,196,4,252,196,193,188,135,240,15,192,127,5,224,37,236,192,62,132,71,240,142,3,248,3,251,192,25,248,7,156,12,23,248,7,224,31,161,252,15,252,1,240,63,0,254,3,240,31,0,253,0,255,136,13,249,1,255,0,112,7,192,62,66,243,13,196,127,128,252,7,240,94,192,63,0,120,63,129,255,1,248,1,195,232,12,228,100,143,228,15,240,7,240,194,31,0,127,192,111,128,126,3,248,7,240,63,192,120,15,130,7,254,34,119,112,2,118,3,254,0,254,103,0,124,199,241,142,198,59,224,63,132,243,25,216,3,153,252,9,184,15,248,0,157,36,97,249,13,0,253,3,240,31,144,63,1,248,31,208,15,248,55,1,248,7,240,15,192,63,0,254,3,248,15,192,63,0,250,3,240,15,128,255,1,184,7,240,1,252,1,188,128,19,30,0,127,225,64,127,160,127,176,0,63,192,31,192,56,15,240,31,128,255,1,252,3,241,126,1,254,1,240,255,0,127,192,29,7,240,15,192,126,6,224,7,224,15,248,6,193,254,1,252,3,224,15,0,252],I1=(e,A)=>{let E=(H,e)=>(H*e>>8&255)<<1,r=[[],[],[]];O1.map((H,e)=>{r[0][e]=255&H,r[1][e]=H>>8&255,r[2][e]=H>>16&255});for(let H=5;H<30;H++)r[0][H]=E(e,r[0][H]),r[1][H]=E(A,r[1][H]);for(let H=48;H<54;H++)r[0][H]=E(e,r[0][H]),r[1][H]=E(A,r[1][H]);return r},Y1=(e,H,A,E)=>{let Y=[e,H[0],H[1],H[2],A[0],A[1],A[2]],l=(H,e)=>Y[H][e],r=(e,A,E,H)=>{let r=H<0,t=Math.abs(H)%e,O=H/e|0,R=0,I=e;for(;0<--I;){let H=l(A,E)+O;(R+=t)>=e&&(R-=e,r?H--:H&&H++),Y[A][++E]=H,H+=O}},t,O,R=0;for(let H=0;H<E.length-1;H++){var I=E[H][0],n=E[H+1][0],U=M[n],N=M[I],W=(O=N===U?(t=d[I],d[n]):N<U?(t=K[n],d[n]):(t=d[I],K[I]),(R+=E[H][1])+O),S=R-t,f=t+O;if(0==(f-2&128)){r((N=E[H][1]>>1)+(U=E[H+1][1]>>1),0,S,e[R+U]-e[R-N]);for(let H=1;H<7;H++){var T=l(H,W)-l(H,S);r(f,H,S,T)}}}return R+E[E.length-1][1]},l1=255,n1=1,U1=(A,E,r)=>{let H=(H,e,A)=>{var E=e;e<30?e=0:e-=30;let r;for(;127===(r=A[e]);)++e;for(;e!==E;)for(r+=H,A[e]=255&r;++e!==E&&255===A[e];);},t=[],O=[[],[],[]],R=[[],[],[]],I=[],Y=0;for(let e=0;e<E.length;e++){var l=E[e][0],n=(l===m?H(n1,Y,t):l===y&&H(l1,Y,t),r1[E[e][2]]);for(let H=E[e][1];0<H;H--)O[0][Y]=r[0][l],O[1][Y]=r[1][l],O[2][Y]=r[2][l],R[0][Y]=255&C[l],R[1][Y]=C[l]>>8&255,R[2][Y]=C[l]>>16&255,I[Y]=t1[l],t[Y]=A+n&255,Y++}return[t,O,R,I]},N1=(H,e,A,E,r)=>{var A=I1(A,E),[t,O,R,E]=U1(e,H,A),e=Y1(t,O,R,H);if(!r)for(let H=0;H<t.length;H++)t[H]-=O[0][H]>>1;var I=[0,1,2,2,2,3,3,4,4,5,6,8,9,11,13,15];for(let H=R[0].length-1;0<=H;H--)R[0][H]=I[R[0][H]],R[1][H]=I[R[1][H]],R[2][H]=I[R[2][H]];return[e,O,t,R,E]},W1=H=>{let A=new Uint8Array(H),E=0,r=0,t=(H,e)=>{e=16*(15&e),t.ary(H,[e,e,e,e,e])};return t.ary=(H,e)=>{if(((E+=[[162,167,167,127,128],[226,60,60,0,0],[225,60,59,0,0],[200,0,0,54,55],[199,0,0,54,54]][r][H])/50|0)>A.length)throw new Error;r=H;for(let H=0;H<5;H++)A[(E/50|0)+H]=e[H]},t.get=()=>A.slice(0,E/50|0),t},v=(O,e,H,A)=>{let E=(7&H)-1,R=256*E&65535,I=248&H,r=(H,e,A,E)=>{let r=8,t=R1[R+I];for(;0!=(128&t)?O(H,e):O(A,E),t<<=1,--r;);};if(0===I){let H=A>>4^255;for(I=255&e;r(3,26,4,6),I++,I&=255,255&++H;);return I}I^=255;for(var t=255&E1[E];r(2,5,1,t),255&++I;);return e},c=H=>127*Math.sin(2*Math.PI*(H/256))|0,S1=(H,e,A,t,E,O,r)=>{let R=A,I=0,Y=0,l=0,n=0,U=0,N=E[0],W=.75*N|0;for(;e;){var S=r[U];if(0!=(248&S))n=v(H,n,S,E[255&U]),U+=2,e-=2,R=A;else{{let e=[],A=256*I,E=256*Y,r=256*l;for(let H=0;H<5;H++){var f=c(255&A>>8),T=c(255&E>>8),i=(255&r>>8)<129?-112:112,f=(f*(15&O[0][U])+T*(15&O[1][U])+i*(15&O[2][U]))/32+128;e[H]=0|f,A+=256*t[0][U]/4,E+=256*t[1][U]/4,r+=256*t[2][U]/4}H.ary(0,e)}if(0==--R){if(U++,0==--e)return;R=A}if(0!=--N){if(0!=--W||0===S){I+=t[0][U],Y+=t[1][U],l+=t[2][U];continue}n=v(H,n,S,E[255&U])}}N=E[U],W=.75*N|0,I=0,Y=0,l=0}};function X(H){var e,A,E,r,t,O=1<arguments.length&&void 0!==arguments[1]?arguments[1]:{},H=(H=>{if(!H)return!1;let e=H=>H===I.length?null:I[H],A=(e,H,A,E)=>{for(let H=I.length-1;H>=e;H--)I[H+1]=I[H],R[H+1]=t(H),O[H+1]=r(H);I[e]=H,R[e]=0|E,O[e]=A},r=H=>0|O[H],t=H=>0|R[H],E=(H,e)=>{R[H]=e},O=[],R=[],I=[],Y=0;return b(H,H=>{O[Y]=0,R[Y]=0,I[Y++]=H},H=>{O[Y-1]=H}),q(A,(H,e)=>{I[H]=e},e,r),H1(e,r,(H,e)=>{O[H]=e}),e1(e,r,E),z(e,E,t),A1(e,A,r),I.map((H,e)=>H?[H,0|R[e],0|O[e]]:null).filter(H=>H)})(H);return!1!==H&&(r=void 0===(r=O.pitch)?64:255&r,A=void 0===(A=O.mouth)?128:255&A,E=void 0===(E=O.throat)?128:255&E,e=255&(O.speed||72),O=O.singmode||!1,r=N1(H,r,A,E,O),A=W1(176.4*H.reduce((H,e)=>H+e[1],0)*e|0),[E,O,H,r,t]=r,S1(A,E,e,O,H,r,t),A.get())}let F=H=>{let e=" "+H.toUpperCase(),A=0,E="",r=(H,e)=>{A+=e,E+=H},t=0;for(;A<e.length&&t++<1e4;){var O=e[A];if("."!==O||N(e,A+1,1))if(U(O,2))f.some(H=>H(e,A,r));else if(0!==l[O]){if(!U(O,n))return!1;S[O].some(H=>H(e,A,r))}else E+=" ",A++;else E+=".",A++}return E},g=X,p=(H,e)=>{if(!1===(H=X(H,e)))return!1;var A=H,E=new Float32Array(A.length);for(let H=0;H<A.length;H++)E[H]=(A[H]-128)/256;return E};function H(H){let A=H||{},E=(H,e)=>e||A.phonetic?H.toUpperCase():F(H);this.buf8=(H,e)=>g(E(H,e),A),this.buf32=(H,e)=>p(E(H,e),A),this.speak=(e,H)=>{if(e=this.buf32(e,H),I=null===I?new AudioContext:I){var O=I,R=e;let t,H=new Promise((H,e)=>{let A=O.createBufferSource(),E=O.createBuffer(1,R.length,22050),r=E.getChannelData(0);for(let H=0;H<R.length;H++)r[H]=R[H];A.buffer=E,A.connect(O.destination),A.onended=()=>{H(!0)},t=H=>{A.disconnect(),e(H)},A.start(0)});return H.abort=t,H}throw new Error},this.download=(H,e)=>{var A,H=this.buf8(H,e),e=new Blob([R(H)],{type:"audio/vnd.wave"}),e=(H=window.URL||window.webkitURL).createObjectURL(e);(A=document.createElement("a")).href=e,A.target="_blank",A.download="sam.wav",document.body.appendChild(A),A.click(),document.body.removeChild(A),H.revokeObjectURL(e)},this.wav=(H,e)=>R(this.buf8(H,e))}return H.buf8=g,H.buf32=p,H.convert=F,H}var e=this;"object"==typeof exports&&"undefined"!=typeof module?module.exports=H():"function"==typeof define&&define.amd?define(H):(e="undefined"!=typeof globalThis?globalThis:e||self).SamJs=H();
+
+}).call(window);
+</script>
+<script>
+/* ===== Voce SAM (Software Automatic Mouth, 1982) in italiano =====
+   Il motore e' il port JavaScript di SAM (sam-js di Christian Schiffler, incluso sopra).
+   Qui l'italiano scritto diventa fonemi di SAM: SAM legge solo l'inglese, quindi gli diamo i suoni gia' pronti. */
+const ITA_STRESS={'Cuneo':'C\u00f9neo','Pavia':'Pav\u00eca','Cagliari':'C\u00e0gliari','Sassari':'S\u00e0ssari','Pesaro':'P\u00e8saro','Ascoli':'\u00c0scoli',
+ 'Teramo':'T\u00e8ramo','Aquila':'\u00c0quila','Rimini':'R\u00ecmini','Modena':'M\u00f2dena','Padova':'P\u00e0dova','Udine':'\u00d9dine',
+ 'Bergamo':'B\u00e8rgamo','Mantova':'M\u00e0ntova','Genova':'G\u00e8nova','Napoli':'N\u00e0poli','Taranto':'T\u00e0ranto','Brindisi':'Br\u00ecndisi',
+ 'Trapani':'Tr\u00e0pani','Ossola':'\u00d2ssola','Sulcis':'S\u00f9lcis','Olbia':'\u00d2lbia','Tempio':'T\u00e8mpio'};
+const ITA_LET={A:'AA4',B:'BIY4',C:'CHIY4',D:'DIY4',E:'EH4',F:'EH4FEH',G:'JIY4',H:'AA4KAA',I:'IY4',J:'IY4 LUW4NGAA',K:'KAA4PAA',L:'EH4LEH',
+ M:'EH4MEH',N:'EH4NEH',O:'OH4',P:'PIY4',Q:'KUW4',R:'EH4REH',S:'EH4SEH',T:'TIY4',U:'UW4',V:'VUW4',W:'DOH4PYAA VUW4',X:'IY4KS',Y:'IY4PSIYLOHN',Z:'DZEH4TAA'};
+const ITA_V={a:'AA',e:'EH',i:'IY',o:'OH',u:'UW'};
+const ITA_ACC={'\u00e0':'a','\u00e8':'e','\u00e9':'e','\u00ec':'i','\u00ed':'i','\u00f2':'o','\u00f3':'o','\u00f9':'u','\u00fa':'u'};
+function itaWord(w){
+  w=w.replace(/[A-Za-z\u00c0-\u00ff]+/g,m=>ITA_STRESS[m]||m);
+  const raw=w.toLowerCase().replace(/[^a-z\u00e0-\u00fa]/g,'');
+  const L=[],acc=[];for(const ch of raw){if(ITA_ACC[ch]){L.push(ITA_ACC[ch]);acc.push(true)}else{L.push(ch);acc.push(false)}}
+  const isV=c=>'aeiou'.includes(c),PLOS='cgtpbdkqz';
+  const out=[];/* {p:fonema, v:nucleo?, s:accento} */
+  const C=p=>out.push({p,v:false});
+  for(let i=0;i<L.length;i++){const c=L[i],n=L[i+1],n2=L[i+2];
+    if(isV(c)){
+      const prevV=i>0&&isV(L[i-1]),nextV=n!==undefined&&isV(n);
+      if(c==='i'&&!acc[i]&&nextV&&i>0&&!(prevV&&!nextV)){C('Y');continue}
+      if(c==='u'&&!acc[i]&&nextV&&i>0&&!prevV){C('W');continue}
+      out.push({p:ITA_V[c],v:true,s:acc[i]});continue}
+    if(c===n&&c!=='s'||(c==='c'&&n==='q')){if(PLOS.includes(c))C('Q');continue}
+    const soft=x=>x==='e'||x==='i';
+    const silentI=k=>{if(L[k]==='i'&&!acc[k]&&L[k+1]!==undefined&&isV(L[k+1]))return true;return false};
+    switch(c){
+      case 'c':if(n==='h'){C('K');i++}else if(soft(n)){C('CH');if(silentI(i+1))i++}else C('K');break;
+      case 'g':if(n==='h'){C('G');i++}else if(n==='n'){C('N');C('Y');i++;if(silentI(i+1))i++}
+        else if(n==='l'&&n2==='i'){C('L');C('Y');i++;if(silentI(i+1))i++}
+        else if(soft(n)){C('J');if(silentI(i+1))i++}else C('G');break;
+      case 's':if(n==='s'){continue}
+        if(n==='c'&&soft(n2)){C('SH');i++;if(silentI(i+1))i++;break}
+        if(i>0&&isV(L[i-1])&&n!==undefined&&isV(n)&&L[i-1]!=='s'){C('Z');break}
+        if(n!==undefined&&'bdglmnrv'.includes(n)){C('Z');break}
+        C('S');break;
+      case 'z':C('T');C('S');break;
+      case 'q':C('K');if(n==='u'){C('W');i++}break;
+      case 'h':break;
+      case 'j':C('Y');break;
+      case 'x':C('K');C('S');break;
+      case 'y':out.push({p:'IY',v:true,s:false});break;
+      case 'w':C('W');break;
+      case 'r':C('R');break;
+      default:C(c.toUpperCase())}
+  }
+  const nuc=out.filter(o=>o.v);
+  if(nuc.length){let st=nuc.find(o=>o.s);if(!st)st=nuc.length>=2?nuc[nuc.length-2]:nuc[0];st.p+='4'}
+  return out.map(o=>o.p).join('')}
+function itaPhrase(t){/* parole separate da spazio; trattini e apostrofi */
+  return String(t).replace(/\(.*?\)/g,'').replace(/\b([LlDd])[\u2019']/g,'$1').split(/[\s\-]+/).filter(Boolean)
+    .map(wd=>{const m=/^([LlDd])([A-Z\u00c0-\u00dd].*)$/.exec(wd);return m?m[1]+(ITA_STRESS[m[2]]||m[2]):wd}).map(itaWord).join(' ')}
+function itaSpell(s){return s.toUpperCase().split('').map(c=>ITA_LET[c]||'').filter(Boolean).join(', ')}
+</script>
+<script>
+'use strict';
+const FONT={"A":[24,60,102,102,126,102,102,0],"B":[124,102,102,124,102,102,124,0],"C":[60,102,96,96,96,102,60,0],"D":[120,108,102,102,102,108,120,0],"E":[126,96,96,124,96,96,126,0],"F":[126,96,96,124,96,96,96,0],"G":[60,102,96,110,102,102,60,0],"H":[102,102,102,126,102,102,102,0],"I":[60,24,24,24,24,24,60,0],"J":[30,12,12,12,12,108,56,0],"K":[102,108,120,112,120,108,102,0],"L":[96,96,96,96,96,96,126,0],"M":[99,119,127,107,99,99,99,0],"N":[102,118,126,126,110,102,102,0],"O":[60,102,102,102,102,102,60,0],"P":[124,102,102,124,96,96,96,0],"Q":[60,102,102,102,102,60,14,0],"R":[124,102,102,124,120,108,102,0],"S":[60,102,96,60,6,102,60,0],"T":[126,24,24,24,24,24,24,0],"U":[102,102,102,102,102,102,60,0],"V":[102,102,102,102,102,60,24,0],"W":[99,99,99,107,127,119,99,0],"X":[102,102,60,24,60,102,102,0],"Y":[102,102,102,60,24,24,24,0],"Z":[126,6,12,24,48,96,126,0],"a":[0,0,60,6,62,102,62,0],"b":[0,96,96,124,102,102,124,0],"c":[0,0,60,96,96,96,60,0],"d":[0,6,6,62,102,102,62,0],"e":[0,0,60,102,126,96,60,0],"f":[0,28,48,124,48,48,48,0],"g":[0,0,62,102,102,62,6,124],"h":[0,96,96,124,102,102,102,0],"i":[0,24,0,56,24,24,60,0],"j":[0,6,0,6,6,6,102,60],"k":[0,96,96,108,120,108,102,0],"l":[0,56,24,24,24,24,60,0],"m":[0,0,118,127,107,99,99,0],"n":[0,0,124,102,102,102,102,0],"o":[0,0,60,102,102,102,60,0],"p":[0,0,124,102,102,124,96,96],"q":[0,0,62,102,102,62,6,6],"r":[0,0,124,102,96,96,96,0],"s":[0,0,62,96,60,6,124,0],"t":[0,48,124,48,48,48,28,0],"u":[0,0,102,102,102,102,62,0],"v":[0,0,102,102,102,60,24,0],"w":[0,0,99,107,127,54,54,0],"x":[0,0,102,60,24,60,102,0],"y":[0,0,102,102,102,62,12,120],"z":[0,0,126,12,24,48,126,0],"0":[60,102,110,126,118,102,60,0],"1":[24,56,120,24,24,24,126,0],"2":[60,102,6,12,48,96,126,0],"3":[60,102,6,28,6,102,60,0],"4":[12,28,60,108,126,12,12,0],"5":[126,96,124,6,6,102,60,0],"6":[60,96,96,124,102,102,60,0],"7":[126,6,12,24,24,24,24,0],"8":[60,102,102,60,102,102,60,0],"9":[60,102,102,62,6,6,60,0]," ":[0,0,0,0,0,0,0,0],"!":[24,24,24,24,24,0,24,0],"\"":[102,102,0,0,0,0,0,0],"#":[102,102,255,102,255,102,102,0],"$":[24,62,96,60,6,124,24,0],"%":[98,102,12,24,48,102,70,0],"&":[60,102,60,56,111,102,63,0],"'":[12,24,0,0,0,0,0,0],"(":[12,24,48,48,48,24,12,0],")":[48,24,12,12,12,24,48,0],"*":[0,102,60,255,60,102,0,0],"+":[0,24,24,126,24,24,0,0],",":[0,0,0,0,0,24,24,48],"-":[0,0,0,126,0,0,0,0],".":[0,0,0,0,0,24,24,0],"/":[0,3,6,12,24,48,96,0],":":[0,0,24,0,0,24,0,0],";":[0,0,24,0,0,24,24,48],"<":[14,28,56,112,56,28,14,0],"=":[0,0,126,0,126,0,0,0],">":[112,56,28,14,28,56,112,0],"?":[60,102,6,12,24,0,24,0],"@":[60,102,110,110,96,98,60,0],"[":[60,48,48,48,48,48,60,0],"]":[60,12,12,12,12,12,60,0],"_":[0,0,0,0,0,0,0,255],"█":[255,255,255,255,255,255,255,255],"◣":[128,192,224,240,248,252,254,255],"◢":[1,3,7,15,31,63,127,255],"◤":[255,254,252,248,240,224,192,128],"◥":[255,127,63,31,15,7,3,1],"─":[0,0,0,255,255,0,0,0],"▀":[255,255,255,255,0,0,0,0],"▄":[0,0,0,0,255,255,255,255],"▌":[240,240,240,240,240,240,240,240],"▐":[15,15,15,15,15,15,15,15],"│":[24,24,24,24,24,24,24,24],"à":[48,24,60,6,62,102,62,0],"è":[48,24,60,102,126,96,60,0],"é":[12,24,60,102,126,96,60,0],"ì":[48,24,0,56,24,24,60,0],"ò":[48,24,60,102,102,102,60,0],"ù":[48,24,102,102,102,102,62,0],"È":[48,126,96,124,96,96,126,0],"€":[30,48,252,48,252,48,30,0],"┌":[0,0,0,31,31,24,24,24],"┐":[0,0,0,248,248,24,24,24],"└":[24,24,24,31,31,0,0,0],"┘":[24,24,24,248,248,0,0,0],"├":[24,24,24,31,31,24,24,24],"┤":[24,24,24,248,248,24,24,24],"▒":[170,85,170,85,170,85,170,85],"►":[96,120,126,127,126,120,96,0],"◄":[6,30,126,254,126,30,6,0],"▲":[0,24,60,126,255,0,0,0],"▼":[0,255,126,60,24,0,0,0],"♥":[102,255,255,255,126,60,24,0],"●":[60,126,255,255,255,126,60,0],"✓":[0,3,6,140,216,112,32,0],"·":[0,0,0,24,24,0,0,0],"▏":[128,128,128,128,128,128,128,128],"▎":[192,192,192,192,192,192,192,192],"▍":[224,224,224,224,224,224,224,224],"▋":[248,248,248,248,248,248,248,248],"▊":[252,252,252,252,252,252,252,252],"▉":[254,254,254,254,254,254,254,254],"▁":[0,0,0,0,0,0,0,255],"▂":[0,0,0,0,0,0,255,255],"▃":[0,0,0,0,0,255,255,255],"▅":[0,0,0,255,255,255,255,255],"▆":[0,0,255,255,255,255,255,255],"▇":[0,255,255,255,255,255,255,255]};
+/* ===== Palette C64 (16 colori) ===== */
+const PAL=['#000000','#FFFFFF','#68372B','#70A4B2','#6F3D86','#588D43','#352879','#B8C76F','#6F4F25','#433900','#9A6759','#444444','#6C6C6C','#9AD284','#6C5EB5','#959595'];
+const BLK=0,WHT=1,RED=2,CYN=3,PUR=4,GRN=5,BLU=6,YEL=7,ORA=8,BRN=9,LRED=10,DGRY=11,GRY=12,LGRN=13,LBLU=14,LGRY=15;
+const P32=PAL.map(h=>{const n=parseInt(h.slice(1),16);return((255<<24)|((n&255)<<16)|(n&0xff00)|((n>>16)&255))>>>0});
+const COLS=30,BX=12,BY=12,MINR=44,CW=28;
+let ROWS=MINR,W=COLS*8+2*BX,H=0;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const off=document.createElement('canvas'),octx=off.getContext('2d');
+let img=null,b32=null,CH=[],FG=[],BG=[];
+let scrBg=BLU,border=LBLU,txt=LBLU,hot=[],cursor=null,dirty=true,mode='text',flash=null,blink=true;
+let cur=null,curBack=null,inputH=null,anyTap=null,busy=false;
+/* ===== Memoria ===== */
+let S={};try{S=JSON.parse(localStorage.getItem('province64')||'{}')||{}}catch(e){S={}}
+function save(){try{localStorage.setItem('province64',JSON.stringify(S))}catch(e){}}
+if(S.snd===undefined)S.snd=true;
+/* ===== Schermo ===== */
+function layout(){
+  const vw=window.innerWidth,vh=window.innerHeight,W0=COLS*8+2*BX;
+  let s=vw/W0,rows=Math.floor((vh/s-2*BY)/8);
+  if(rows<MINR){rows=MINR;s=vh/(MINR*8+2*BY)}
+  rows=Math.min(rows,72);
+  const changed=rows!==ROWS||!img;
+  ROWS=rows;W=W0;H=ROWS*8+2*BY;
+  if(changed){off.width=W;off.height=H;img=octx.createImageData(W,H);b32=new Uint32Array(img.data.buffer);
+    const n=COLS*ROWS;CH=new Array(n).fill(' ');FG=new Array(n).fill(txt);BG=new Array(n).fill(-1)}
+  const cw=W*s,chh=H*s,dpr=Math.min(window.devicePixelRatio||1,3);
+  cv.style.width=cw+'px';cv.style.height=chh+'px';
+  cv.style.left=Math.round((vw-cw)/2)+'px';cv.style.top=Math.round((vh-chh)/2)+'px';
+  cv.width=Math.round(cw*dpr);cv.height=Math.round(chh*dpr);
+  if(changed&&cur)cur();
+  dirty=true;
+}
+function cls(bg,bd,fg){scrBg=bg;border=bd;txt=fg;CH.fill(' ');FG.fill(fg);BG.fill(-1);hot=[];cursor=null;flash=null;dirty=true}
+function put(x,y,s,fg,bg){s=String(s);if(fg===undefined)fg=txt;if(bg===undefined)bg=-1;
+  for(let i=0;i<s.length;i++){const xx=x+i;if(xx<0||xx>=COLS||y<0||y>=ROWS)continue;const k=y*COLS+xx;CH[k]=s[i];FG[k]=fg;BG[k]=bg}dirty=true}
+function fill(x,y,w,h,bg,ch,fg){for(let j=0;j<h;j++)put(x,y+j,(ch||' ').repeat(w),fg===undefined?txt:fg,bg)}
+function center(y,s,fg,bg){put(Math.floor((COLS-s.length)/2),y,s,fg,bg)}
+function wrap(t,w){const out=[];String(t).split('\n').forEach(par=>{let line='';par.split(' ').forEach(wd=>{if(!wd)return;
+  while(wd.length>w){if(line){out.push(line);line=''}out.push(wd.slice(0,w));wd=wd.slice(w)}
+  if(!line)line=wd;else if(line.length+1+wd.length<=w)line+=' '+wd;else{out.push(line);line=wd}});out.push(line)});return out}
+function hotspot(x,y,w,h,fn,keys){hot.push({x,y,w,h,fn,keys:keys||[]})}
+function button(x,y,w,h,label,bg,fg,fn,keys){fill(x,y,w,h,bg,' ',fg);const ls=Array.isArray(label)?label:[label];
+  const y0=y+Math.floor((h-ls.length)/2);ls.forEach((l,i)=>put(x+Math.max(0,Math.floor((w-l.length)/2)),y0+i,l.slice(0,w),fg,bg));hotspot(x,y,w,h,fn,keys)}
+function render(){
+  const bc=P32[border];
+  if(mode==='pilot'||mode==='data'||mode==='blank'){
+    /* Come il caricatore della ROM del C64: durante la lettura del nastro lo schermo si spegne
+       e diventa tutto del colore del bordo (azzurro), senza strisce e senza nero. */
+    b32.fill(bc);
+  }else{
+    b32.fill(bc);
+    for(let cy=0;cy<ROWS;cy++)for(let cx=0;cx<COLS;cx++){
+      const k=cy*COLS+cx;let f=FG[k],b=BG[k]<0?scrBg:BG[k];
+      let inv=false;
+      if(flash&&cx>=flash.x&&cx<flash.x+flash.w&&cy>=flash.y&&cy<flash.y+flash.h)inv=true;
+      if(cursor&&blink&&cursor.x===cx&&cursor.y===cy)inv=!inv;
+      if(inv){const tmp=f;f=b;b=tmp}
+      const fc=P32[f],gc=P32[b],gl=FONT[CH[k]]||FONT['?'];
+      for(let r=0;r<8;r++){const bits=gl[r];let p=(BY+cy*8+r)*W+BX+cx*8;
+        for(let c=0;c<8;c++)b32[p+c]=(bits&(128>>c))?fc:gc}}
+  }
+  octx.putImageData(img,0,0);ctx.imageSmoothingEnabled=false;ctx.drawImage(off,0,0,cv.width,cv.height);
+  document.body.style.background=PAL[border];
+  dirty=false;
+}
+let lastBlink=0;
+function loop(t){if(t-lastBlink>333){lastBlink=t;blink=!blink;if(cursor)dirty=true}
+  if(flash&&t>flash.until){flash=null;dirty=true}
+  if(dirty||mode!=='text')render();requestAnimationFrame(loop)}
+/* ===== Suono (stile SID) ===== */
+let AC=null,tapeOsc=null;
+function audioInit(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==='suspended')AC.resume().catch(()=>{})}
+function tone(f,d,type,v,when){if(!S.snd||!AC)return;try{const t=AC.currentTime+(when||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v||0.05,t);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+0.03)}catch(e){}}
+const sfx={
+  click(){tone(1760,0.03,'square',0.025)},
+  sel(){tone(660,0.05,'square',0.04);tone(990,0.08,'square',0.04,0.05)},
+  page(){tone(523,0.05,'triangle',0.08)},
+  ok(){[523,659,784,1047].forEach((f,i)=>tone(f,0.12,'triangle',0.12,i*0.08))},
+  bad(){tone(150,0.35,'sawtooth',0.05);tone(110,0.35,'sawtooth',0.05,0.12)},
+  err(){tone(220,0.15,'square',0.04)}
+};
+function tapeOn(){if(!S.snd||!AC)return;try{tapeOsc=AC.createOscillator();const g=AC.createGain();tapeOsc.type='square';g.gain.value=0.012;
+  tapeOsc.connect(g);g.connect(AC.destination);tapeOsc.start();
+  const step=()=>{if(!tapeOsc)return;tapeOsc.frequency.setValueAtTime(mode==='pilot'?1200:600+Math.random()*1800,AC.currentTime);setTimeout(step,25)};step()}catch(e){tapeOsc=null}}
+function tapeOff(){if(tapeOsc){try{tapeOsc.stop()}catch(e){}tapeOsc=null}}
+/* ===== Voce SAM: dice la sigla e il nome della provincia =====
+   Come SAM sul C64 vero, mentre parla lo schermo si spegne e resta tutto del colore del bordo (azzurro). */
+let SAMV=null,samSrc=null,samT=null;const samCache={};
+function samText(d){return itaSpell(d.s)+'. '+itaPhrase(d.n.replace(/\s*\(.*\)/,''))+'.'}
+function samBuf(d){if(samCache[d.s])return samCache[d.s];
+  try{if(!SAMV){if(typeof SamJs!=='function')return null;SAMV=new SamJs({speed:76,pitch:64,throat:128,mouth:128})}
+    const f=SAMV.buf32(samText(d),true);if(!f||!f.length)return null;samCache[d.s]=f;return f}catch(e){return null}}
+function stopSay(){if(!samSrc)return;const s=samSrc;samSrc=null;clearTimeout(samT);try{s.onended=null;s.stop()}catch(e){}
+  mode='text';anyTap=null;dirty=true}
+function say(d){stopSay();audioInit();const f=samBuf(d);if(!f||!AC){tone(220,0.15,'square',0.04);return false}
+  let src;try{const b=AC.createBuffer(1,f.length,22050);b.getChannelData(0).set(f);src=AC.createBufferSource();src.buffer=b;
+    const g=AC.createGain();g.gain.value=1.6;src.connect(g);g.connect(AC.destination)}catch(e){return false}
+  samSrc=src;mode='blank';dirty=true;anyTap=stopSay;
+  window.samLast={s:d.s,text:samText(d),samples:f.length,secs:f.length/22050,t0:performance.now()};
+  const done=()=>{if(samSrc!==src)return;samSrc=null;clearTimeout(samT);mode='text';anyTap=null;dirty=true;window.samLast.t1=performance.now()};
+  src.onended=done;samT=setTimeout(done,f.length/22050*1000+500);
+  try{src.start()}catch(e){done();return false}return true}
+/* ===== Schermo intero ===== */
+function goFull(){const d=document;if(d.fullscreenElement||d.webkitFullscreenElement)return;const el=d.documentElement;
+  try{const fn=el.requestFullscreen||el.webkitRequestFullscreen;if(!fn)return;const p=fn.call(el,{navigationUI:'hide'});
+    if(p&&p.then)p.then(()=>{try{screen.orientation.lock('portrait').catch(()=>{})}catch(e){}}).catch(()=>{})}catch(e){}}
+/* Schermo intero subito: prova all'avvio, poi al primo tocco ovunque (Chrome lo consente solo dopo un gesto) */
+goFull();addEventListener('load',goFull);
+['pointerdown','touchend','click','keydown'].forEach(t=>document.addEventListener(t,goFull,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSay();else goFull()});
+/* ===== Tocco e tastiera ===== */
+cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();goFull();
+  const r=cv.getBoundingClientRect();const px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H;
+  const cx=Math.max(0,Math.min(COLS-1,Math.floor((px-BX)/8))),cy=Math.max(0,Math.min(ROWS-1,Math.floor((py-BY)/8)));
+  if(anyTap){const f=anyTap;f();return}
+  if(busy)return;
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(cx>=h.x&&cx<h.x+h.w&&cy>=h.y&&cy<h.y+h.h){press(h);return}}
+});
+function press(h){busy=true;flash={x:h.x,y:h.y,w:h.w,h:h.h,until:performance.now()+110};dirty=true;sfx.click();
+  setTimeout(()=>{busy=false;h.fn()},100)}
+const KEYMAP={Backspace:'DEL',Enter:'OK',Escape:'ESC',Delete:'C','.':',',',':',',ArrowRight:'NEXT',ArrowLeft:'PREV',' ':'NEXT'};
+document.addEventListener('keydown',e=>{audioInit();if(anyTap){anyTap();e.preventDefault();return}
+  let k=KEYMAP[e.key]||e.key.toUpperCase();if(busy)return;
+  if(inputH&&(/^[0-9]$/.test(k)||['DEL','OK','ESC','C',','].includes(k))){e.preventDefault();inputH(k,true);return}
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(h.keys.includes(k)){e.preventDefault();press(h);return}}
+});
+/* Tasto Indietro di Android */
+let trapped=false;
+function trap(){if(!trapped){try{history.pushState({s64:1},'');trapped=true}catch(e){}}}
+window.addEventListener('popstate',()=>{trapped=false;if(curBack){const f=curBack;f()}});
+function show(fn,back){stopSay();cur=fn;curBack=back||null;inputH=null;anyTap=null;if(back)trap();fn()}
+/* ===== Utilità numeri ===== */
+function fmt(n,d){d=d||0;const neg=n<0;let s=Math.abs(n).toFixed(d);let [i,f]=s.split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return(neg?'-':'')+i+(f?','+f:'')}
+function eur(n,d){return fmt(n,d)+' \u20ac'}
+/* Importi in centesimi interi (BigInt): niente errori di virgola mobile, centesimi sempre visibili */
+function toC(v){return BigInt(Math.round(Number(v)*100))}
+function fmtC(c){c=BigInt(c);const neg=c<0n;if(neg)c=-c;const i=(c/100n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'),f=(c%100n).toString().padStart(2,'0');return(neg?'-':'')+i+','+f}
+function eurC(c){return fmtC(c)+' \u20ac'}
+function strC(s){const p=String(s).split(',');return BigInt(p[0]||'0')*100n+BigInt(((p[1]||'')+'00').slice(0,2))}
+function pad(s,n){s=String(s);return s.length>=n?s.slice(0,n):s+' '.repeat(n-s.length)}
+function lpad(s,n){s=String(s);return s.length>=n?s:' '.repeat(n-s.length)+s}
+const PART='\u258f\u258e\u258d\u258c\u258b\u258a\u2589';
+function barStr(fr,w){fr=Math.max(0,Math.min(1,fr));let u=Math.round(fr*w*8);if(fr>0&&u===0)u=1;return '\u2588'.repeat(Math.floor(u/8))+(u%8?PART[u%8-1]:'')}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ===== Intestazione e blocchi di testo ===== */
+function header(title,right,bg,fg,onBack){fill(0,0,COLS,3,bg,' ',fg);
+  if(onBack){button(0,0,5,3,'\u25c4',WHT,BLU,onBack,['ESC'])}
+  const tx=onBack?6:1;put(tx,1,title,fg,bg);if(right&&tx+title.length+1<COLS-1-right.length)put(COLS-1-right.length,1,right,fg,bg)}
+/* Ogni descrittore diventa un blocco di righe; ogni riga e' un elenco di pezzi [x,testo,colore,sfondo] */
+function build(d,th){if(d==='BREAK')return 'BREAK';const k=d[0],v=d[1],c=d[2];const L=[];
+  if(k==='p'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.fg:c]]));L.push([])}
+  else if(k==='h'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.hd:c]]))}
+  else if(k==='f'){const s=' '+v+' ';L.push([[Math.max(0,Math.floor((CW-s.length)/2)),s,th.ffg,th.fbg]]);L.push([])}
+  else if(k==='t'){v.forEach(r=>{const l=r[0],val=r[1],n=Math.max(1,CW-l.length-val.length-2);
+    if(l.length+val.length+2>CW){L.push([[0,l,th.fg]]);L.push([[CW-val.length,val,r[2]===undefined?th.hd:r[2]]]);return}
+    L.push([[0,l,th.fg],[l.length+1,'\u00b7'.repeat(n),th.dot],[CW-val.length,val,r[2]===undefined?th.hd:r[2]]])});L.push([])}
+  else if(k==='r'){const bg=c===undefined?th.rbg:c;L.push([[0,' '.repeat(CW),th.rfg,bg]]);
+    wrap(v,CW-2).forEach(s=>L.push([[0,' '+pad(s,CW-1),th.rfg,bg]]));L.push([[0,' '.repeat(CW),th.rfg,bg]]);L.push([])}
+  else if(k==='bars'){const mx=Number(d[2])||1,vs=v.map(it=>fmtC(it.v)),vw=Math.max(6,...vs.map(x=>x.length)),bw=Math.max(3,CW-10-1-vw);v.forEach((it,i)=>{L.push([[0,pad(it.l,10),th.fg],[10,barStr(Number(it.v)/mx,bw),it.c],[CW-vw,lpad(vs[i],vw),th.hd]])});L.push([])}
+  else if(k==='lines'){v.forEach(x=>L.push(x))}
+  else if(k==='gap'){L.push([])}
+  return L}
+function paginate(items,th,avail){const pages=[];let pg=[];
+  items.forEach(d=>{const b=build(d,th);if(b==='BREAK'){if(pg.length)pages.push(pg);pg=[];return}
+    const need=b.length-(b.length&&b[b.length-1].length===0?1:0);
+    if(pg.length&&pg.length+need>avail){pages.push(pg);pg=[]}
+    b.forEach(l=>{if(pg.length>=avail){if(l.length===0)return;pages.push(pg);pg=[]}if(pg.length===0&&l.length===0)return;pg.push(l)})});
+  if(pg.length)pages.push(pg);return pages.length?pages:[[]]}
+function drawLines(lines,y0,th){lines.forEach((l,i)=>l.forEach(sg=>put(1+sg[0],y0+i,sg[1],sg[2]===undefined?th.fg:sg[2],sg[3]===undefined?-1:sg[3])))}
+/* Pagine sfogliabili */
+function pager(o){let page=o.page||0;
+  function draw(){const th=o.th;cls(th.bg,th.bd,th.fg);
+    const avail=ROWS-9,pages=paginate(o.items,th,avail);page=Math.max(0,Math.min(page,pages.length-1));
+    header(o.title,o.right||'',th.hbg,th.hfg,o.onBack);
+    drawLines(pages[page],4,th);
+    const fy=ROWS-4,last=page===pages.length-1;
+    if(page>0)button(1,fy,8,3,'\u25c4 PREC',th.kbg,th.kfg,()=>{page--;sfx.page();draw()},['PREV']);
+    else button(1,fy,8,3,'\u25c4 '+(o.backLabel||'MENU'),th.kbg,th.kfg,o.onBack,['PREV']);
+    put(10,fy+1,lpad('PAG '+(page+1)+'/'+pages.length,9).padEnd(10),th.dim);
+    if(!last)button(21,fy,8,3,'SEGUE \u25ba',th.nbg,th.nfg,()=>{page++;sfx.page();draw()},['NEXT','OK']);
+    else button(21,fy,8,3,o.endLabel||'FINE',th.nbg,th.nfg,o.onEnd||o.onBack,['NEXT','OK']);
+    if(o.extra)o.extra(page,pages.length);
+  }
+  show(draw,o.onBack)}
+FONT["\u00c0"]=[48,0,60,102,126,102,102,0];FONT["\u00cc"]=[48,0,60,24,24,24,60,0];FONT["\u00d2"]=[48,0,60,102,102,102,60,0];FONT["\u00d9"]=[48,0,102,102,102,102,60,0];FONT["\u00b0"]=[56,108,56,0,0,0,0,0];
+/* ===== Tema: solo i colori della schermata BASIC ===== */
+const TB={bg:BLU,bd:LBLU,fg:LBLU,hd:WHT,dim:LBLU,dot:LBLU,ffg:BLU,fbg:WHT,rfg:WHT,rbg:LBLU,hbg:LBLU,hfg:WHT,kbg:LBLU,kfg:WHT,nbg:WHT,nfg:BLU,err:WHT};
+function scr(){cls(BLU,LBLU,LBLU)}
+/* ===== Regioni ===== */
+const REG={PIE:['Piemonte','Piemonte'],VAO:["Valle d'Aosta","V. d'Aosta"],LOM:['Lombardia','Lombardia'],TAA:['Trentino-Alto Adige','Trentino-AA'],
+ VEN:['Veneto','Veneto'],FVG:['Friuli-Venezia Giulia','Friuli-V.G.'],LIG:['Liguria','Liguria'],EMR:['Emilia-Romagna','Emilia-Rom.'],
+ TOS:['Toscana','Toscana'],UMB:['Umbria','Umbria'],MAR:['Marche','Marche'],LAZ:['Lazio','Lazio'],ABR:['Abruzzo','Abruzzo'],MOL:['Molise','Molise'],
+ CAM:['Campania','Campania'],PUG:['Puglia','Puglia'],BAS:['Basilicata','Basilicata'],CAL:['Calabria','Calabria'],SIC:['Sicilia','Sicilia'],SAR:['Sardegna','Sardegna']};
+const REGORD=['PIE','VAO','LOM','TAA','VEN','FVG','LIG','EMR','TOS','UMB','MAR','LAZ','ABR','MOL','CAM','PUG','BAS','CAL','SIC','SAR'];
+const TYP={P:'provincia',M:'citt\u00e0 metropolitana',L:'libero consorzio comunale',A:'provincia autonoma',F:'ex provincia (EDR)',R:'regione senza province'};
+const TYPNOTE={
+ M:'La citt\u00e0 metropolitana ha preso il posto della vecchia provincia: la sigla \u00e8 rimasta la stessa.',
+ L:'In Sicilia le province si chiamano liberi consorzi comunali. La sigla non \u00e8 cambiata.',
+ F:'In Friuli-Venezia Giulia le province non sono pi\u00f9 enti: dal 1\u00b0 luglio 2020 alcuni compiti li hanno gli enti di decentramento regionale. Territorio e sigla restano.',
+ A:'Provincia autonoma: sulle targhe, accanto alla sigla, c\'\u00e8 lo stemma della provincia.',
+ R:''};
+/* ===== Le 110 province =====
+ s: sigla di oggi (bollino blu)  n: nome  k: nome corto per l'elenco  r: regione  t: tipo di ente
+ o: sigla sulle vecchie targhe (1927-1994); '' = non esisteva ancora; x: nota */
+const N92='Nata nel 1992. Fino al 1999 ha potuto dare ancora targhe del vecchio tipo con la sua sigla, al massimo 12.000.';
+const N06=' La sigla esiste dal 2006 e c\'\u00e8 solo sul bollino blu: sulle vecchie targhe non \u00e8 mai comparsa.';
+const DATA=[
+['AG','Agrigento','','SIC','L','AG','Fino al 1927 la citt\u00e0 si chiamava Girgenti: per questo una vecchia sigla era GI.'],
+['AL','Alessandria','','PIE','P','AL',''],
+['AN','Ancona','','MAR','P','AN',''],
+['AO',"Aosta (Valle d'Aosta)","Aosta (Valle d'Aosta)",'VAO','R','AO',"La Valle d'Aosta non ha province: la regione fa anche da provincia. Sulle targhe la sigla AO ha accanto lo scudo col leone, dal 1947."],
+['AR','Arezzo','','TOS','P','AR',''],
+['AP','Ascoli Piceno','','MAR','P','AP',''],
+['AT','Asti','','PIE','P','AT','Provincia dal 1935: prima le auto di Asti avevano la sigla di Alessandria.'],
+['AV','Avellino','','CAM','P','AV',''],
+['BA','Bari','','PUG','M','BA',''],
+['BT','Barletta-Andria-Trani','','PUG','P','','Nata nel 2004.'+N06],
+['BL','Belluno','','VEN','P','BL',''],
+['BN','Benevento','','CAM','P','BN',''],
+['BG','Bergamo','','LOM','P','BG',''],
+['BI','Biella','','PIE','P','BI*',N92+' Prima le auto di Biella avevano VC, Vercelli.'],
+['BO','Bologna','','EMR','M','BO',''],
+['BZ','Bolzano','','TAA','A','BZ',''],
+['BS','Brescia','','LOM','P','BS',''],
+['BR','Brindisi','','PUG','P','BR',''],
+['CA','Cagliari','','SAR','M','CA',''],
+['CL','Caltanissetta','','SIC','L','CL',''],
+['CB','Campobasso','','MOL','P','CB',''],
+['CE','Caserta','','CAM','P','CE','Dal 1927 al 1945 la provincia di Caserta non esisteva: la sigla CE \u00e8 tornata nel 1945.'],
+['CT','Catania','','SIC','M','CT',''],
+['CZ','Catanzaro','','CAL','P','CZ',''],
+['CH','Chieti','','ABR','P','CH',''],
+['CO','Como','','LOM','P','CO',''],
+['CS','Cosenza','','CAL','P','CS',''],
+['CR','Cremona','','LOM','P','CR',''],
+['KR','Crotone','','CAL','P','KR*',N92+' CR era gi\u00e0 di Cremona.'],
+['CN','Cuneo','','PIE','P','CN','Dal 1927 al 1932 la sigla era CU. Fu cambiata in CN perch\u00e9 in piemontese "cu" vuol dire fondoschiena.'],
+['EN','Enna','','SIC','L','EN','Prima di EN c\'era CG, da Castrogiovanni, il vecchio nome della citt\u00e0.'],
+['FM','Fermo','','MAR','P','','Nata nel 2004.'+N06+' Negli anni Trenta e Quaranta FM era la sigla di Fiume.'],
+['FE','Ferrara','','EMR','P','FE',''],
+['FI','Firenze','','TOS','M','FI',''],
+['FG','Foggia','','PUG','P','FG',''],
+['FC','Forl\u00ec-Cesena','','EMR','P','FO','Fino al 1992 era la provincia di Forl\u00ec, con dentro anche Rimini. Sulle vecchie targhe c\'era FO; la sigla FC \u00e8 arrivata nel 1999.'],
+['FR','Frosinone','','LAZ','P','FR',''],
+['OT','Gallura Nord-Est Sardegna','Gallura N.-E. Sardegna','SAR','P','','Provincia attiva dal 1\u00b0 aprile 2025. La sigla OT entra nell\'elenco ufficiale il 28 ottobre 2026. Dal 2008 al 2016 OT era della provincia di Olbia-Tempio.'],
+['GE','Genova','','LIG','M','GE',''],
+['GO','Gorizia','','FVG','F','GO',''],
+['GR','Grosseto','','TOS','P','GR',''],
+['IM','Imperia','','LIG','P','IM',''],
+['IS','Isernia','','MOL','P','IS','Provincia dal 1970.'],
+['AQ',"L'Aquila",'','ABR','P','AQ','Attenzione: la sigla \u00e8 AQ, non LA.'],
+['SP','La Spezia','','LIG','P','SP','Attenzione: la sigla \u00e8 SP, da Spezia.'],
+['LT','Latina','','LAZ','P','LT','Nata nel 1934 col nome di Littoria. Con il nome Latina la sigla LT \u00e8 rimasta uguale.'],
+['LE','Lecce','','PUG','P','LE',''],
+['LC','Lecco','','LOM','P','LC*',N92],
+['LI','Livorno','','TOS','P','LI',''],
+['LO','Lodi','','LOM','P','LO*',N92],
+['LU','Lucca','','TOS','P','LU',''],
+['MC','Macerata','','MAR','P','MC',''],
+['MN','Mantova','','LOM','P','MN',''],
+['MS','Massa-Carrara','','TOS','P','MS','Durante il fascismo la provincia si chiam\u00f2 per alcuni anni Apuania, con la sigla AU.'],
+['MT','Matera','','BAS','P','MT',''],
+['VS','Medio Campidano','','SAR','P','','Provincia attiva dal 1\u00b0 giugno 2025. La sigla VS entra nell\'elenco ufficiale il 28 ottobre 2026; era gi\u00e0 stata usata dal 2008 al 2016.'],
+['ME','Messina','','SIC','M','ME',''],
+['MI','Milano','','LOM','M','MI',''],
+['MO','Modena','','EMR','P','MO',''],
+['MB','Monza e Brianza','','LOM','P','','Nata nel 2004.'+N06],
+['NA','Napoli','','CAM','M','NA',''],
+['NO','Novara','','PIE','P','NO',''],
+['NU','Nuoro','','SAR','P','NU',''],
+['OG','Ogliastra','','SAR','P','','Provincia attiva dal 1\u00b0 maggio 2025. La sigla OG entra nell\'elenco ufficiale il 28 ottobre 2026; era gi\u00e0 stata usata dal 2008 al 2016.'],
+['OR','Oristano','','SAR','P','OR','Provincia dal 1974.'],
+['PD','Padova','','VEN','P','PD',''],
+['PA','Palermo','','SIC','M','PA',''],
+['PR','Parma','','EMR','P','PR',''],
+['PV','Pavia','','LOM','P','PV',''],
+['PG','Perugia','','UMB','P','PG','Un tempo la sigla di Perugia era PU, che oggi \u00e8 di Pesaro e Urbino.'],
+['PU','Pesaro e Urbino','','MAR','P','PS','Sulle vecchie targhe c\'era PS, da Pesaro. La sigla PU \u00e8 arrivata nel 1999.'],
+['PE','Pescara','','ABR','P','PE',''],
+['PC','Piacenza','','EMR','P','PC',''],
+['PI','Pisa','','TOS','P','PI',''],
+['PT','Pistoia','','TOS','P','PT',''],
+['PN','Pordenone','','FVG','F','PN','Provincia dal 1968.'],
+['PZ','Potenza','','BAS','P','PZ',''],
+['PO','Prato','','TOS','P','PO*',N92+' Prima le auto di Prato avevano FI, Firenze.'],
+['RG','Ragusa','','SIC','L','RG',''],
+['RA','Ravenna','','EMR','P','RA',''],
+['RC','Reggio Calabria','','CAL','M','RC',''],
+['RE','Reggio Emilia','','EMR','P','RE',''],
+['RI','Rieti','','LAZ','P','RI',''],
+['RN','Rimini','','EMR','P','RN*',N92+' Prima le auto di Rimini avevano FO, Forl\u00ec.'],
+['RM','Roma','','LAZ','M','Roma','L\'eccezione d\'Italia: sulle targhe c\'\u00e8 il nome intero, Roma, e c\'\u00e8 ancora oggi sul bollino blu. La sigla RM (RO era gi\u00e0 di Rovigo) l\'hanno usata solo filobus e roulotte della Protezione civile.'],
+['RO','Rovigo','','VEN','P','RO',''],
+['SA','Salerno','','CAM','P','SA',''],
+['SS','Sassari','','SAR','M','SS',''],
+['SV','Savona','','LIG','P','SV',''],
+['SI','Siena','','TOS','P','SI',''],
+['SR','Siracusa','','SIC','L','SR',''],
+['SO','Sondrio','','LOM','P','SO',''],
+['SU','Sulcis Iglesiente','','SAR','P','','Provincia attiva dal 1\u00b0 giugno 2025. Dal 28 ottobre 2026 la sigla SU passa a lei: prima era del Sud Sardegna (2017-2025). Dal 2008 al 2016 questa zona aveva CI, Carbonia-Iglesias.'],
+['TA','Taranto','','PUG','P','TA',''],
+['TE','Teramo','','ABR','P','TE',''],
+['TR','Terni','','UMB','P','TR',''],
+['TO','Torino','','PIE','M','TO',''],
+['TP','Trapani','','SIC','L','TP',''],
+['TN','Trento','','TAA','A','TN',''],
+['TV','Treviso','','VEN','P','TV',''],
+['TS','Trieste','','FVG','F','TS','Dal 1947 al 1954 Trieste ebbe targhe speciali, nere su fondo bianco, con lo stemma della citt\u00e0.'],
+['UD','Udine','','FVG','F','UD',''],
+['VA','Varese','','LOM','P','VA',''],
+['VE','Venezia','','VEN','M','VE',''],
+['VB','Verbano-Cusio-Ossola','','PIE','P','VB*',N92],
+['VC','Vercelli','','PIE','P','VC',''],
+['VR','Verona','','VEN','P','VR',''],
+['VV','Vibo Valentia','','CAL','P','VV*',N92+' VV, perch\u00e9 VI era gi\u00e0 di Vicenza.'],
+['VI','Vicenza','','VEN','P','VI',''],
+['VT','Viterbo','','LAZ','P','VT','']
+].map(a=>({s:a[0],n:a[1],k:a[2]||a[1],r:a[3],t:a[4],o:a[5],x:a[6]}));
+const skey=d=>d.n.toLowerCase().replace(/[' ]/g,'').replace(/\u00ec/g,'i');
+const AZ=DATA.map((d,i)=>i).sort((a,b)=>skey(DATA[a])<skey(DATA[b])?-1:1);
+const BYS={};DATA.forEach((d,i)=>BYS[d.s]=i);
+/* Sigle che sulle vecchie targhe volevano dire altro, o che non ci sono pi\u00f9 */
+const OLD=[
+['GI','Girgenti','Il vecchio nome di Agrigento, fino al 1927.','AG'],
+['CG','Castrogiovanni','Il vecchio nome di Enna.','EN'],
+['CU','Cuneo, 1927-1932','Cambiata in CN perch\u00e9 in piemontese "cu" vuol dire fondoschiena.','CN'],
+['AU','Apuania','Il nome che ebbe per alcuni anni, durante il fascismo, la provincia di Massa-Carrara.','MS'],
+['FO','Forl\u00ec, fino al 1999','Sulle vecchie targhe di Forl\u00ec, Cesena e, fino al 1992, Rimini.','FC'],
+['PS','Pesaro, fino al 1999','Sulle vecchie targhe di Pesaro e Urbino.','PU'],
+['PU','Perugia, un tempo','Prima che Perugia avesse PG. Oggi PU \u00e8 la sigla di Pesaro e Urbino.','PG'],
+['FU','Fiume','Provincia italiana fino alla seconda guerra mondiale, oggi Rijeka in Croazia. Poi us\u00f2 FM.',''],
+['FM','Fiume','Negli anni Trenta e Quaranta: l\'ultima auto targata a Fiume, nel 1944, aveva FM 4059. Oggi FM \u00e8 Fermo.',''],
+['PL','Pola','Provincia italiana fino alla seconda guerra mondiale, oggi Pula in Croazia.',''],
+['ZA','Zara','Provincia italiana fino alla seconda guerra mondiale, oggi Zadar in Croazia.',''],
+['CI','Carbonia-Iglesias, 2008-2016','Provincia sarda abolita nel 2016. Oggi la zona \u00e8 il Sulcis Iglesiente, sigla SU.','SU'],
+['SU','Sud Sardegna, 2017-2025','Provincia soppressa nel 2025. Dal 28 ottobre 2026 SU \u00e8 la sigla del Sulcis Iglesiente.','SU'],
+['OT','Olbia-Tempio, 2008-2016','Provincia abolita nel 2016. Oggi OT \u00e8 la Gallura Nord-Est Sardegna.','OT'],
+['VS','Medio Campidano, 2008-2016','La prima provincia del Medio Campidano, abolita nel 2016 e rinata nel 2025.','VS'],
+['OG','Ogliastra, 2008-2016','La prima provincia dell\'Ogliastra, abolita nel 2016 e rinata nel 2025.','OG']
+].map(a=>({s:a[0],n:a[1],d:a[2],to:a[3]}));
+/* ===== Targa grande a mezzi blocchi ===== */
+function plate(y,text){const L=text.toUpperCase().split(''),cw=7,gap=L.length<=2?1:0,w=L.length*cw+(L.length-1)*gap,pw=Math.min(COLS,w+4),x0=Math.floor((COLS-pw)/2);
+  fill(x0,y,pw,6,WHT,' ',BLU);
+  const lx=x0+Math.floor((pw-w)/2);
+  L.forEach((c,i)=>{const g=FONT[c]||FONT['?'];const bx=lx+i*(cw+gap);
+    for(let r=0;r<4;r++){const t=g[2*r],b=g[2*r+1];
+      for(let col=0;col<cw;col++){const m=64>>col,T=t&m,B=b&m;const ch=T&&B?'\u2588':T?'\u2580':B?'\u2584':' ';put(bx+col,y+1+r,ch,BLU,WHT)}}});
+  return y+6}
+/* ===== Elenco sfogliabile (A-Z, per regione) ===== */
+/* Una riga vuota tra una provincia e l'altra: si sbaglia meno a toccare */
+function LPER(){return Math.max(1,Math.floor((ROWS-8)/3))}
+function listScreen(o){let page=o.page||0;
+  function draw(){scr();header(o.title,o.az?'':o.right||'',TB.hbg,TB.hfg,o.back);
+    if(o.az)button(COLS-6,0,6,3,'A-Z',WHT,BLU,()=>azIndex(),['I']);
+    const per=LPER(),pages=Math.max(1,Math.ceil(o.idx.length/per));page=Math.max(0,Math.min(page,pages-1));o.page=page;
+    o.idx.slice(page*per,page*per+per).forEach((di,k)=>{const d=DATA[di],y=4+k*3,pos=page*per+k;
+      hotspot(0,y,COLS,3,()=>scheda(o.idx,pos,()=>listScreen(o)));
+      put(1,y,' '+(d.s)+' ',BLU,WHT);put(6,y,d.k.slice(0,23),WHT);
+      put(6,y+1,(o.sub?o.sub(d):REG[d.r][0]).slice(0,23),LBLU)});
+    const fy=ROWS-4;
+    if(page>0)button(1,fy,8,3,'\u25c4 PREC',TB.kbg,TB.kfg,()=>{page--;sfx.page();draw()},['PREV']);
+    else button(1,fy,9,3,'\u25c4 '+(o.backLabel||'MENU'),TB.kbg,TB.kfg,o.back,['PREV']);
+    put(10,fy+1,lpad('PAG '+(page+1)+'/'+pages,9).padEnd(10),LBLU);
+    if(page<pages-1)button(21,fy,8,3,'SEGUE \u25ba',TB.nbg,TB.nfg,()=>{page++;sfx.page();draw()},['NEXT','OK']);
+    else button(21,fy,8,3,'FINE',TB.nbg,TB.nfg,o.back,['NEXT','OK']);
+  }
+  show(draw,o.back)}
+let azState=null;
+function azList(page){azState=azState||{title:'ELENCO A-Z',idx:AZ,az:true,back:mainMenu};azState.page=page===undefined?azState.page||0:page;listScreen(azState)}
+function azIndex(){show(function draw(){scr();header('INDICE A-Z','',TB.hbg,TB.hfg,()=>azList());
+    const per=LPER();const first={};AZ.forEach((di,p)=>{const c=skey(DATA[di])[0].toUpperCase();if(first[c]===undefined)first[c]=p});
+    const letters=Object.keys(first);put(1,4,'Tocca una lettera:',LBLU);put(1,5,'salti alle province che',LBLU);put(1,6,'cominciano cos\u00ec.',LBLU);
+    letters.forEach((c,i)=>{const col=i%7,row=Math.floor(i/7),x=1+col*4,y=8+row*4,alt=(col+row)%2;
+      button(x,y,4,3,c,alt?WHT:LBLU,alt?BLU:WHT,()=>azList(Math.floor(first[c]/per)),[c])});
+  },()=>azList())}
+/* ===== Per regione ===== */
+function regionMenu(){show(function draw(){scr();header('PER REGIONE','20',TB.hbg,TB.hfg,mainMenu);
+    REGORD.forEach((r,i)=>{const col=i%2,row=Math.floor(i/2),x=1+col*14,y=4+row*3,alt=(col+row)%2;const n=DATA.filter(d=>d.r===r).length;
+      button(x,y,14,3,'',alt?WHT:LBLU,alt?BLU:WHT,()=>regionList(r,0));put(x+1,y+1,REG[r][1],alt?BLU:WHT,alt?WHT:LBLU);put(x+12,y+1,lpad(n,2),alt?BLU:WHT,alt?WHT:LBLU)});
+    const y=4+30+1;wrap('Il numero dice quante province ha la regione.',CW).forEach((l,i)=>{if(y+i<ROWS-1)put(1,y+i,l,LBLU)});
+  },mainMenu)}
+function regionList(r,page){const idx=AZ.filter(i=>DATA[i].r===r);
+  listScreen({title:REG[r][0].toUpperCase(),right:idx.length+(idx.length===1?' PROV.':' PROV.'),idx,page,back:regionMenu,backLabel:'REGIONI',sub:d=>TYP[d.t]})}
+/* ===== Scheda di una provincia ===== */
+function oldTxt(d){if(d.o==='')return 'non c\'erano';if(d.o.endsWith('*'))return d.o.slice(0,2)+' (1994-1999)';return d.o}
+function scheda(list,pos,back){show(function draw(){const d=DATA[list[pos]];scr();header('SCHEDA',(pos+1)+'/'+list.length,TB.hbg,TB.hfg,back);
+    let y=plate(4,d.s==='RM'?'ROMA':d.s);
+    hotspot(0,4,COLS,6,()=>say(d),['S']);
+    center(y,d.s==='RM'?'Roma, per esteso':d.o===''?'sigla solo sul bollino blu':'sigla delle vecchie targhe',LBLU);
+    center(y+1,'TOCCA LA SIGLA E ASCOLTA',WHT);y+=3;
+    const items=[['h',d.n,WHT],['gap'],['t',[['Regione',REG[d.r][0]],['Ente',TYP[d.t]],['Vecchie targhe',oldTxt(d)],['Bollino oggi',d.s==='RM'?'Roma':d.s]]]];
+    const note=[d.x,TYPNOTE[d.t]].filter(Boolean).join(' ');if(note)items.push(['p',note]);
+    const lines=[];items.forEach(it=>build(it,TB).forEach(l=>lines.push(l)));
+    drawLines(lines.slice(0,Math.max(0,ROWS-5-y)),y,TB);
+    const fy=ROWS-4;
+    button(1,fy,8,3,'\u25c4 PREC',TB.kbg,TB.kfg,()=>{pos=(pos-1+list.length)%list.length;sfx.page();draw()},['PREV']);
+    button(10,fy,10,3,'ELENCO',TB.kbg,TB.kfg,back,['OK']);
+    button(21,fy,8,3,'SEGUE \u25ba',TB.nbg,TB.nfg,()=>{pos=(pos+1)%list.length;sfx.page();draw()},['NEXT']);
+  },back)}
+/* ===== Cerca una sigla ===== */
+let q='';
+function cerca(){show(function draw(){scr();header('CERCA UNA SIGLA','',TB.hbg,TB.hfg,mainMenu);
+    put(1,4,'Hai visto una targa vecchia?',LBLU);put(1,5,'Scrivi la sigla:',LBLU);
+    const box=q==='ROMA'?' ROMA ':' '+(q+'__').slice(0,2)+' ';put(18,5,box,BLU,WHT);if(q.length<2)cursor={x:19+q.length,y:5};
+    const kb=ROWS-13;let y=7;const maxY=kb-2;
+    const out=(s,c,bg)=>{if(y<=maxY){put(1,y,s,c,bg)}y++};
+    if(q.length>=2){const s=q==='ROMA'?'RM':q,cur=BYS[s],olds=OLD.filter(o=>o.s===q);
+      if(cur!==undefined&&(q!=='RM')){const d=DATA[cur];out('OGGI:',LBLU);const y0=y;
+        out(' '+pad(d.n.slice(0,CW-2),CW-1),WHT,LBLU);out(' '+pad(REG[d.r][0]+' \u00b7 SCHEDA \u25ba',CW-1),WHT,LBLU);hotspot(1,y0,CW,2,()=>scheda([cur],0,cerca));y++}
+      if(q==='RM'){out('RM:',LBLU);wrap('La sigla tecnica di Roma: sulle targhe per\u00f2 c\'\u00e8 il nome intero, Roma. RM l\'hanno usata solo filobus e roulotte della Protezione civile.',CW).forEach(l=>out(l,WHT));y++;
+        const y0=y;out(' '+pad('Roma \u00b7 SCHEDA \u25ba',CW-1),WHT,LBLU);hotspot(1,y0,CW,1,()=>scheda([BYS.RM],0,cerca));y++}
+      if(olds.length){out(cur!==undefined?'UNA VOLTA ANCHE:':'SOLO SULLE TARGHE VECCHIE:',LBLU);
+        olds.forEach(o=>{out(o.n,WHT);wrap(o.d,CW).forEach(l=>out(l,LBLU));y++})}
+      if(cur===undefined&&!olds.length){out('NESSUNA PROVINCIA',WHT);out('HA LA SIGLA '+q+'.',WHT);y++;
+        wrap('Di solito la sigla usa lettere del nome della citt\u00e0, ma non sempre le prime due: per esempio SP \u00e8 La Spezia e AQ \u00e8 L\'Aquila.',CW).forEach(l=>out(l,LBLU))}
+    }else wrap('Tocca due lettere qui sotto. Ti dico a quale provincia corrispondono oggi e cosa volevano dire sulle targhe di una volta.',CW).forEach(l=>out(l,LBLU));
+    const keys='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').concat(['DEL','ROMA']);
+    keys.forEach((k,i)=>{const col=i%7,row=Math.floor(i/7),x=1+col*4,yy=kb+row*3,alt=(col+row)%2;
+      button(x,yy,4,3,k,alt?WHT:LBLU,alt?BLU:WHT,()=>key(k),[k])});
+  },mainMenu)}
+function key(k){if(k==='DEL'){q=q==='ROMA'?'':q.slice(0,-1)}else if(k==='ROMA'){q='ROMA'}else{if(q.length>=2)q='';q+=k}
+  if(q.length>=2){const s=q==='ROMA'?'RM':q;if(BYS[s]!==undefined||OLD.some(o=>o.s===q))sfx.ok();else sfx.err()}cerca()}
+/* ===== Storia delle targhe ===== */
+const STORIA=[
+ ['h','1905-1927: I NUMERI ROSSI',WHT],['gap'],
+ ['p','Le prime targhe non avevano lettere: la provincia era un numero rosso di due cifre, poi un trattino e il numero dell\'auto in nero.'],
+ ['p','I numeri andavano in ordine alfabetico, da 1 a 69, come le province di prima della Grande Guerra. Nel 1923 e nel 1924 si arriv\u00f2 a 76.'],
+ ['t',[['Esempio: Torino','63']]],
+ 'BREAK',
+ ['h','1927: ARRIVANO LE SIGLE',WHT],['gap'],
+ ['p','Dal 28 febbraio 1927 ogni provincia ha due lettere, scelte tra quelle del nome della citt\u00e0. Le targhe sono di metallo, nere, con i caratteri bianchi su una riga.'],
+ ['f','PISA = PI    TORINO = TO'],
+ ['p','Unica eccezione: Roma, capitale, ha il privilegio del nome scritto per intero.'],
+ ['h','1932: DUE RIGHE',WHT],
+ ['p','Dal giugno 1932 la targa posteriore ha due righe: la sigla sopra, i numeri sotto. Cuneo cambia CU in CN.'],
+ 'BREAK',
+ ['h','1951-1985',WHT],['gap'],
+ ['p','Dal 1951 caratteri pi\u00f9 semplici e targa posteriore pi\u00f9 piccola.'],
+ ['p','Dal 1976 la targa posteriore resta nera, ma la sigla della provincia diventa arancione.'],
+ ['h','1985-1994: FONDO BIANCO',WHT],
+ ['p','Dal 1985 targhe di metallo con fondo bianco e caratteri neri. La targa davanti diventa pi\u00f9 grande e la sigla va prima del numero.'],
+ ['p','L\'ultima provincia a dare targhe nere fu Aosta, nel dicembre 1985.'],
+ 'BREAK',
+ ['h','1994: SPARISCE LA SIGLA',WHT],['gap'],
+ ['p','Dal 28 febbraio 1994 la targa non dice pi\u00f9 da dove viene l\'auto: due lettere, tre cifre, due lettere, uguale in tutta Italia.'],
+ ['f','AA 000 AA'],
+ ['p','Le 8 province nate nel 1992 (BI, VB, LC, LO, RN, PO, KR, VV) hanno potuto dare targhe col vecchio sistema fino al 1999, al massimo 12.000 ciascuna.'],
+ 'BREAK',
+ ['h','1999: IL BOLLINO BLU',WHT],['gap'],
+ ['p','Dal 1999 la targa ha due bande blu. A sinistra le stelle europee e la I di Italia. A destra, in alto, l\'anno in giallo; in basso, se il proprietario la vuole, la sigla della provincia in bianco.'],
+ ['r','La sigla sul bollino \u00e8 quella della provincia dove abita il proprietario, ed \u00e8 facoltativa.'],
+ 'BREAK',
+ ['h','LE ECCEZIONI',WHT],['gap'],
+ ['p','ROMA: dal 1927 sulle targhe c\'\u00e8 il nome intero, e anche oggi sul bollino. La sigla RM, scelta perch\u00e9 RO era di Rovigo, l\'hanno usata solo filobus e roulotte della Protezione civile.'],
+ ['p','AOSTA, TRENTO E BOLZANO: accanto alla sigla c\'\u00e8 lo stemma.'],
+ ['p','TRIESTE: dal 1947 al 1954 ebbe targhe proprie, nere su fondo bianco.'],
+ 'BREAK',
+ ['h','LE SIGLE NUOVE',WHT],['gap'],
+ ['p','MB, FM e BT (Monza e Brianza, Fermo, Barletta-Andria-Trani) esistono dal 2006, solo sul bollino.'],
+ ['p','Sardegna: CI, VS, OG e OT dal 2008 al 2016; poi SU, Sud Sardegna, dal 2017.'],
+ ['p','Con il riordino del 2025 sono nate Gallura Nord-Est Sardegna, Medio Campidano, Ogliastra e Sulcis Iglesiente. Il DPR 183/2026, in vigore dal 28 ottobre 2026, d\u00e0 loro OT, VS, OG e SU.'],
+ ['r','Chi ha gi\u00e0 una targa con una sigla vecchia non la deve cambiare.'],
+ 'BREAK',
+ ['h','DA DOVE VENGONO I DATI',WHT],['gap'],
+ ['p','Sigle di oggi: elenco del regolamento del Codice della strada (DPR 495/1992, Appendice XI), aggiornato dal DPR 183/2026.'],
+ ['p','Province e storia delle targhe: Wikipedia in italiano, voci Province d\'Italia, Targhe d\'immatricolazione dell\'Italia e Sigle automobilistiche italiane.'],
+ ['p','Dati aggiornati al 19 ottobre 2026.']
+];
+function storia(){pager({th:TB,title:'STORIA DELLE TARGHE',items:STORIA,onBack:mainMenu})}
+/* ===== Sigle scomparse ===== */
+function scomparse(){const items=[['p','Sigle che trovi sulle targhe vecchie e che oggi non indicano pi\u00f9 quella provincia, o non indicano pi\u00f9 niente.'],['gap']];
+  OLD.forEach(o=>{items.push(['lines',[[[0,' '+o.s+' ',BLU,WHT],[5,o.n.slice(0,CW-5),WHT]]]]);items.push(['p',o.d+(o.to&&o.to!==o.s&&o.d.indexOf('Oggi')<0?' Oggi: '+o.to+'.':'')])});
+  pager({th:TB,title:'SIGLE SCOMPARSE',right:OLD.length+' SIGLE',items,onBack:mainMenu})}
+/* ===== Menu principale ===== */
+function mainMenu(){
+  show(function draw(){scr();
+    put(1,1,' PROVINCE 64 ',BLU,WHT);
+    put(1,3,'Le sigle delle',LBLU);put(1,4,'targhe d\'Italia',LBLU);put(1,6,'110 PROVINCE',WHT);
+    const ex=DATA[AZ[Math.floor(Math.random()*AZ.length)]];
+    put(17,1,'\u250c'+'\u2500'.repeat(10)+'\u2510',WHT);put(17,2,'\u2502',WHT);put(18,2,'          ',BLU,WHT);put(28,2,'\u2502',WHT);
+    put(17,3,'\u2502',WHT);put(18,3,('   '+(ex.s==='RM'?'Roma':ex.s)+'       ').slice(0,10),BLU,WHT);put(28,3,'\u2502',WHT);
+    put(17,4,'\u2502',WHT);put(18,4,'   '+lpad(String(1000+Math.floor(Math.random()*9000)),4)+'   ',BLU,WHT);put(28,4,'\u2502',WHT);
+    put(17,5,'\u2502',WHT);put(18,5,'          ',BLU,WHT);put(28,5,'\u2502',WHT);
+    put(17,6,'\u2514'+'\u2500'.repeat(10)+'\u2518',WHT);put(17+Math.max(0,Math.floor((12-Math.min(12,ex.k.length))/2)),7,ex.k.slice(0,12),LBLU);
+    fill(0,9,COLS,1,BLU,'\u2500',LBLU);
+    const items=[['ELENCO A-Z',()=>azList()],['PER REGIONE',regionMenu],['CERCA UNA SIGLA',()=>{q='';cerca()}],['STORIA DELLE TARGHE',storia],
+      ['SIGLE SCOMPARSE',scomparse],['SUONO: '+(S.snd?'SI':'NO'),()=>{S.snd=!S.snd;save();if(S.snd){audioInit();sfx.sel()}draw()}],['FINE PROGRAMMA',fine]];
+    const slot=Math.max(4,Math.min(6,Math.floor((ROWS-5-11)/7))),h=slot-1,y0=11+Math.max(0,Math.floor((ROWS-4-11-(6*slot+h+1))/2));
+    items.forEach((it,i)=>{const y=y0+i*slot,m=y+Math.floor(h/2),bg=i<5?LBLU:WHT,fg=i<5?WHT:BLU;
+      button(1,y,CW,h,'',bg,fg,()=>{sfx.sel();it[1]()},[String(i+1)]);put(2,m,String(i+1),bg,fg);put(5,m,it[0],fg,bg)});
+    const last=y0+6*slot+h;
+    put(COLS-1-12,Math.min(last+2,ROWS-4),'ByCSD \u00b7 v1.0',WHT);put(1,ROWS-3,'READY.',LBLU);put(1,ROWS-2,'TOCCA UNA VOCE O PREMI 1-7',LBLU);
+  },null)}
+function fine(){show(function draw(){scr();put(0,1,'BREAK IN 30');put(0,2,'READY.');
+    put(0,3,'LIST 10-30');put(0,4,'10 REM PROVINCE 64');put(0,5,'20 PRINT "PI = PISA"');put(0,6,'30 GOTO 20');put(0,7,'READY.');cursor={x:0,y:8};
+    button(1,11,CW,3,'RUN  (RIPARTI)',LBLU,WHT,mainMenu,['OK','R']);
+    wrap('Il programma \u00e8 fermo. Tocca RUN per tornare al menu.',CW).forEach((l,i)=>put(1,15+i,l,LBLU));
+  },mainMenu)}
+/* ===== Accensione e caricamento da cassetta ===== */
+let skipFlag=false,wake=null;
+const w=ms=>new Promise(r=>{wake=r;setTimeout(r,ms)});
+/* BASIC iniziale: RUN avvia il caricamento; il gesto abilita audio e schermo intero. */
+function power(){show(function draw(){mode='text';bootLines=[];typing='';bootScreen();
+  button(7,Math.floor(ROWS/2)-2,15,5,['RUN','','AVVIO'],WHT,BLK,()=>{audioInit();goFull();boot()},['OK','R']);
+},null)}
+async function boot(){skipFlag=false;cur=bootScreen;anyTap=null;hot=[];
+  mode='text';bootLines=[];typing='';bootScreen();await w(900);if(skipFlag)return;
+  await type('LOAD"PROVINCE"');if(skipFlag)return;await w(250);
+  bootLines.push('');bootLines.push('PRESS PLAY ON TAPE');bootScreen(true);await w(900);if(skipFlag)return;
+  bootLines.push('OK');bootScreen(true);await w(400);if(skipFlag)return;
+  bootLines.push('');bootLines.push('SEARCHING FOR PROVINCE');bootScreen(true);await w(300);if(skipFlag)return;
+  mode='pilot';tapeOn();await w(1100);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('FOUND PROVINCE');bootScreen(true);await w(800);if(skipFlag)return;
+  mode='data';tapeOn();await w(2200);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('LOADING');bootLines.push('READY.');bootScreen();await w(500);if(skipFlag)return;
+  await type('RUN');if(skipFlag)return;await w(400);if(skipFlag)return;endBoot()}
+let bootLines=[],typing='';
+function bootScreen(nocur){cls(BLU,LBLU,LBLU);center(1,'*** COMMODORE 64 BASIC V2 ***');put(0,3,' 64K RAM SYSTEM');put(0,4,' 38911 BASIC BYTES FREE');put(0,6,'READY.');
+  let y=7;bootLines.forEach(l=>{put(0,y,l);y++});if(typing!==null)put(0,y,typing);if(!nocur)cursor={x:typing?typing.length:0,y:y}}
+async function type(s){typing='';for(const c of s){typing+=c;bootScreen();sfx.click();await w(110);if(skipFlag)return}
+  bootLines.push(typing);typing='';bootScreen()}
+function endBoot(){anyTap=null;tapeOff();mode='text';typing='';sfx.sel();mainMenu()}
+/* ===== Avvio ===== */
+window.addEventListener('resize',()=>{layout()});
+layout();power();requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#141210">
+<title>Mistero a Villa Martini - C64</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#141210;color:#d8cfc0;font-family:system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+#wrap{display:flex;flex-direction:column;height:100%;align-items:center}
+#bar{width:100%;display:flex;align-items:center;gap:6px;padding:6px 8px;padding-top:max(6px,env(safe-area-inset-top));font-size:12px;letter-spacing:.06em}
+#bar .t{flex:1;color:#a89b86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar button{background:#2a2420;color:#d8cfc0;border:1px solid #4a4038;border-radius:6px;font-size:11px;padding:6px 8px;letter-spacing:.05em}
+#scrbox{flex:1;display:flex;align-items:center;justify-content:center;width:100%;min-height:0}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+#led{width:8px;height:8px;border-radius:50%;background:#3a1010;box-shadow:inset 0 0 2px #000}
+#led.on{background:#ff3b2e;box-shadow:0 0 6px #ff3b2e}
+#kbd{width:100%;max-width:640px;padding:6px 4px;padding-bottom:max(8px,env(safe-area-inset-bottom));background:linear-gradient(#5b4c3e,#4a3d31);border-top:3px solid #6e5d4c}
+.row{display:flex;gap:4px;margin:4px 0}
+.k{flex:1;height:44px;border:none;border-radius:5px;background:linear-gradient(#3b302a,#2a221d);color:#efe6d2;font:600 15px/1 "Courier New",monospace;box-shadow:0 3px 0 #17110d,inset 0 1px 0 #5a4c42;padding:0;touch-action:manipulation}
+.k.f{background:linear-gradient(#b9a98f,#9c8b70);color:#2a221d;box-shadow:0 3px 0 #5e5240,inset 0 1px 0 #ddd0b8;font-size:12px}
+.k.w2{flex:2}.k.w3{flex:3.2}
+.k.dn{transform:translateY(2px);box-shadow:0 1px 0 #17110d}
+@media (orientation:landscape){
+#wrap{display:grid;grid-template-columns:1fr clamp(250px,36vw,380px);grid-template-rows:auto 1fr;grid-template-areas:"scr bar" "scr kbd";align-items:stretch;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#scrbox{grid-area:scr;height:100%;background:#000}
+#bar{grid-area:bar;padding:4px 6px}
+#kbd{grid-area:kbd;max-width:none;display:flex;flex-direction:column;padding:4px;border-top:none;border-left:3px solid #6e5d4c}
+.row{flex:1;margin:2px 0;gap:3px}
+.k{height:auto;min-height:28px;font-size:13px}.k.f{font-size:10px}
+}
+#power{position:fixed;inset:0;background:#141210;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:9;text-align:center;padding:24px}
+#power h1{font:700 22px "Courier New",monospace;letter-spacing:.08em;margin:0;color:#b2b2b2}
+#power p{margin:0;color:#8f8473;font-size:13px;line-height:1.5;max-width:320px}
+#power button{background:#2e2c9b;color:#706deb;border:4px solid #706deb;font:700 18px "Courier New",monospace;padding:14px 26px;border-radius:4px;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="bar"><span id="led"></span><span class="t">MISTERO A VILLA MARTINI</span><button id="bSnd">SUONO SI</button><button id="bRst">RESET</button></div>
+  <div id="scrbox"><canvas id="scr"></canvas></div>
+  <div id="kbd"></div>
+</div>
+<div id="power">
+  <h1>MISTERO A<br>VILLA MARTINI</h1>
+  <p>Rifacimento in stile Commodore 64 dell'avventura investigativa del 1984. Si gioca da 1 a 6 persone, passandosi il telefono.</p>
+  <button id="bOn">ACCENDI</button>
+  <p>Durante il caricamento tocca lo schermo per saltarlo.</p>
+</div>
+<script>
+'use strict';
+/* ===== Font 8x8 originale e palette C64 (colodore) ===== */
+const FONT={"A":[24,60,102,102,126,102,102,0],"B":[124,102,102,124,102,102,124,0],"C":[60,102,96,96,96,102,60,0],"D":[120,108,102,102,102,108,120,0],"E":[126,96,96,124,96,96,126,0],"F":[126,96,96,124,96,96,96,0],"G":[60,102,96,110,102,102,60,0],"H":[102,102,102,126,102,102,102,0],"I":[60,24,24,24,24,24,60,0],"J":[30,12,12,12,12,108,56,0],"K":[102,108,120,112,120,108,102,0],"L":[96,96,96,96,96,96,126,0],"M":[99,119,127,107,99,99,99,0],"N":[102,118,126,126,110,102,102,0],"O":[60,102,102,102,102,102,60,0],"P":[124,102,102,124,96,96,96,0],"Q":[60,102,102,102,102,60,14,0],"R":[124,102,102,124,120,108,102,0],"S":[60,102,96,60,6,102,60,0],"T":[126,24,24,24,24,24,24,0],"U":[102,102,102,102,102,102,60,0],"V":[102,102,102,102,102,60,24,0],"W":[99,99,99,107,127,119,99,0],"X":[102,102,60,24,60,102,102,0],"Y":[102,102,102,60,24,24,24,0],"Z":[126,6,12,24,48,96,126,0],"a":[0,0,60,6,62,102,62,0],"b":[0,96,96,124,102,102,124,0],"c":[0,0,60,96,96,96,60,0],"d":[0,6,6,62,102,102,62,0],"e":[0,0,60,102,126,96,60,0],"f":[0,28,48,124,48,48,48,0],"g":[0,0,62,102,102,62,6,124],"h":[0,96,96,124,102,102,102,0],"i":[0,24,0,56,24,24,60,0],"j":[0,6,0,6,6,6,102,60],"k":[0,96,96,108,120,108,102,0],"l":[0,56,24,24,24,24,60,0],"m":[0,0,118,127,107,99,99,0],"n":[0,0,124,102,102,102,102,0],"o":[0,0,60,102,102,102,60,0],"p":[0,0,124,102,102,124,96,96],"q":[0,0,62,102,102,62,6,6],"r":[0,0,124,102,96,96,96,0],"s":[0,0,62,96,60,6,124,0],"t":[0,48,124,48,48,48,28,0],"u":[0,0,102,102,102,102,62,0],"v":[0,0,102,102,102,60,24,0],"w":[0,0,99,107,127,54,54,0],"x":[0,0,102,60,24,60,102,0],"y":[0,0,102,102,102,62,12,120],"z":[0,0,126,12,24,48,126,0],"0":[60,102,110,126,118,102,60,0],"1":[24,56,120,24,24,24,126,0],"2":[60,102,6,12,48,96,126,0],"3":[60,102,6,28,6,102,60,0],"4":[12,28,60,108,126,12,12,0],"5":[126,96,124,6,6,102,60,0],"6":[60,96,96,124,102,102,60,0],"7":[126,6,12,24,24,24,24,0],"8":[60,102,102,60,102,102,60,0],"9":[60,102,102,62,6,6,60,0]," ":[0,0,0,0,0,0,0,0],"!":[24,24,24,24,24,0,24,0],"\"":[102,102,0,0,0,0,0,0],"#":[102,102,255,102,255,102,102,0],"$":[24,62,96,60,6,124,24,0],"%":[98,102,12,24,48,102,70,0],"&":[60,102,60,56,111,102,63,0],"'":[12,24,0,0,0,0,0,0],"(":[12,24,48,48,48,24,12,0],")":[48,24,12,12,12,24,48,0],"*":[0,102,60,255,60,102,0,0],"+":[0,24,24,126,24,24,0,0],",":[0,0,0,0,0,24,24,48],"-":[0,0,0,126,0,0,0,0],".":[0,0,0,0,0,24,24,0],"/":[0,3,6,12,24,48,96,0],":":[0,0,24,0,0,24,0,0],";":[0,0,24,0,0,24,24,48],"<":[14,28,56,112,56,28,14,0],"=":[0,0,126,0,126,0,0,0],">":[112,56,28,14,28,56,112,0],"?":[60,102,6,12,24,0,24,0],"@":[60,102,110,110,96,98,60,0],"[":[60,48,48,48,48,48,60,0],"]":[60,12,12,12,12,12,60,0],"_":[0,0,0,0,0,0,0,255],"█":[255,255,255,255,255,255,255,255],"◣":[128,192,224,240,248,252,254,255],"◢":[1,3,7,15,31,63,127,255],"◤":[255,254,252,248,240,224,192,128],"◥":[255,127,63,31,15,7,3,1],"─":[0,0,0,255,255,0,0,0],"▀":[255,255,255,255,0,0,0,0],"▄":[0,0,0,0,255,255,255,255],"▌":[240,240,240,240,240,240,240,240],"▐":[15,15,15,15,15,15,15,15],"│":[24,24,24,24,24,24,24,24]};
+const PAL=['#000000','#ffffff','#813338','#75cec8','#8e3c97','#56ac4d','#2e2c9b','#edf171','#8e5029','#553800','#c46c71','#4a4a4a','#7b7b7b','#a9ff9f','#706deb','#b2b2b2'];
+const RGB=PAL.map(h=>{const n=parseInt(h.slice(1),16);return (0xff000000|((n&255)<<16)|(n&0xff00)|(n>>16))>>>0;});
+const BX=0,BY=0,SW=320,SH=200,CW=SW+2*BX,CH=SH+2*BY;
+const cv=document.getElementById('scr'),ctx=cv.getContext('2d');
+cv.width=CW;cv.height=CH;
+const imgData=ctx.createImageData(CW,CH),u32=new Uint32Array(imgData.data.buffer);
+
+/* ===== Schermo testo 40x25 ===== */
+const scr={ch:new Array(1000).fill(' '),fg:new Uint8Array(1000),rv:new Uint8Array(1000),border:14,bg:6,cx:0,cy:0,col:14,rvs:false,dirty:true,blank:0,cursor:false};
+function clr(){scr.ch.fill(' ');scr.fg.fill(scr.col);scr.rv.fill(0);scr.cx=0;scr.cy=0;scr.dirty=true;}
+function scroll(){scr.ch.splice(0,40);for(let i=0;i<40;i++)scr.ch.push(' ');scr.fg.copyWithin(0,40);scr.fg.fill(scr.col,960);scr.rv.copyWithin(0,40);scr.rv.fill(0,960);}
+function putc(c){if(scr.cx>=40){scr.cx=0;scr.cy++;if(scr.cy>=25){scroll();scr.cy=24;}}const i=scr.cy*40+scr.cx;scr.ch[i]=c;scr.fg[i]=scr.col;scr.rv[i]=scr.rvs?1:0;scr.cx++;scr.dirty=true;}
+function nl(){scr.cx=0;scr.cy++;if(scr.cy>=25){scroll();scr.cy=24;}scr.rvs=false;scr.dirty=true;}
+function ctl(t,v){
+  if(t==='c')scr.col=+v;else if(t==='r')scr.rvs=true;else if(t==='o')scr.rvs=false;
+  else if(t==='clr')clr();else if(t==='home'){scr.cx=0;scr.cy=0;}
+  else if(t==='d'){const n=v?+v:1;for(let i=0;i<n;i++){scr.cy++;if(scr.cy>=25){scroll();scr.cy=24;}}}
+  else if(t==='t'){scr.cx=+v;}
+  else if(t==='at'){scr.cy=+v;scr.cx=0;}
+}
+function pr(s='',n=true){const re=/\{([a-z]+)(\d*)\}/g;let last=0,m;while((m=re.exec(s))){for(const c of s.slice(last,m.index))putc(c);ctl(m[1],m[2]);last=re.lastIndex;}for(const c of s.slice(last))putc(c);if(n)nl();}
+function wrap(text,w=40){const lead=text.match(/^ */)[0];text=text.slice(lead.length);const out=[];let line=lead;for(const word of text.split(' ')){if(line===lead)line+=word;else if((line+' '+word).length<=w)line+=' '+word;else{out.push(line);line=word;}}if(line.length||!out.length)out.push(line);return out;}
+function prw(text,indent=0){const pad=' '.repeat(indent);wrap(text,40-indent).forEach((l,i)=>pr((i?pad:'')+l));}
+function backsp(){if(scr.cx===0){if(scr.cy===0)return;scr.cy--;scr.cx=40;}scr.cx--;const i=scr.cy*40+scr.cx;scr.ch[i]=' ';scr.rv[i]=0;scr.dirty=true;}
+function screenText(){let s=[];for(let y=0;y<25;y++)s.push(scr.ch.slice(y*40,y*40+40).join('').replace(/\s+$/,''));return s.join('\n');}
+
+/* ===== Disegno ===== */
+let blinkOn=true,lastBlink=0;
+function render(){
+  const W=CW;
+  if(scr.blank){
+    let y=0;while(y<CH){const h=2+((Math.random()*9)|0);const c=scr.blank===2?RGB[[6,14,3,7,2,5,1,0,13,10][(Math.random()*10)|0]]:RGB[scr.border];const e=Math.min(CH,y+h);u32.fill(c,y*W,e*W);y=e;}
+  }else{
+    u32.fill(RGB[scr.border]);const bg=RGB[scr.bg];const ci=scr.cursor&&blinkOn?scr.cy*40+Math.min(scr.cx,39):-1;
+    for(let cy=0;cy<25;cy++)for(let cx=0;cx<40;cx++){
+      const i=cy*40+cx;const g=FONT[scr.ch[i]]||FONT['?'];const fg=RGB[scr.fg[i]];let rv=scr.rv[i];
+      let fgc=fg;if(i===ci){rv^=1;fgc=RGB[scr.col];}
+      for(let y=0;y<8;y++){let bits=g[y];if(rv)bits^=255;const base=(BY+cy*8+y)*W+BX+cx*8;
+        for(let x=0;x<8;x++)u32[base+x]=(bits&(128>>x))?fgc:bg;}
+    }
+  }
+  ctx.putImageData(imgData,0,0);
+}
+function frame(t){if(t-lastBlink>320){lastBlink=t;blinkOn=!blinkOn;if(scr.cursor)scr.dirty=true;}if(scr.dirty||scr.blank){scr.dirty=false;render();}requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+function fit(){const box=document.getElementById('scrbox');const w=box.clientWidth,h=box.clientHeight;const s=Math.max(0.5,Math.min(w/CW,h/CH));cv.style.width=Math.floor(CW*s)+'px';cv.style.height=Math.floor(CH*s)+'px';}
+addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));
+
+/* ===== Tastiera ===== */
+const kq=[];let kwait=null,skipBoot=false;
+function pushKey(k){skipBoot=true;if(kwait){const f=kwait;kwait=null;f(k);}else{kq.push(k);if(kq.length>10)kq.shift();}}
+function key(){return kq.length?Promise.resolve(kq.shift()):new Promise(r=>kwait=r);}
+async function getk(valid){kq.length=0;for(;;){const k=await key();if(!valid||valid.includes(k))return k;}}
+const ROWS_K=[['1','2','3','4','5','6','7','8','9','0','DEL'],['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L','RETURN'],['Z','X','C','V','B','N','M','SPACE']];
+(function(){const kb=document.getElementById('kbd');for(const r of ROWS_K){const d=document.createElement('div');d.className='row';for(const k of r){const b=document.createElement('button');b.className='k'+(k==='RETURN'?' f w2':k==='DEL'?' f w2':k==='SPACE'?' w3':'');b.textContent=k==='SPACE'?'':k;b.dataset.k=k;
+  b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('dn');if(navigator.vibrate)try{navigator.vibrate(8)}catch(_){}pushKey(k==='SPACE'?' ':k);});
+  const up=()=>b.classList.remove('dn');b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up);
+  d.appendChild(b);}kb.appendChild(d);}})();
+addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;let k=null;if(e.key==='Enter')k='RETURN';else if(e.key==='Backspace')k='DEL';else if(e.key===' ')k=' ';else if(e.key.length===1&&/[a-z0-9]/i.test(e.key))k=e.key.toUpperCase();if(k){e.preventDefault();pushKey(k);}});
+cv.addEventListener('pointerdown',()=>{skipBoot=true;});
+
+/* ===== Suono (voci in stile SID) ===== */
+let AC=null,master=null,soundOn=localStorage.getItem('villaMartini.snd')!=='0';
+function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=soundOn?0.22:0;master.connect(AC.destination);}catch(e){AC=null;}}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms*(window.__speed||1)));}
+const NOTE={};(function(){const n=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];for(let o=1;o<8;o++)for(let i=0;i<12;i++)NOTE[n[i]+o]=440*Math.pow(2,(o*12+i-57)/12);})();
+function tone(f,t0,d,wave,vol){const o=AC.createOscillator(),g=AC.createGain();o.type=wave;o.frequency.value=f;g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol,t0+0.006);g.gain.setValueAtTime(vol,t0+Math.max(0.01,d-0.03));g.gain.linearRampToValueAtTime(0,t0+d);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+d+0.02);}
+async function tune(seq,wave,vol=0.5){let tot=0;for(let i=0;i<seq.length;i+=2)tot+=seq[i+1];if(AC&&soundOn){let t=AC.currentTime+0.03;for(let i=0;i<seq.length;i+=2){const n=seq[i],d=seq[i+1];if(n)tone(NOTE[n],t,d,wave,vol);t+=d;}}await sleep(tot*1000+60);}
+function noise(dur,vol=0.6){if(!AC||!soundOn)return;const len=Math.floor(AC.sampleRate*dur),buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);let v=0,hold=0;for(let i=0;i<len;i++){if(hold--<=0){v=Math.random()*2-1;hold=(Math.random()*40)|0;}d[i]=v*(1-i/len);}const s=AC.createBufferSource(),g=AC.createGain();g.gain.value=vol;s.buffer=buf;s.connect(g);g.connect(master);s.start();}
+function siren(dur){if(!AC||!soundOn)return;const o=AC.createOscillator(),l=AC.createOscillator(),lg=AC.createGain(),g=AC.createGain(),t=AC.currentTime;o.type='sawtooth';o.frequency.value=700;l.type='triangle';l.frequency.value=3.2;lg.gain.value=220;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(0.25,t);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g);g.connect(master);o.start(t);l.start(t);o.stop(t+dur);l.stop(t+dur);}
+// Musiche: Bach e Chopin (pubblico dominio) come nel gioco del 1984; jingle nuovi
+const T_TOCC1=['A5',.1,'G5',.1,'A5',.7,0,.4,'G5',.1,'F5',.1,'E5',.1,'D5',.1,'C#5',.6,'D5',.8,0,.5];
+const T_TOCC2=['A4',.1,'G4',.1,'A4',.8,0,.6,'E4',.6,'F4',.6,'C#4',.6,'D4',2.0];
+const T_FUNE=['A3',.6,'A3',.45,'A3',.15,'A3',.6,'C4',.45,'B3',.15,'B3',.45,'A3',.15,'A3',.45,'G#3',.15,'A3',1.2];
+const T_TURN=['E4',.12,'G4',.12,'C5',.12,0,.06,'G4',.12,'C5',.36];
+const T_WRONG=['C3',.25,0,.08,'C3',.5];
+const T_WIN=['C4',.14,'E4',.14,'G4',.14,'C5',.42,'G4',.14,'C5',.42,'E5',.9];
+document.getElementById('bSnd').onclick=e=>{soundOn=!soundOn;localStorage.setItem('villaMartini.snd',soundOn?'1':'0');e.target.textContent=soundOn?'SUONO SI':'SUONO NO';if(master)master.gain.value=soundOn?0.22:0;};
+document.getElementById('bSnd').textContent=soundOn?'SUONO SI':'SUONO NO';
+document.getElementById('bRst').onclick=()=>{if(confirm('Tornare alla schermata iniziale? La partita resta salvata all\'inizio del turno.'))location.reload();};
+const led=document.getElementById('led');
+
+/* ===== Dati del gioco ===== */
+const rnd=x=>Math.floor(Math.random()*x)+1;
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+// 1-10 ospiti, 11-22 armi: [nome con articolo, forma con "di"]
+const S=[null,['il Cuoco','del Cuoco'],['il Maggiordomo','del Maggiordomo'],['il Giardiniere','del Giardiniere'],["l'Autista","dell'Autista"],['il Duca','del Duca'],['la Duchessa','della Duchessa'],['la Bambinaia','della Bambinaia'],['la Cantante lirica','della Cantante lirica'],["l'Ambasciatore","dell'Ambasciatore"],['il Primo Ministro','del Primo Ministro'],
+ ['il Coltello trinciante'],['la Corda'],['la Scatola di diserbante'],['la Mazza ferrata'],['la Pistola da duello'],['il Fioretto'],['il Rompighiaccio'],['il Sacchetto di plastica'],['la Motosega'],['il Tosasiepi'],['la Mazza da polo'],['la Vanga']];
+// stanze: [con articolo, "in", "di"]
+const RM=[null,["l'Ingresso","nell'Ingresso","dell'Ingresso"],['il Corridoio','nel Corridoio','del Corridoio'],['il Salone','nel Salone','del Salone'],['la Dispensa','nella Dispensa','della Dispensa'],['la Sala da pranzo','nella Sala da pranzo','della Sala da pranzo'],['la Cucina','in Cucina','della Cucina'],['lo Studio','nello Studio','dello Studio'],['la Camera da letto','nella Camera da letto','della Camera da letto'],['il Bagno','in Bagno','del Bagno'],['il Ripostiglio','nel Ripostiglio','del Ripostiglio'],['la Serra','nella Serra','della Serra'],['il Giardino','in Giardino','del Giardino'],['la Piscina','in Piscina','della Piscina'],['il Garage','in Garage','del Garage']];
+// uscite N,E,S,O di ogni stanza (0 = muro, <100 passaggio libero, >=100 porta n.-100)
+const EXITS=[null,[5,3,0,2],[4,1,101,100],[104,103,102,1],[0,6,2,0],[6,0,1,0],[0,0,5,4],[102,105,0,0],[0,107,106,103],[106,0,0,105],[0,0,0,107],[0,0,104,108],[0,108,109,0],[109,100,0,110],[101,110,0,0]];
+const DOORS=[[2,13],[2,14],[3,7],[3,8],[3,11],[7,9],[8,9],[8,10],[11,12],[12,13],[13,14]];
+const DIRS=['Nord','Est','Sud','Ovest'],DIRK=['N','E','S','O'];
+function item(i){if(i===0)return 'niente';if(i<23)return S[i][0];if(i===23)return 'il passe-partout';return 'la chiave '+RM[i-17][2];}
+
+/* ===== Stato ===== */
+// P[1..31] posizione oggetti (negativo = nascosto, 100+n = portato dal giocatore n)
+// P[32] assassino, P[33] arma (1-12), P[34] stanza del corpo, P[35] vittima, P[36..41] stanza giocatori, P[42..47] oggetto portato, P[49] giocatori, P[50] eliminati
+let G=null;
+const SAVE='villaMartini.save';
+function save(){try{localStorage.setItem(SAVE,JSON.stringify(G));}catch(e){}}
+function loadSave(){try{const g=JSON.parse(localStorage.getItem(SAVE));if(g&&g.v===1&&Array.isArray(g.P))return g;}catch(e){}return null;}
+function newGame(n){
+  const P=new Array(51).fill(0);
+  for(let j=1;j<=10;j++)P[j]=rnd(11)+3;
+  for(let j=11;j<=22;j++)P[j]=rnd(13)+1;
+  for(let j=24;j<=31;j++)P[j]=4;
+  P[23]=rnd(8)+6;
+  let j=rnd(10);P[35]=j;P[34]=P[j];P[j]=0;
+  do{j=rnd(10);}while(P[j]===0);
+  P[32]=j;P[j]=0;j=rnd(12);P[33]=j;P[j+10]=0;
+  for(j=1;j<=22;j++)if(Math.random()<=.75)P[j]=-P[j];
+  const D=DOORS.map(()=>Math.random()<.9);
+  P[49]=n;for(j=1;j<=n;j++)P[35+j]=1;
+  G={v:1,P,D,C:['','','','','','',''],Q:1};
+}
+function keyCheck(z){const i=G.P[41+G.Q];if(i<23||i>31)return 0;if(i===23)return -1;const r=i-17;return (r===DOORS[z][0]||r===DOORS[z][1])?1:0;}
+
+/* ===== Avvio: schermo blu del C64 e caricamento da cassetta ===== */
+async function wait(ms){const t=Date.now();while(Date.now()-t<ms){if(skipBoot)return;await sleep(20);}}
+async function typeOut(s){for(const c of s){if(skipBoot)return;putc(c);await sleep(90);}nl();}
+async function boot(){
+  skipBoot=false;scr.blank=0;scr.border=14;scr.bg=6;scr.col=14;clr();
+  await wait(400);
+  pr('{d}    **** COMMODORE 64 BASIC V2 ****');pr('{d} 64K RAM SYSTEM  38911 BASIC BYTES FREE');pr('{d}READY.');
+  scr.cursor=true;await wait(900);
+  if(!skipBoot)await typeOut('LOAD');
+  scr.cursor=false;
+  if(!skipBoot){pr('{d}PRESS PLAY ON TAPE');await wait(1100);}
+  if(!skipBoot){pr('OK');await wait(500);}
+  if(!skipBoot){scr.blank=1;await wait(1300);scr.blank=0;scr.dirty=true;pr('{d}FOUND MISTERO A VILLA');await wait(1100);}
+  if(!skipBoot){scr.blank=2;led.classList.add('on');await wait(2600);led.classList.remove('on');scr.blank=0;scr.dirty=true;pr('LOADING');await wait(500);pr('READY.');scr.cursor=true;await wait(500);}
+  if(!skipBoot)await typeOut('RUN');
+  scr.cursor=false;scr.blank=0;led.classList.remove('on');
+}
+
+/* ===== Titolo ===== */
+const BIG={M:['\u25e3    \u25e2','\u2588\u25e3  \u25e2\u2588','\u2588\u2588\u25e3\u25e2\u2588\u2588','\u2588 \u25e5\u25e4 \u2588','\u2588    \u2588'],
+ V:['\u2588    \u2588','\u2588    \u2588','\u25e5\u2588  \u2588\u25e4',' \u25e5\u2588\u2588\u25e4 ','  \u25e5\u25e4  ']};
+function bigAt(L,row,col,color,word){scr.col=color;for(let i=0;i<5;i++){scr.cy=row+i;scr.cx=col;for(const c of BIG[L][i]){if(c===' ')scr.cx++;else putc(c);}if(i===2&&word){scr.cx=col+7;pr(word,false);}}scr.dirty=true;}
+async function title(){
+  scr.border=1;scr.bg=0;scr.col=15;clr();scr.cursor=false;
+  bigAt('M',4,6,15,'ISTERO A');await tune(T_TOCC1,'triangle',.55);
+  bigAt('V',10,11,12,'ILLA');await tune(T_TOCC2,'triangle',.55);
+  bigAt('M',16,16,15,'ARTINI');await sleep(1000);
+  noise(1.0,.7);let j=1;for(let i=0;i<15;i++){scr.bg=j;scr.border=1-j;scr.dirty=true;j=1-j;await sleep(55);}
+  // finisce con fondo bianco e cornice nera, come l'originale
+  const sv=loadSave();
+  scr.col=0;scr.cy=21;scr.cx=0;pr('      QUANTI GIOCATORI (1-6) ?');
+  scr.col=11;pr('{d}  {r}I{o} istruzioni'+(sv?'   {r}C{o} continua la partita':''));
+  const k=await getk(['1','2','3','4','5','6','I'].concat(sv?['C']:[]));
+  if(k==='I'){await istruzioni();return title2();}
+  if(k==='C'){G=sv;return 'cont';}
+  newGame(+k);return 'new';
+}
+async function title2(){
+  scr.border=0;scr.bg=1;scr.col=0;clr();bigAt('M',4,6,11,'ISTERO A');bigAt('V',10,11,12,'ILLA');bigAt('M',16,16,11,'ARTINI');
+  const sv=loadSave();scr.col=0;scr.cy=21;scr.cx=0;pr('      QUANTI GIOCATORI (1-6) ?');
+  scr.col=11;pr('{d}  {r}I{o} istruzioni'+(sv?'   {r}C{o} continua la partita':''));
+  const k=await getk(['1','2','3','4','5','6','I'].concat(sv?['C']:[]));
+  if(k==='I'){await istruzioni();return title2();}
+  if(k==='C'){G=sv;return 'cont';}
+  newGame(+k);return 'new';
+}
+async function page(lines){scr.border=0;scr.bg=1;scr.col=11;clr();for(const l of lines){if(l.startsWith('#')){scr.col=0;pr(l.slice(1));scr.col=11;}else prw(l);}scr.cy=24;scr.cx=0;scr.col=0;pr('     Premi {r}RETURN{o} per continuare',false);await getk(['RETURN']);}
+async function istruzioni(){
+  await page(['#{r} ISTRUZIONI {o} (1/3)','',"Durante una festa a Villa Martini uno dei dieci ospiti e' stato ucciso. L'assassino e' un altro degli ospiti.",'','#Dovete scoprire quattro cose:','  1 la vittima','  2 l\'assassino','  3 l\'arma','  4 la stanza del delitto','',"La vittima e' quella di cui trovate il corpo, e la stanza e' quella dove giace il corpo.","L'assassino e' l'unico ospite che non troverete mai in giro per la villa, e l'arma e' l'unica delle dodici che non troverete mai."]);
+  await page(['#{r} ISTRUZIONI {o} (2/3)','',"Molti ospiti e oggetti sono nascosti: per trovarli usate CERCA, anche piu' volte nella stessa stanza.",'',"Quasi tutte le porte sono chiuse a chiave. Le chiavi delle stanze sono nella Dispensa, il passe-partout e' da qualche parte nella villa e apre ogni porta.",'',"Si porta un solo oggetto alla volta. Con la chiave giusta potete richiudere una porta dietro di voi.",'',"A ogni turno potete passare in una stanza vicina e poi fare una sola azione.",'',"In piu' giocatori, ognuno sceglie un codice segreto di due tasti. Chi accusa e sbaglia esce dal gioco."]);
+  const os=[];for(let i=1;i<=10;i++)os.push(cap(S[i][0]));const ar=[];for(let i=11;i<=22;i++)ar.push(cap(S[i][0]));
+  await page(['#{r} ISTRUZIONI {o} (3/3)','','#Gli ospiti:',os.join(', ')+'.','','#Le armi:',ar.join(', ')+'.','','#Le stanze:','Ingresso, Corridoio, Salone, Dispensa, Sala da pranzo, Cucina, Studio, Camera da letto, Bagno, Ripostiglio, Serra, Giardino, Piscina, Garage.']);
+}
+
+/* ===== Una partita ===== */
+function header(){scr.border=12;scr.bg=15;scr.col=0;clr();pr('{d}{c0}{r} GIOCATORE N.'+G.Q+' {o}{c11} ---------------------');}
+async function code2(){const a=await getk();putc('*');const b=await getk();putc('*');nl();return a+b;}
+async function input(prompt){for(;;){pr(prompt+'? ',false);let s='';scr.cursor=true;kq.length=0;for(;;){const k=await key();if(k==='RETURN')break;if(k==='DEL'){if(s.length){s=s.slice(0,-1);backsp();}continue;}if(s.length<8){s+=k;putc(k);}}scr.cursor=false;scr.dirty=true;nl();if(/^\s*\d+\s*$/.test(s))return parseInt(s,10);pr('?REDO FROM START');}}
+async function pressRet(msg){scr.col=0;pr(msg);await getk(['RETURN']);}
+function showRoom(R){
+  const P=G.P,Q=G.Q;P[Q+35]=R;scr.col=0;pr('{d}Sei '+RM[R][1]+'.');
+  scr.col=11;prw('Porti con te: '+item(P[Q+41])+'.');
+  scr.col=0;pr('Qui vedi:');scr.col=11;let j=0;
+  for(let i=1;i<=31;i++)if(P[i]===R){j++;prw('   '+cap(item(i))+'.',3);}
+  for(let i=1;i<=6;i++)if(i!==Q&&P[35+i]===R){pr('   Il giocatore n.'+i+'.');j++;}
+  if(P[34]===R){prw('   Il cadavere '+S[P[35]][1]+'.',3);j++;}
+  if(j===0)pr('   Niente di interessante.');
+}
+async function turn(){
+  const P=G.P;save();
+  for(;;){
+    header();
+    if(!G.C[G.Q]){scr.col=11;pr('{d}Premi due tasti a tua scelta: saranno il');pr('tuo CODICE SEGRETO. Con questo codice');pr("nessun altro potra' giocare al posto tuo!");scr.col=0;pr('{d}Inserisci ora il codice: ',false);G.C[G.Q]=await code2();save();break;}
+    scr.col=0;pr('{d}Inserisci il tuo codice segreto: ',false);const c=await code2();
+    if(c===G.C[G.Q])break;scr.col=11;pr('{d}Codice sbagliato!');await tune(T_WRONG,'sawtooth',.4);
+  }
+  header();const Q=G.Q;let R=P[35+Q];
+  scr.col=11;pr('{d}Sei '+RM[R][1]+'.');scr.col=0;
+  pr('{d}Vuoi uscire da questa stanza ({r}S{o}/{r}N{o}) ?');
+  let k=await getk(['S','N']);
+  if(k==='N'){pr('No');}
+  else{
+    pr("Si'");const V=EXITS[R];scr.col=11;pr('{d}Ci sono porte o passaggi verso:');
+    for(let j=0;j<4;j++)if(V[j]!==0)pr('    '+DIRS[j]);
+    scr.col=0;pr('{d}Premi {r}N{o}, {r}E{o}, {r}S{o} oppure {r}O{o} per muoverti!');
+    k=await getk(DIRK);const d=DIRK.indexOf(k);scr.col=11;pr('Verso '+DIRS[d]);
+    const v=V[d];
+    if(v<1){pr("Da questa parte non c'e' nessuna porta.");pr('Non puoi muoverti.');await sleep(2200);}
+    else if(v<100){R=v;pr('Passi nella stanza accanto.');await sleep(1000);}
+    else{
+      const z=v-100;let go=true;
+      if(G.D[z]){pr("La porta e' chiusa a chiave.");const a=keyCheck(z);
+        if(a===0){pr('Non hai la chiave giusta.');pr('Resti dove sei.');await sleep(2200);go=false;}
+        else{pr('La tua chiave apre la porta.');G.D[z]=false;pr('Passi nella stanza accanto.');}}
+      if(go){R=DOORS[z][0]===R?DOORS[z][1]:DOORS[z][0];
+        if(keyCheck(z)===1){scr.col=0;pr('{d}Vuoi chiudere a chiave la porta dietro');pr('di te ({r}S{o}/{r}N{o}) ?');k=await getk(['S','N']);
+          if(k==='S'){pr("Si'");G.D[z]=true;scr.col=11;pr('Porta chiusa a chiave.');}else pr('No');}}
+    }
+  }
+  showRoom(R);
+  scr.col=0;pr('{d}Premi {r}RETURN{o} per le azioni....');await getk(['RETURN']);
+  // menu azioni
+  scr.col=0;clr();
+  pr('{d}{d}     {c0}>>>>>  COSA VUOI FARE?  <<<<<');pr('');
+  const M=[['A',"Accusa l'assassino!"],['L',"Lascia l'oggetto che porti"],['N','Nascondi un oggetto o una persona'],['S','Stai fermo, nessuna azione'],['D','Deruba un altro giocatore'],['C','Cerca oggetti e persone nascosti'],['P','Prendi un oggetto']];
+  for(const [l,t] of M)pr('{d}  {c11}{r}'+l+'{o} '+t);
+  pr('');pr('{d}{c0}  Premi la lettera della tua scelta!');
+  k=await getk(M.map(m=>m[0]));
+  clr();scr.col=0;
+  let over=false;
+  if(k==='A')over=await accusa(R);
+  else if(k==='L')lascia();
+  else if(k==='N')await nascondi(R);
+  else if(k==='S'){pr('{d}   ***  NESSUNA AZIONE  ***');}
+  else if(k==='D')await deruba(R);
+  else if(k==='C')cerca(R);
+  else if(k==='P')await prendi(R);
+  if(over)return true;
+  // fine turno
+  scr.col=0;pr('{d}Premi {r}RETURN{o} per finire il turno!');await getk(['RETURN']);
+  scr.col=11;pr('{d}  {c0}{r} GIOCATORE N.'+G.Q+' {o}{c11}=========  {c0}FINE TURNO');
+  await tune(T_TURN,'sawtooth',.35);
+  do{G.Q++;if(G.Q>P[49])G.Q=1;}while(P[G.Q+35]===0);
+  return false;
+}
+function dropCarried(){const P=G.P,Q=G.Q,i=P[Q+41];if(i===0)return 0;P[i]=P[Q+35];P[Q+41]=0;return i;}
+function lascia(){pr('{d}   ***  LASCIA UN OGGETTO  ***');scr.col=11;const i=dropCarried();if(i===0)pr("{d}Non avevi niente con te!");else prw('Lasci '+item(i)+'.');}
+async function prendi(R){
+  const P=G.P,Q=G.Q;pr('{d}   ***  PRENDI UN OGGETTO  ***');scr.col=11;pr('{d}Puoi prendere questi oggetti:');
+  const L=[];for(let i=11;i<=31;i++)if(P[i]===R){L.push(i);prw(L.length+': '+cap(item(i))+'.',3);}
+  if(!L.length){pr('Nessun oggetto.');return;}
+  scr.col=0;pr("{d}Scrivi il numero dell'oggetto da");pr('prendere, oppure 0 per non prendere nulla.');
+  let a;do{a=await input('Quale oggetto vuoi');}while(a<0||a>L.length);
+  scr.col=11;if(a===0){pr('Non prendi niente.');return;}
+  const d=dropCarried();if(d)prw('Lasci '+item(d)+'.');const i=L[a-1];P[i]=100+Q;P[Q+41]=i;prw('Prendi '+item(i)+'.');
+}
+async function deruba(R){
+  const P=G.P,Q=G.Q;pr('{d}   ***  DERUBA UN GIOCATORE  ***');scr.col=11;pr('{d}Nella stanza ci sono anche questi');pr('giocatori...');let j=0;
+  for(let i=1;i<=6;i++)if(P[35+i]===R&&i!==Q){pr('   Il giocatore n.'+i+'.');j++;}
+  if(!j){pr('   Non ci sono altri giocatori qui!');return;}
+  for(;;){scr.col=0;pr('{d}Quale giocatore vuoi derubare?');pr('Scrivi il numero, oppure 0.');
+    let a;for(;;){a=await input('Derubi il giocatore n.');if(a>P[49])break;if(a===Q){scr.col=11;pr('Non puoi derubare te stesso!');scr.col=0;continue;}break;}
+    if(a>P[49])continue;
+    scr.col=11;if(a===0){pr('Nessun furto.');return;}
+    if(P[35+a]!==R){pr("Il giocatore n."+a+" non e' qui!");continue;}
+    const d=dropCarried();if(d)prw('Lasci '+item(d)+'.');
+    const i=P[a+41];if(i===0){pr('Il giocatore n.'+a+' non aveva niente!');return;}
+    P[Q+41]=i;P[a+41]=0;P[i]=100+Q;prw('Prendi '+item(i)+'.');return;}
+}
+function cerca(R){
+  const P=G.P;pr('{d}   ***  CERCA NELLA STANZA  ***');scr.col=11;pr('{d}Trovi:');let j=0;
+  for(let i=1;i<=31;i++){if(P[i]!==-R)continue;if(Math.random()>.5)continue;j++;prw('    '+cap(item(i))+'.',4);P[i]=R;}
+  if(P[34]===-R&&Math.random()<=.5){j++;prw('    Il cadavere '+S[P[35]][1]+'!',4);P[34]=R;}
+  if(!j)pr('    ------ Niente!');
+}
+async function nascondi(R){
+  const P=G.P,Q=G.Q;pr('{d}   ***  NASCONDI  ***');scr.col=11;pr('{d}Puoi nascondere:');const L=[];
+  for(let i=1;i<=31;i++)if(P[i]===R){L.push(i);prw(L.length+': '+cap(item(i))+'.',3);}
+  if(P[Q+41]){L.push(Q+41);prw(L.length+': '+cap(item(P[Q+41]))+' (lo porti tu).',3);}
+  if(P[34]===R){L.push(34);prw(L.length+': Il cadavere '+S[P[35]][1]+'.',3);}
+  if(!L.length){pr("Qui non c'e' niente da nascondere!");return;}
+  scr.col=0;pr("{d}Scrivi il numero di cio' che vuoi");pr('nascondere, oppure 0 per non nascondere.');
+  let a;do{a=await input('Cosa nascondi');}while(a<0||a>L.length);
+  scr.col=11;if(a===0){pr('Non nascondi niente.');return;}
+  const i=L[a-1];
+  if(i>34){const it=P[Q+41];P[Q+41]=0;P[it]=-R;prw("Nascondi l'oggetto che portavi: "+item(it)+'.');return;}
+  P[i]=-R;if(i===34)pr('Nascondi il cadavere.');else prw('Nascondi '+item(i)+'.');
+}
+async function accusa(R){
+  const P=G.P,Q=G.Q;let ok=true;const sep=()=>{scr.col=0;pr('{d}   *****  ACCUSA  *****');scr.col=11;};
+  sep();for(let j=1;j<=10;j++)pr((j<10?' ':'')+j+': '+cap(S[j][0])+'.');
+  scr.col=0;let a=await input('Numero della vittima');if(a!==P[35])ok=false;
+  sep();for(let j=1;j<=10;j++)pr((j<10?' ':'')+j+': '+cap(S[j][0])+'.');
+  scr.col=0;a=await input("Numero dell'assassino");if(a!==P[32])ok=false;
+  sep();for(let j=1;j<=12;j++)pr((j<10?' ':'')+j+': '+cap(S[j+10][0])+'.');
+  scr.col=0;a=await input("Numero dell'arma");if(a!==P[33])ok=false;
+  sep();for(let j=1;j<=14;j++)pr((j<10?' ':'')+j+': '+cap(RM[j][0])+'.');
+  scr.col=0;a=await input('Numero della stanza');if(a!==Math.abs(P[34]))ok=false;
+  scr.col=11;pr('{d}Chiamo la polizia per l\'arresto......');siren(2.2);await sleep(2500);
+  if(ok){scr.col=0;pr('{d}{r} LA TUA SOLUZIONE E\' ESATTA! {o}');tune(T_WIN,'square',.3);await sleep(400);pr('{d}Il giocatore n.'+Q+' ha risolto il caso!');await sleep(2200);return await soluzione();}
+  scr.col=0;pr('{d}No!... E\' stato un arresto sbagliato!');await tune(T_FUNE,'square',.3);
+  scr.col=11;const d=dropCarried();if(d)prw('Lasci '+item(d)+'.');P[35+Q]=0;P[50]++;pr('Sei fuori dal gioco!');
+  if(P[50]<P[49])return false;
+  await tune(T_TOCC1,'triangle',.55);await sleep(500);
+  scr.col=0;pr('{d}Tutti i giocatori hanno dato una');pr('soluzione sbagliata!!');pr('{d}Nessuno vince!');await sleep(1500);
+  return await soluzione();
+}
+async function soluzione(){
+  const P=G.P;try{localStorage.removeItem(SAVE);}catch(e){}
+  scr.col=0;pr('{d}Ecco la soluzione esatta:');scr.col=11;
+  prw(cap(S[P[32]][0])+' ha ucciso '+S[P[35]][0]+' '+RM[Math.abs(P[34])][1]+', con '+S[P[33]+10][0]+'.');
+  scr.col=0;pr('{d}Premi {r}RETURN{o} per una nuova partita.');await getk(['RETURN']);return true;
+}
+async function play(mode){
+  if(mode==='new'){scr.border=0;scr.bg=1;scr.col=11;clr();pr('{d}{d}Tutti i giocatori tranne il n.1 devono');pr('lasciare la stanza.');pr('{d}   Giocatore n.1: premi {r} RETURN {o}');pr('       per cominciare la partita!');await getk(['RETURN']);}
+  for(;;){if(await turn())return;}
+}
+async function main(){
+  fit();await boot();
+  for(;;){const m=await title();await play(m);}
+}
+document.getElementById('bOn').onclick=()=>{audioInit();try{const de=document.documentElement;const p=de.requestFullscreen?de.requestFullscreen({navigationUI:'hide'}):null;if(p&&p.then)p.then(()=>{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{});setTimeout(fit,300);}).catch(()=>{});}catch(_){}document.getElementById('power').remove();fit();main();};
+fit();render();
+// accesso per i test automatici
+window.__villa={get G(){return G;},scr,screenText,pushKey};
+</script>
+<script>(function(){var d=document,e=d.documentElement;function on(){return d.fullscreenElement||d.webkitFullscreenElement}function go(){if(on())return;var r=e.requestFullscreen||e.webkitRequestFullscreen;if(!r)return;try{var p=r.call(e,{navigationUI:'hide'});if(p&&p.then)p.then(function(){try{screen.orientation.lock('landscape').catch(function(){})}catch(y){}}).catch(function(){})}catch(x){}}d.addEventListener('pointerdown',go,true);d.addEventListener('keydown',go,true)})();</script></body>
+</html>

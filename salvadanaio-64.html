@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Il Salvadanaio 64</title>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+#cv{position:absolute;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<script>
+'use strict';
+const FONT={"A":[24,60,102,102,126,102,102,0],"B":[124,102,102,124,102,102,124,0],"C":[60,102,96,96,96,102,60,0],"D":[120,108,102,102,102,108,120,0],"E":[126,96,96,124,96,96,126,0],"F":[126,96,96,124,96,96,96,0],"G":[60,102,96,110,102,102,60,0],"H":[102,102,102,126,102,102,102,0],"I":[60,24,24,24,24,24,60,0],"J":[30,12,12,12,12,108,56,0],"K":[102,108,120,112,120,108,102,0],"L":[96,96,96,96,96,96,126,0],"M":[99,119,127,107,99,99,99,0],"N":[102,118,126,126,110,102,102,0],"O":[60,102,102,102,102,102,60,0],"P":[124,102,102,124,96,96,96,0],"Q":[60,102,102,102,102,60,14,0],"R":[124,102,102,124,120,108,102,0],"S":[60,102,96,60,6,102,60,0],"T":[126,24,24,24,24,24,24,0],"U":[102,102,102,102,102,102,60,0],"V":[102,102,102,102,102,60,24,0],"W":[99,99,99,107,127,119,99,0],"X":[102,102,60,24,60,102,102,0],"Y":[102,102,102,60,24,24,24,0],"Z":[126,6,12,24,48,96,126,0],"a":[0,0,60,6,62,102,62,0],"b":[0,96,96,124,102,102,124,0],"c":[0,0,60,96,96,96,60,0],"d":[0,6,6,62,102,102,62,0],"e":[0,0,60,102,126,96,60,0],"f":[0,28,48,124,48,48,48,0],"g":[0,0,62,102,102,62,6,124],"h":[0,96,96,124,102,102,102,0],"i":[0,24,0,56,24,24,60,0],"j":[0,6,0,6,6,6,102,60],"k":[0,96,96,108,120,108,102,0],"l":[0,56,24,24,24,24,60,0],"m":[0,0,118,127,107,99,99,0],"n":[0,0,124,102,102,102,102,0],"o":[0,0,60,102,102,102,60,0],"p":[0,0,124,102,102,124,96,96],"q":[0,0,62,102,102,62,6,6],"r":[0,0,124,102,96,96,96,0],"s":[0,0,62,96,60,6,124,0],"t":[0,48,124,48,48,48,28,0],"u":[0,0,102,102,102,102,62,0],"v":[0,0,102,102,102,60,24,0],"w":[0,0,99,107,127,54,54,0],"x":[0,0,102,60,24,60,102,0],"y":[0,0,102,102,102,62,12,120],"z":[0,0,126,12,24,48,126,0],"0":[60,102,110,126,118,102,60,0],"1":[24,56,120,24,24,24,126,0],"2":[60,102,6,12,48,96,126,0],"3":[60,102,6,28,6,102,60,0],"4":[12,28,60,108,126,12,12,0],"5":[126,96,124,6,6,102,60,0],"6":[60,96,96,124,102,102,60,0],"7":[126,6,12,24,24,24,24,0],"8":[60,102,102,60,102,102,60,0],"9":[60,102,102,62,6,6,60,0]," ":[0,0,0,0,0,0,0,0],"!":[24,24,24,24,24,0,24,0],"\"":[102,102,0,0,0,0,0,0],"#":[102,102,255,102,255,102,102,0],"$":[24,62,96,60,6,124,24,0],"%":[98,102,12,24,48,102,70,0],"&":[60,102,60,56,111,102,63,0],"'":[12,24,0,0,0,0,0,0],"(":[12,24,48,48,48,24,12,0],")":[48,24,12,12,12,24,48,0],"*":[0,102,60,255,60,102,0,0],"+":[0,24,24,126,24,24,0,0],",":[0,0,0,0,0,24,24,48],"-":[0,0,0,126,0,0,0,0],".":[0,0,0,0,0,24,24,0],"/":[0,3,6,12,24,48,96,0],":":[0,0,24,0,0,24,0,0],";":[0,0,24,0,0,24,24,48],"<":[14,28,56,112,56,28,14,0],"=":[0,0,126,0,126,0,0,0],">":[112,56,28,14,28,56,112,0],"?":[60,102,6,12,24,0,24,0],"@":[60,102,110,110,96,98,60,0],"[":[60,48,48,48,48,48,60,0],"]":[60,12,12,12,12,12,60,0],"_":[0,0,0,0,0,0,0,255],"█":[255,255,255,255,255,255,255,255],"◣":[128,192,224,240,248,252,254,255],"◢":[1,3,7,15,31,63,127,255],"◤":[255,254,252,248,240,224,192,128],"◥":[255,127,63,31,15,7,3,1],"─":[0,0,0,255,255,0,0,0],"▀":[255,255,255,255,0,0,0,0],"▄":[0,0,0,0,255,255,255,255],"▌":[240,240,240,240,240,240,240,240],"▐":[15,15,15,15,15,15,15,15],"│":[24,24,24,24,24,24,24,24],"à":[48,24,60,6,62,102,62,0],"è":[48,24,60,102,126,96,60,0],"é":[12,24,60,102,126,96,60,0],"ì":[48,24,0,56,24,24,60,0],"ò":[48,24,60,102,102,102,60,0],"ù":[48,24,102,102,102,102,62,0],"È":[48,126,96,124,96,96,126,0],"€":[30,48,252,48,252,48,30,0],"┌":[0,0,0,31,31,24,24,24],"┐":[0,0,0,248,248,24,24,24],"└":[24,24,24,31,31,0,0,0],"┘":[24,24,24,248,248,0,0,0],"├":[24,24,24,31,31,24,24,24],"┤":[24,24,24,248,248,24,24,24],"▒":[170,85,170,85,170,85,170,85],"►":[96,120,126,127,126,120,96,0],"◄":[6,30,126,254,126,30,6,0],"▲":[0,24,60,126,255,0,0,0],"▼":[0,255,126,60,24,0,0,0],"♥":[102,255,255,255,126,60,24,0],"●":[60,126,255,255,255,126,60,0],"✓":[0,3,6,140,216,112,32,0],"·":[0,0,0,24,24,0,0,0],"▏":[128,128,128,128,128,128,128,128],"▎":[192,192,192,192,192,192,192,192],"▍":[224,224,224,224,224,224,224,224],"▋":[248,248,248,248,248,248,248,248],"▊":[252,252,252,252,252,252,252,252],"▉":[254,254,254,254,254,254,254,254],"▁":[0,0,0,0,0,0,0,255],"▂":[0,0,0,0,0,0,255,255],"▃":[0,0,0,0,0,255,255,255],"▅":[0,0,0,255,255,255,255,255],"▆":[0,0,255,255,255,255,255,255],"▇":[0,255,255,255,255,255,255,255]};
+/* ===== Palette C64 (16 colori) ===== */
+const PAL=['#000000','#FFFFFF','#68372B','#70A4B2','#6F3D86','#588D43','#352879','#B8C76F','#6F4F25','#433900','#9A6759','#444444','#6C6C6C','#9AD284','#6C5EB5','#959595'];
+const BLK=0,WHT=1,RED=2,CYN=3,PUR=4,GRN=5,BLU=6,YEL=7,ORA=8,BRN=9,LRED=10,DGRY=11,GRY=12,LGRN=13,LBLU=14,LGRY=15;
+const P32=PAL.map(h=>{const n=parseInt(h.slice(1),16);return((255<<24)|((n&255)<<16)|(n&0xff00)|((n>>16)&255))>>>0});
+const COLS=30,BX=12,BY=12,MINR=44,CW=28;
+let ROWS=MINR,W=COLS*8+2*BX,H=0;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const off=document.createElement('canvas'),octx=off.getContext('2d');
+let img=null,b32=null,CH=[],FG=[],BG=[];
+let scrBg=BLU,border=LBLU,txt=LBLU,hot=[],cursor=null,dirty=true,mode='text',flash=null,blink=true;
+let cur=null,curBack=null,inputH=null,anyTap=null,busy=false;
+/* ===== Memoria ===== */
+let S={};try{S=JSON.parse(localStorage.getItem('salvadanaio64')||'{}')||{}}catch(e){S={}}
+function save(){try{localStorage.setItem('salvadanaio64',JSON.stringify(S))}catch(e){}}
+if(S.snd===undefined)S.snd=true;
+/* ===== Schermo ===== */
+function layout(){
+  const vw=window.innerWidth,vh=window.innerHeight,W0=COLS*8+2*BX;
+  let s=vw/W0,rows=Math.floor((vh/s-2*BY)/8);
+  if(rows<MINR){rows=MINR;s=vh/(MINR*8+2*BY)}
+  rows=Math.min(rows,72);
+  const changed=rows!==ROWS||!img;
+  ROWS=rows;W=W0;H=ROWS*8+2*BY;
+  if(changed){off.width=W;off.height=H;img=octx.createImageData(W,H);b32=new Uint32Array(img.data.buffer);
+    const n=COLS*ROWS;CH=new Array(n).fill(' ');FG=new Array(n).fill(txt);BG=new Array(n).fill(-1)}
+  const cw=W*s,chh=H*s,dpr=Math.min(window.devicePixelRatio||1,3);
+  cv.style.width=cw+'px';cv.style.height=chh+'px';
+  cv.style.left=Math.round((vw-cw)/2)+'px';cv.style.top=Math.round((vh-chh)/2)+'px';
+  cv.width=Math.round(cw*dpr);cv.height=Math.round(chh*dpr);
+  if(changed&&cur)cur();
+  dirty=true;
+}
+function cls(bg,bd,fg){scrBg=bg;border=bd;txt=fg;CH.fill(' ');FG.fill(fg);BG.fill(-1);hot=[];cursor=null;flash=null;dirty=true}
+function put(x,y,s,fg,bg){s=String(s);if(fg===undefined)fg=txt;if(bg===undefined)bg=-1;
+  for(let i=0;i<s.length;i++){const xx=x+i;if(xx<0||xx>=COLS||y<0||y>=ROWS)continue;const k=y*COLS+xx;CH[k]=s[i];FG[k]=fg;BG[k]=bg}dirty=true}
+function fill(x,y,w,h,bg,ch,fg){for(let j=0;j<h;j++)put(x,y+j,(ch||' ').repeat(w),fg===undefined?txt:fg,bg)}
+function center(y,s,fg,bg){put(Math.floor((COLS-s.length)/2),y,s,fg,bg)}
+function wrap(t,w){const out=[];String(t).split('\n').forEach(par=>{let line='';par.split(' ').forEach(wd=>{if(!wd)return;
+  while(wd.length>w){if(line){out.push(line);line=''}out.push(wd.slice(0,w));wd=wd.slice(w)}
+  if(!line)line=wd;else if(line.length+1+wd.length<=w)line+=' '+wd;else{out.push(line);line=wd}});out.push(line)});return out}
+function hotspot(x,y,w,h,fn,keys){hot.push({x,y,w,h,fn,keys:keys||[]})}
+function button(x,y,w,h,label,bg,fg,fn,keys){fill(x,y,w,h,bg,' ',fg);const ls=Array.isArray(label)?label:[label];
+  const y0=y+Math.floor((h-ls.length)/2);ls.forEach((l,i)=>put(x+Math.max(0,Math.floor((w-l.length)/2)),y0+i,l.slice(0,w),fg,bg));hotspot(x,y,w,h,fn,keys)}
+function render(){
+  const bc=P32[border];
+  if(mode==='pilot'||mode==='data'||mode==='blank'){
+    let y=0;const t=performance.now();
+    while(y<H){let h,c;
+      if(mode==='blank'){h=H;c=bc}
+      else if(mode==='pilot'){h=5;c=(Math.floor((y+t/7)/5)%2)?P32[CYN]:P32[RED]}
+      else{h=2+Math.floor(Math.random()*7);c=P32[[YEL,BLU,LBLU,RED,CYN,WHT,PUR,GRN,ORA][Math.floor(Math.random()*9)]]}
+      b32.fill(c,y*W,Math.min(H,y+h)*W);y+=h}
+  }else{
+    b32.fill(bc);
+    for(let cy=0;cy<ROWS;cy++)for(let cx=0;cx<COLS;cx++){
+      const k=cy*COLS+cx;let f=FG[k],b=BG[k]<0?scrBg:BG[k];
+      let inv=false;
+      if(flash&&cx>=flash.x&&cx<flash.x+flash.w&&cy>=flash.y&&cy<flash.y+flash.h)inv=true;
+      if(cursor&&blink&&cursor.x===cx&&cursor.y===cy)inv=!inv;
+      if(inv){const tmp=f;f=b;b=tmp}
+      const fc=P32[f],gc=P32[b],gl=FONT[CH[k]]||FONT['?'];
+      for(let r=0;r<8;r++){const bits=gl[r];let p=(BY+cy*8+r)*W+BX+cx*8;
+        for(let c=0;c<8;c++)b32[p+c]=(bits&(128>>c))?fc:gc}}
+  }
+  octx.putImageData(img,0,0);ctx.imageSmoothingEnabled=false;ctx.drawImage(off,0,0,cv.width,cv.height);
+  document.body.style.background=PAL[mode==='text'?border:BLK];
+  dirty=false;
+}
+let lastBlink=0;
+function loop(t){if(t-lastBlink>333){lastBlink=t;blink=!blink;if(cursor)dirty=true}
+  if(flash&&t>flash.until){flash=null;dirty=true}
+  if(dirty||mode!=='text')render();requestAnimationFrame(loop)}
+/* ===== Suono (stile SID) ===== */
+let AC=null,tapeOsc=null;
+function audioInit(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==='suspended')AC.resume().catch(()=>{})}
+function tone(f,d,type,v,when){if(!S.snd||!AC)return;try{const t=AC.currentTime+(when||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v||0.05,t);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+0.03)}catch(e){}}
+const sfx={
+  click(){tone(1760,0.03,'square',0.025)},
+  sel(){tone(660,0.05,'square',0.04);tone(990,0.08,'square',0.04,0.05)},
+  page(){tone(523,0.05,'triangle',0.08)},
+  ok(){[523,659,784,1047].forEach((f,i)=>tone(f,0.12,'triangle',0.12,i*0.08))},
+  bad(){tone(150,0.35,'sawtooth',0.05);tone(110,0.35,'sawtooth',0.05,0.12)},
+  err(){tone(220,0.15,'square',0.04)}
+};
+function tapeOn(){if(!S.snd||!AC)return;try{tapeOsc=AC.createOscillator();const g=AC.createGain();tapeOsc.type='square';g.gain.value=0.012;
+  tapeOsc.connect(g);g.connect(AC.destination);tapeOsc.start();
+  const step=()=>{if(!tapeOsc)return;tapeOsc.frequency.setValueAtTime(mode==='pilot'?1200:600+Math.random()*1800,AC.currentTime);setTimeout(step,25)};step()}catch(e){tapeOsc=null}}
+function tapeOff(){if(tapeOsc){try{tapeOsc.stop()}catch(e){}tapeOsc=null}}
+/* ===== Schermo intero ===== */
+function goFull(){const d=document;if(d.fullscreenElement||d.webkitFullscreenElement)return;const el=d.documentElement;
+  try{const fn=el.requestFullscreen||el.webkitRequestFullscreen;if(!fn)return;const p=fn.call(el,{navigationUI:'hide'});
+    if(p&&p.then)p.then(()=>{try{screen.orientation.lock('portrait').catch(()=>{})}catch(e){}}).catch(()=>{})}catch(e){}}
+/* Schermo intero subito: prova all'avvio, poi al primo tocco ovunque (Chrome lo consente solo dopo un gesto) */
+goFull();addEventListener('load',goFull);
+['pointerdown','touchend','click','keydown'].forEach(t=>document.addEventListener(t,goFull,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)goFull()});
+/* ===== Tocco e tastiera ===== */
+cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();goFull();
+  const r=cv.getBoundingClientRect();const px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H;
+  const cx=Math.max(0,Math.min(COLS-1,Math.floor((px-BX)/8))),cy=Math.max(0,Math.min(ROWS-1,Math.floor((py-BY)/8)));
+  if(anyTap){const f=anyTap;f();return}
+  if(busy)return;
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(cx>=h.x&&cx<h.x+h.w&&cy>=h.y&&cy<h.y+h.h){press(h);return}}
+});
+function press(h){busy=true;flash={x:h.x,y:h.y,w:h.w,h:h.h,until:performance.now()+110};dirty=true;sfx.click();
+  setTimeout(()=>{busy=false;h.fn()},100)}
+const KEYMAP={Backspace:'DEL',Enter:'OK',Escape:'ESC',Delete:'C','.':',',',':',',ArrowRight:'NEXT',ArrowLeft:'PREV',' ':'NEXT'};
+document.addEventListener('keydown',e=>{audioInit();if(anyTap){anyTap();e.preventDefault();return}
+  let k=KEYMAP[e.key]||e.key.toUpperCase();if(busy)return;
+  if(inputH&&(/^[0-9]$/.test(k)||['DEL','OK','ESC','C',','].includes(k))){e.preventDefault();inputH(k,true);return}
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(h.keys.includes(k)){e.preventDefault();press(h);return}}
+});
+/* Tasto Indietro di Android */
+let trapped=false;
+function trap(){if(!trapped){try{history.pushState({s64:1},'');trapped=true}catch(e){}}}
+window.addEventListener('popstate',()=>{trapped=false;if(curBack){const f=curBack;f()}});
+function show(fn,back){cur=fn;curBack=back||null;inputH=null;anyTap=null;if(back)trap();fn()}
+/* ===== Utilità numeri ===== */
+function fmt(n,d){d=d||0;const neg=n<0;let s=Math.abs(n).toFixed(d);let [i,f]=s.split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return(neg?'-':'')+i+(f?','+f:'')}
+function eur(n,d){return fmt(n,d)+' \u20ac'}
+/* Importi in centesimi interi (BigInt): niente errori di virgola mobile, centesimi sempre visibili */
+function toC(v){return BigInt(Math.round(Number(v)*100))}
+function fmtC(c){c=BigInt(c);const neg=c<0n;if(neg)c=-c;const i=(c/100n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'),f=(c%100n).toString().padStart(2,'0');return(neg?'-':'')+i+','+f}
+function eurC(c){return fmtC(c)+' \u20ac'}
+function strC(s){const p=String(s).split(',');return BigInt(p[0]||'0')*100n+BigInt(((p[1]||'')+'00').slice(0,2))}
+function pad(s,n){s=String(s);return s.length>=n?s.slice(0,n):s+' '.repeat(n-s.length)}
+function lpad(s,n){s=String(s);return s.length>=n?s:' '.repeat(n-s.length)+s}
+const PART='\u258f\u258e\u258d\u258c\u258b\u258a\u2589';
+function barStr(fr,w){fr=Math.max(0,Math.min(1,fr));let u=Math.round(fr*w*8);if(fr>0&&u===0)u=1;return '\u2588'.repeat(Math.floor(u/8))+(u%8?PART[u%8-1]:'')}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ===== Intestazione e blocchi di testo ===== */
+function header(title,right,bg,fg,onBack){fill(0,0,COLS,3,bg,' ',fg);
+  if(onBack){button(0,0,5,3,'\u25c4',BLK,fg===BLK?WHT:fg,onBack,['ESC'])}
+  const tx=onBack?6:1;put(tx,1,title,fg,bg);if(right&&tx+title.length+1<COLS-1-right.length)put(COLS-1-right.length,1,right,fg,bg)}
+/* Ogni descrittore diventa un blocco di righe; ogni riga e' un elenco di pezzi [x,testo,colore,sfondo] */
+function build(d,th){if(d==='BREAK')return 'BREAK';const k=d[0],v=d[1],c=d[2];const L=[];
+  if(k==='p'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.fg:c]]));L.push([])}
+  else if(k==='h'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.hd:c]]))}
+  else if(k==='f'){const s=' '+v+' ';L.push([[Math.max(0,Math.floor((CW-s.length)/2)),s,th.ffg,th.fbg]]);L.push([])}
+  else if(k==='t'){v.forEach(r=>{const l=r[0],val=r[1],n=Math.max(1,CW-l.length-val.length-2);
+    if(l.length+val.length+2>CW){L.push([[0,l,th.fg]]);L.push([[CW-val.length,val,r[2]===undefined?th.hd:r[2]]]);return}
+    L.push([[0,l,th.fg],[l.length+1,'\u00b7'.repeat(n),th.dot],[CW-val.length,val,r[2]===undefined?th.hd:r[2]]])});L.push([])}
+  else if(k==='r'){const bg=c===undefined?th.rbg:c;L.push([[0,' '.repeat(CW),th.rfg,bg]]);
+    wrap(v,CW-2).forEach(s=>L.push([[0,' '+pad(s,CW-1),th.rfg,bg]]));L.push([[0,' '.repeat(CW),th.rfg,bg]]);L.push([])}
+  else if(k==='bars'){const mx=Number(d[2])||1,vs=v.map(it=>fmtC(it.v)),vw=Math.max(6,...vs.map(x=>x.length)),bw=Math.max(3,CW-10-1-vw);v.forEach((it,i)=>{L.push([[0,pad(it.l,10),th.fg],[10,barStr(Number(it.v)/mx,bw),it.c],[CW-vw,lpad(vs[i],vw),th.hd]])});L.push([])}
+  else if(k==='lines'){v.forEach(x=>L.push(x))}
+  else if(k==='gap'){L.push([])}
+  return L}
+function paginate(items,th,avail){const pages=[];let pg=[];
+  items.forEach(d=>{const b=build(d,th);if(b==='BREAK'){if(pg.length)pages.push(pg);pg=[];return}
+    const need=b.length-(b.length&&b[b.length-1].length===0?1:0);
+    if(pg.length&&pg.length+need>avail){pages.push(pg);pg=[]}
+    b.forEach(l=>{if(pg.length>=avail){if(l.length===0)return;pages.push(pg);pg=[]}if(pg.length===0&&l.length===0)return;pg.push(l)})});
+  if(pg.length)pages.push(pg);return pages.length?pages:[[]]}
+function drawLines(lines,y0,th){lines.forEach((l,i)=>l.forEach(sg=>put(1+sg[0],y0+i,sg[1],sg[2]===undefined?th.fg:sg[2],sg[3]===undefined?-1:sg[3])))}
+/* Pagine sfogliabili */
+function pager(o){let page=o.page||0;
+  function draw(){const th=o.th;cls(th.bg,th.bd,th.fg);
+    const avail=ROWS-9,pages=paginate(o.items,th,avail);page=Math.max(0,Math.min(page,pages.length-1));
+    header(o.title,o.right||'',th.hbg,th.hfg,o.onBack);
+    drawLines(pages[page],4,th);
+    const fy=ROWS-4,last=page===pages.length-1;
+    if(page>0)button(1,fy,8,3,'\u25c4 PREC',th.kbg,th.kfg,()=>{page--;sfx.page();draw()},['PREV']);
+    else button(1,fy,8,3,'\u25c4 '+(o.backLabel||'MENU'),th.kbg,th.kfg,o.onBack,['PREV']);
+    put(10,fy+1,lpad('PAG '+(page+1)+'/'+pages.length,9).padEnd(10),th.dim);
+    if(!last)button(21,fy,8,3,'SEGUE \u25ba',th.nbg,th.nfg,()=>{page++;sfx.page();draw()},['NEXT','OK']);
+    else button(21,fy,8,3,o.endLabel||'FINE',th.nbg,th.nfg,o.onEnd||o.onBack,['NEXT','OK']);
+    if(o.extra)o.extra(page,pages.length);
+  }
+  show(draw,o.onBack)}
+/* ===== Tastierino numerico ===== */
+function askNumber(o){let s=o.def!==undefined&&o.def!==null?(o.unit==='eur'&&o.def%1?Number(o.def).toFixed(2):String(o.def)).replace('.',','):'';let fresh=s!=='';let err=null;
+  const th=o.th;
+  function key(k){
+    if(/^[0-9]$/.test(k)){if(fresh){s='';fresh=false}const parts=s.split(',');
+      if(parts.length===2){if(parts[1].length<(o.dec||0))s+=k;else sfx.err()}else if(parts[0].length<7){s=(s==='0'?'':s)+k}else sfx.err()}
+    else if(k===','){if(!o.dec)sfx.err();else{if(fresh){s='0';fresh=false}if(!s.includes(','))s=(s||'0')+','}}
+    else if(k==='DEL'){fresh=false;s=s.slice(0,-1)}
+    else if(k==='C'){fresh=false;s=''}
+    else if(k==='ESC'){o.onBack();return}
+    else if(k==='OK'){const v=parseFloat(s.replace(',','.'));
+      if(s===''||isNaN(v)||v<o.min||v>o.max){err=['?REDO FROM START','Scrivi un numero da '+(o.unit==='eur'?eurC(toC(o.min))+' a '+eurC(toC(o.max)):fmt(o.min)+' a '+fmt(o.max))+'.'];sfx.err();draw();return}
+      sfx.sel();o.onOK(v);return}
+    err=null;draw()}
+  function draw(){cls(th.bg,th.bd,th.fg);header(o.title,o.right||'',th.hbg,th.hfg,o.onBack);
+    let y=4;if(o.step){put(1,y,o.step,th.dim);y+=2}
+    wrap(o.label,CW).forEach(l=>{put(1,y,l,th.hd);y++});
+    wrap(o.help,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++;
+    put(1,y,'? '+s,th.fg);cursor={x:3+s.length,y:y};y+=2;
+    const v=parseFloat(s.replace(',','.'));
+    if(s!==''&&!isNaN(v))put(1,y,'= '+(o.unit==='%'?fmt(v,(s.split(',')[1]||'').length)+' %':o.unit==='anni'?fmt(v)+(v===1?' anno':' anni'):eurC(strC(s))),th.hd);
+    y+=2;
+    if(err){put(1,y,err[0],th.err);wrap(err[1],CW).forEach((l,i)=>put(1,y+1+i,l,th.fg))}
+    else if(fresh)wrap('Tocca OK per confermare, oppure scrivi un altro numero.',CW).forEach((l,i)=>put(1,y+i,l,th.dim));
+    keypad(th,o.dec,key)}
+  show(()=>{draw();inputH=key},o.onBack)}
+function keypad(th,dec,key){const kh=ROWS>=60?4:3,y0=ROWS-1-(4*kh+3),xs=[1,8,15,22],ws=[6,6,6,7];
+  const rows=[['7','8','9','DEL'],['4','5','6','C'],['1','2','3',','],['ESC','0','OK']];
+  rows.forEach((r,j)=>{const y=y0+j*(kh+1);
+    if(j<3)r.forEach((k,i)=>{let bg=LGRY,fg=BLK,l=k;
+      if(k==='DEL'){bg=RED;fg=WHT;l='DEL'}else if(k==='C'){bg=ORA;fg=WHT;l='CANC'}else if(k===','){bg=dec?GRY:DGRY;fg=dec?WHT:GRY;l=','}
+      button(xs[i],y,ws[i],kh,l,bg,fg,()=>key(k))});
+    else{button(1,y,6,kh,'\u25c4ESCI',DGRY,WHT,()=>key('ESC'));button(8,y,6,kh,'0',LGRY,BLK,()=>key('0'));button(15,y,14,kh,'OK  RETURN',GRN,WHT,()=>key('OK'))}});
+}
+/* ===== Temi colore ===== */
+const TH={
+  les:{bg:BLU,bd:LBLU,fg:WHT,hd:YEL,dim:LBLU,dot:LBLU,ffg:BLK,fbg:CYN,rfg:WHT,rbg:LBLU,hbg:LBLU,hfg:WHT,kbg:LBLU,kfg:WHT,nbg:CYN,nfg:BLK,err:LRED},
+  bil:{bg:BLK,bd:GRN,fg:LGRN,hd:WHT,dim:GRN,dot:DGRY,ffg:BLK,fbg:LGRN,rfg:WHT,rbg:GRN,hbg:GRN,hfg:WHT,kbg:DGRY,kfg:WHT,nbg:LGRN,nfg:BLK,err:LRED},
+  obj:{bg:PUR,bd:LRED,fg:WHT,hd:YEL,dim:LRED,dot:LRED,ffg:BLK,fbg:YEL,rfg:WHT,rbg:LRED,hbg:LRED,hfg:WHT,kbg:BLK,kfg:WHT,nbg:YEL,nfg:BLK,err:YEL},
+  sim:{bg:BRN,bd:ORA,fg:WHT,hd:YEL,dim:LGRY,dot:ORA,ffg:BLK,fbg:YEL,rfg:WHT,rbg:ORA,hbg:ORA,hfg:WHT,kbg:BLK,kfg:YEL,nbg:YEL,nfg:BLK,err:LRED},
+  quiz:{bg:BLK,bd:RED,fg:WHT,hd:CYN,dim:GRY,dot:DGRY,ffg:BLK,fbg:CYN,rfg:WHT,rbg:RED,hbg:RED,hfg:WHT,kbg:DGRY,kfg:WHT,nbg:CYN,nfg:BLK,err:LRED}
+};
+/* ===== Lezioni ===== */
+const LESSONS=[
+{t:'ENTRATE E USCITE',p:[
+ ['p','Le ENTRATE sono i soldi che arrivano: stipendio, pensione, affitti incassati, regali.'],
+ ['p','Le USCITE sono i soldi che escono: spesa, bollette, benzina, svago.'],
+ ['f','SALDO = ENTRATE - USCITE'],
+ ['h','ESEMPIO'],
+ ['t',[['Entrate','1.500,00 \u20ac'],['Uscite','1.350,00 \u20ac'],['Saldo','+150,00 \u20ac',LGRN]]],
+ ['p','Saldo positivo: stai risparmiando. Saldo negativo: stai usando i risparmi o ti stai indebitando.'],
+ ['h','LE PICCOLE SPESE'],
+ ['p','Un caff\u00e8 al bar da 1,20 \u20ac al giorno fa 36 \u20ac in un mese e 438 \u20ac in un anno.'],
+ ['r','RICORDA: per un mese scrivi tutte le spese, anche le pi\u00f9 piccole.']]},
+{t:'SPESE FISSE E VARIABILI',p:[
+ ['p','Le spese FISSE sono quasi uguali ogni mese: affitto o mutuo, bollette, assicurazione, abbonamenti.'],
+ ['p','Le spese VARIABILI cambiano: spesa, carburante, ristoranti, vestiti, regali.'],
+ ['p','Le fisse si cambiano di rado: una volta l\'anno confronta tariffe e gestori.'],
+ ['p','Le variabili si controllano ogni giorno: \u00e8 l\u00ec che si risparmia pi\u00f9 in fretta.'],
+ ['h','ESEMPIO'],
+ ['t',[['3 abbonamenti','9,99 \u20ac'],['Al mese','29,97 \u20ac'],['In un anno','359,64 \u20ac',LRED]]],
+ ['r','RICORDA: disdici gli abbonamenti che non usi.']]},
+{t:'BISOGNI E DESIDERI',p:[
+ ['p','Un BISOGNO \u00e8 una cosa che serve davvero: casa, cibo, salute, luce, il trasporto per il lavoro.'],
+ ['p','Un DESIDERIO \u00e8 piacevole ma rinunciabile: la cena fuori, il telefono nuovo, la vacanza.'],
+ ['p','I desideri non sono un errore: basta decidere prima quanto spenderci.'],
+ ['h','IL TRUCCO DELLE 48 ORE'],
+ ['p','Davanti a un acquisto non necessario aspetta due giorni. Se lo vuoi ancora, controlla se rientra nel budget.'],
+ ['h','QUANTE ORE DI LAVORO COSTA?'],
+ ['p','Un oggetto da 120 \u20ac, se guadagni 10 \u20ac netti l\'ora, costa 12 ore di lavoro.'],
+ ['r','RICORDA: prima i bisogni, poi i desideri.']]},
+{t:'LA REGOLA 50/30/20',p:[
+ ['p','Un modo semplice per dividere le entrate nette di ogni mese:'],
+ ['t',[['Bisogni','50 %',LBLU],['Desideri','30 %',YEL],['Risparmio e debiti','20 %',LGRN]]],
+ ['h','ESEMPIO SU 1.500 \u20ac'],
+ ['t',[['Bisogni','750,00 \u20ac',LBLU],['Desideri','450,00 \u20ac',YEL],['Risparmio','300,00 \u20ac',LGRN]]],
+ ['p','\u00c8 una linea guida, non una legge: con entrate basse i bisogni possono superare la met\u00e0.'],
+ ['r','RICORDA: se il 20% \u00e8 troppo, parti dal 5% e poi aumenta.']]},
+{t:'PAGA PRIMA TE STESSO',p:[
+ ['p','Molti risparmiano quello che avanza a fine mese. Spesso non avanza niente.'],
+ ['p','Meglio fare il contrario: appena arriva lo stipendio sposta subito una cifra fissa sul conto dei risparmi.'],
+ ['p','Il modo pi\u00f9 comodo \u00e8 un bonifico automatico ogni mese, il giorno dopo lo stipendio.'],
+ ['h','RISPARMIARE 100 \u20ac AL MESE'],
+ ['t',[['In 1 anno','1.200,00 \u20ac'],['In 5 anni','6.000,00 \u20ac'],['In 10 anni','12.000,00 \u20ac',LGRN]]],
+ ['r','RICORDA: prima metti da parte, poi spendi il resto.']]},
+{t:'IL FONDO EMERGENZE',p:[
+ ['p','Gli imprevisti arrivano: l\'auto guasta, il dentista, la caldaia da cambiare.'],
+ ['p','Il fondo emergenze \u00e8 una riserva solo per queste cose. Di solito copre da 3 a 6 mesi di spese essenziali.'],
+ ['h','ESEMPIO'],
+ ['t',[['Spese essenziali','1.200,00 \u20ac'],['Fondo minimo (x3)','3.600,00 \u20ac'],['Fondo ampio (x6)','7.200,00 \u20ac',LGRN]]],
+ ['p','Tienilo separato dal conto di tutti i giorni, ma facile da prelevare in fretta.'],
+ ['r','RICORDA: se lo usi, ricostruiscilo un po\' alla volta.']]},
+{t:'L\'INTERESSE COMPOSTO',p:[
+ ['p','Con l\'interesse composto anche gli interessi guadagnati producono nuovi interessi.'],
+ ['h','1.000 \u20ac AL 5% L\'ANNO'],
+ ['t',[['Dopo 1 anno','1.050,00 \u20ac'],['Dopo 2 anni','1.102,50 \u20ac'],['Dopo 10 anni','1.628,89 \u20ac'],['Dopo 20 anni','2.653,30 \u20ac',LGRN]]],
+ ['h','LA REGOLA DEL 72'],
+ ['p','72 diviso il tasso annuo d\u00e0 circa gli anni per raddoppiare: al 6% circa 12 anni, al 3% circa 24.'],
+ ['p','Il tempo conta pi\u00f9 della cifra: cominciare presto aiuta molto.'],
+ ['r','Esempi senza tasse n\u00e9 costi. I rendimenti veri non sono garantiti.']]},
+{t:'L\'INFLAZIONE',p:[
+ ['p','Con il tempo i prezzi salgono: con gli stessi soldi si compra un po\' meno. Questa \u00e8 l\'inflazione.'],
+ ['h','SPESA DA 100 \u20ac, +2% L\'ANNO'],
+ ['t',[['Oggi','100,00 \u20ac'],['Fra 1 anno','102,00 \u20ac'],['Fra 10 anni','121,90 \u20ac',LRED]]],
+ ['p','I soldi fermi nel cassetto perdono valore anno dopo anno.'],
+ ['p','Per capire quanto guadagni davvero, togli l\'inflazione dal rendimento: 3% meno 2% di inflazione fa circa 1%.'],
+ ['r','RICORDA: guarda il rendimento meno l\'inflazione.']]},
+{t:'DEBITI, RATE E TAEG',p:[
+ ['p','Comprare a rate costa: oltre al prezzo paghi gli interessi e spesso delle spese.'],
+ ['p','Il TAN \u00e8 solo il tasso di interesse. Il TAEG \u00e8 il costo totale annuo, spese comprese. Confronta sempre il TAEG.'],
+ ['h','1.000 \u20ac IN 12 RATE AL 15%'],
+ ['t',[['Rata al mese','90,26 \u20ac'],['Totale pagato','1.083,12 \u20ac'],['Interessi','83,12 \u20ac',LRED]]],
+ ['p','Tasso zero? Controlla il TAEG: possono esserci spese. Le carte revolving hanno rate piccole ma tassi alti.'],
+ ['p','Molte banche considerano sostenibili rate fino a circa un terzo delle entrate nette.'],
+ ['r','RICORDA: guarda il totale da pagare, non solo la rata.']]}
+];
+function lessonList(){const th=TH.les;
+  show(function draw(){cls(th.bg,th.bd,th.fg);header('LEZIONI','9 SCHEDE',th.hbg,th.hfg,mainMenu);
+    const read=S.read||[];const y0=4;const h=Math.max(3,Math.min(5,Math.floor((ROWS-7-y0)/9)));
+    LESSONS.forEach((l,i)=>{const y=y0+i*h,m=y+Math.floor(h/2),bg=i%2?CYN:LBLU,fg=i%2?BLK:WHT;
+      button(1,y,CW,h,'',bg,fg,()=>lesson(i,0),[String(i+1)]);
+      put(2,m,String(i+1),bg,fg);put(4,m,l.t,fg,bg);if(read.includes(i))put(27,m,'\u2713',fg,bg)});
+    const y=y0+LESSONS.length*h+1;wrap('Tocca una lezione. Il segno \u2713 indica quelle gi\u00e0 lette.',CW).forEach((l,i)=>put(1,y+i,l,th.dim));
+  },mainMenu)}
+function lesson(i,page){const L=LESSONS[i];
+  pager({th:TH.les,title:'LEZIONE '+(i+1),right:(i+1)+'/9',items:[['h',L.t,CYN],['gap']].concat(L.p),page:page||0,backLabel:'ELENCO',
+    onBack:lessonList,endLabel:i<8?'LEZ.'+(i+2)+'\u25ba':'FINE',
+    onEnd:()=>{S.read=S.read||[];if(!S.read.includes(i)){S.read.push(i);save()}sfx.sel();if(i<8)lesson(i+1,0);else lessonList()}})}
+/* ===== Il mio bilancio ===== */
+const BIL=[
+ {k:'entrate',l:'ENTRATE DEL MESE',h:'Stipendio, pensione e ogni altra entrata netta del mese.',min:1},
+ {k:'casa',l:'CASA',h:'Affitto o rata del mutuo, condominio.',n:'CASA',t:'N',c:LBLU},
+ {k:'bollette',l:'BOLLETTE',h:'Luce, gas, acqua, telefono, rifiuti (media al mese).',n:'BOLLETTE',t:'N',c:YEL},
+ {k:'spesa',l:'SPESA',h:'Cibo e prodotti per la casa.',n:'SPESA',t:'N',c:LGRN},
+ {k:'trasporti',l:'TRASPORTI',h:'Benzina, bus, assicurazione e bollo divisi per 12.',n:'TRASPORTI',t:'N',c:CYN},
+ {k:'salute',l:'SALUTE',h:'Medicine, visite, dentista (media al mese).',n:'SALUTE',t:'N',c:LRED},
+ {k:'svago',l:'SVAGO',h:'Bar, ristoranti, uscite, hobby, vacanze (media al mese).',n:'SVAGO',t:'D',c:ORA},
+ {k:'abbon',l:'ABBONAMENTI',h:'TV, streaming, palestra, riviste.',n:'ABBONAM.',t:'D',c:PUR},
+ {k:'altro',l:'ALTRO',h:'Vestiti, regali e tutto il resto.',n:'ALTRO',t:'D',c:LGRY}];
+function bilancioStart(){const th=TH.bil;const has=S.bil&&S.bil.entrate;
+  show(function draw(){cls(th.bg,th.bd,th.fg);header('IL MIO BILANCIO','',th.hbg,th.hfg,mainMenu);
+    let y=4;['p','p'].forEach(()=>{});
+    const t=['Scrivi le entrate e le uscite di un mese tipo. Per i centesimi usa il tasto ",".','Alla fine vedi il saldo, dove vanno i soldi e il confronto con la regola 50/30/20.','I numeri restano solo su questo telefono.'];
+    t.forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,has?'RICOMINCIA (USA I DATI DI PRIMA)':'COMINCIA',LGRN,BLK,()=>bilStep(0),['OK','1']);y+=4;
+    if(has){button(1,y,CW,3,'VEDI L\'ULTIMO RISULTATO',GRN,WHT,bilReport,['2']);y+=4}
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',DGRY,WHT,mainMenu,['ESC']);
+  },mainMenu)}
+function bilStep(i){const f=BIL[i];S.bil=S.bil||{};
+  askNumber({th:TH.bil,title:'IL MIO BILANCIO',right:(i+1)+'/'+BIL.length,step:'PASSO '+(i+1)+'/'+BIL.length+': '+(i===0?'ENTRATE':'USCITE, '+(f.t==='N'?'BISOGNO':'DESIDERIO')),
+    label:f.l+(i===0?' (EURO)':' (EURO/MESE)'),help:f.h,def:S.bil[f.k]!==undefined?S.bil[f.k]:(i===0?null:0),min:f.min||0,max:9999999.99,dec:2,unit:'eur',
+    onBack:()=>{if(i>0)bilStep(i-1);else bilancioStart()},
+    onOK:v=>{S.bil[f.k]=v;save();if(i<BIL.length-1)bilStep(i+1);else bilReport()}})}
+function bilReport(){const b=S.bil,th=TH.bil,E=toC(b.entrate);
+  const cats=BIL.slice(1).map(f=>({l:f.n,v:toC(b[f.k]||0),c:f.c,t:f.t}));
+  const U=cats.reduce((a,c)=>a+c.v,0n),saldo=E-U;
+  const N=cats.filter(c=>c.t==='N').reduce((a,c)=>a+c.v,0n),D=U-N;
+  const pn=Number(N)/Number(E)*100,pd=Number(D)/Number(E)*100,ps=Number(saldo)/Number(E)*100;
+  const sorted=cats.filter(c=>c.v>0n).sort((a,c)=>c.v>a.v?1:c.v<a.v?-1:0);
+  const items=[['h','RIEPILOGO DEL MESE'],['t',[['Entrate',eurC(E)],['Uscite',eurC(U)],['Saldo',(saldo>=0n?'+':'')+eurC(saldo),saldo>=0n?LGRN:LRED],['Risparmio',fmt(Math.max(0,ps),0)+' %',saldo>=0n?LGRN:LRED]]]];
+  if(sorted.length){items.push(['h','DOVE VANNO I SOLDI (EURO)']);items.push(['bars',sorted,sorted[0].v])}
+  items.push('BREAK');
+  items.push(['h','LA REGOLA 50/30/20']);
+  const rule=(name,p,target,col,good)=>{const q=Math.round(p),ok=good?q<=target:q>=target;
+    return [[[0,pad(name,11),WHT],[11,lpad(fmt(Math.max(0,p),0)+'%',5),ok?LGRN:LRED],[17,'meta '+target+'%',GRN]],
+      [[0,barStr(Math.max(0,p)/100,CW),col],[Math.min(CW-1,Math.round(target/100*CW)),'\u2502',WHT]]]};
+  const rl=[].concat(rule('BISOGNI',pn,50,LBLU,true),[[]],rule('DESIDERI',pd,30,ORA,true),[[]],rule('RISPARMIO',ps,20,LGRN,false),[[]]);
+  items.push(['lines',rl]);
+  items.push(['h','COSA PUOI FARE']);
+  const tips=[];
+  if(saldo<0n)tips.push(['r','Spendi pi\u00f9 di quanto entra: '+eurC(-saldo)+' al mese. Parti dai desideri.',RED]);
+  else if(Math.round(ps)<10)tips.push(['r','Risparmi meno del 10%. Prova a mettere da parte una cifra fissa appena arriva lo stipendio.',ORA]);
+  if(Math.round(pn)>50)tips.push(['r','I bisogni superano il 50%. Confronta tariffe di bollette, assicurazioni e telefono.',ORA]);
+  if(Math.round(pd)>30)tips.push(['r','I desideri superano il 30%: qui \u00e8 pi\u00f9 facile tagliare.',ORA]);
+  if(!tips.length)tips.push(['r','Ottimo equilibrio: il tuo bilancio rispetta la regola 50/30/20.',GRN]);
+  tips.forEach(t=>items.push(t));
+  if(sorted.length)items.push(['p','La voce pi\u00f9 pesante \u00e8 '+sorted[0].l+': '+fmt(Number(sorted[0].v)/Number(E)*100,0)+'% delle entrate.']);
+  if(N>0n)items.push(['p','Fondo emergenze consigliato: da '+eurC(N*3n)+' a '+eurC(N*6n)+' (3-6 mesi di bisogni).',WHT]);
+  pager({th,title:'IL MIO BILANCIO',right:'RISULTATO',items,onBack:bilancioStart,backLabel:'INDIET',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Obiettivo di risparmio ===== */
+const PIG=[
+ ['     \u25cf    ',YEL],
+ ['  \u2584\u2588\u2588\u2588\u2588\u2588\u2584\u2584 ',LRED],
+ [' \u2590\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2584',LRED],
+ ['\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c',LRED],
+ [' \u2580\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2580 ',LRED],
+ ['  \u2588\u2580  \u2588\u2580   ',LRED]];
+function drawPig(x,y,bg){PIG.forEach((r,i)=>put(x,y+i,r[0],r[1],bg));put(x+7,y+2,'\u00b7',BLK,LRED)}
+function objStart(){const th=TH.obj;S.obj=S.obj||{};
+  const steps=[
+   {k:'costo',l:'QUANTO COSTA?',h:'Il prezzo della cosa che vuoi comprare: una vacanza, un elettrodomestico, un regalo.',min:1},
+   {k:'gia',l:'QUANTO HAI GIA\'?',h:'I soldi che hai gi\u00e0 messo da parte per questo obiettivo. Se non hai niente scrivi 0.',min:0},
+   {k:'mese',l:'QUANTO AL MESE?',h:'La cifra che puoi mettere da parte ogni mese.',min:1}];
+  function step(i){const f=steps[i];
+    askNumber({th,title:'OBIETTIVO',right:(i+1)+'/3',step:'PASSO '+(i+1)+' DI 3',label:f.l+' (EURO)',help:f.h,def:S.obj[f.k]!==undefined?S.obj[f.k]:(i===1?0:null),
+      min:f.min,max:9999999.99,dec:2,unit:'eur',onBack:()=>{if(i>0)step(i-1);else intro()},
+      onOK:v=>{S.obj[f.k]=v;save();if(i===1&&v>=S.obj.costo)return objReport();if(i<2)step(i+1);else objReport()}})}
+  function intro(){show(function draw(){cls(th.bg,th.bd,th.fg);header('OBIETTIVO RISPARMIO','',th.hbg,th.hfg,mainMenu);
+    drawPig(9,5,-1);let y=13;
+    ['Vuoi comprare qualcosa senza fare debiti? Mettere da parte un po\' ogni mese \u00e8 il modo pi\u00f9 sicuro.','Scrivi quanto costa, quanto hai gi\u00e0 e quanto puoi risparmiare al mese: ti dico quando ci arrivi.']
+      .forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,'COMINCIA',YEL,BLK,()=>step(0),['OK','1']);y+=4;
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',BLK,WHT,mainMenu,['ESC'])},mainMenu)}
+  intro()}
+function mesiTxt(m){const a=Math.floor(m/12),r=m%12;const p=[];if(a)p.push(a+(a===1?' anno':' anni'));if(r||!a)p.push(r+(r===1?' mese':' mesi'));return p.join(' e ')}
+function objReport(){const o=S.obj,th=TH.obj;const eur=(n)=>eurC(toC(n));const cC=Math.round(o.costo*100),gC=Math.round(o.gia*100),mC=Math.round(o.mese*100);const rest=Math.max(0,cC-gC)/100;const items=[];
+  items.push(['lines',PIG.map((r,i)=>i===2?[[8,r[0],r[1]],[15,'\u00b7',BLK,LRED]]:[[8,r[0],r[1]]]).concat([[]])]);
+  items.push(['t',[['Obiettivo',eur(o.costo)],['Hai gi\u00e0',eur(o.gia)],['Mancano',eur(rest),rest?YEL:LGRN]]]);
+  const fr=Math.min(1,o.gia/o.costo);
+  items.push(['lines',[[[0,'A che punto sei: '+fmt(fr*100,0)+'%',WHT]],[[0,'\u2592'.repeat(CW),LRED],[0,barStr(fr,CW),YEL]],[]]]);
+  if(!rest){items.push(['r','Hai gi\u00e0 raggiunto l\'obiettivo! Puoi comprarlo senza debiti.',GRN])}
+  else{const m=Math.ceil((cC-gC)/mC);items.push(['f','CI ARRIVI IN '+m+(m===1?' MESE':' MESI')]);
+    if(m>=12)items.push(['p','Cio\u00e8 '+mesiTxt(m)+', mettendo da parte '+eur(o.mese)+' al mese.']);
+    else items.push(['p','Mettendo da parte '+eur(o.mese)+' al mese.']);
+    const m2=Math.ceil((cC-gC)/Math.ceil(mC*12/10));
+    if(m2<m)items.push(['r','Con il 20% in pi\u00f9 al mese ('+eur(Math.ceil(mC*12/10)/100)+') ci arrivi in '+mesiTxt(m2)+'.']);
+    items.push(['p','Consiglio: tieni questi soldi separati dal conto di tutti i giorni.',YEL])}
+  pager({th,title:'OBIETTIVO',right:'RISULTATO',items,onBack:objStart,backLabel:'RIFAI',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Interesse composto ===== */
+function simStart(){const th=TH.sim;S.sim=S.sim||{};
+  const steps=[
+   {k:'ini',l:'CAPITALE INIZIALE',h:'Quanto metti subito. Se parti da zero scrivi 0. Per i centesimi usa il tasto ",".',min:0,max:9999999.99,dec:2,unit:'eur',def:0},
+   {k:'mese',l:'VERSAMENTO MENSILE',h:'Quanto aggiungi ogni mese. Se hai un capitale iniziale puoi scrivere 0.',min:0,max:999999.99,dec:2,unit:'eur',def:100},
+   {k:'anni',l:'PER QUANTI ANNI?',h:'Da 1 a 50 anni.',min:1,max:50,dec:0,unit:'anni',def:10},
+   {k:'tasso',l:'TASSO ANNUO (%)',h:'Il rendimento all\'anno, per esempio 3. Per la virgola usa il tasto ",".',min:0,max:20,dec:2,unit:'%',def:3}];
+  function step(i){const f=steps[i];
+    askNumber({th,title:'INTERESSE COMPOSTO',right:(i+1)+'/4',step:'PASSO '+(i+1)+' DI 4',label:f.l,help:f.h,def:S.sim[f.k]!==undefined?S.sim[f.k]:f.def,
+      min:(f.k==='mese'&&!S.sim.ini)?0.01:f.min,max:f.max,dec:f.dec,unit:f.unit,onBack:()=>{if(i>0)step(i-1);else intro()},
+      onOK:v=>{S.sim[f.k]=v;save();if(i<3)step(i+1);else simReport()}})}
+  function intro(){show(function draw(){cls(th.bg,th.bd,th.fg);header('INTERESSE COMPOSTO','',th.hbg,th.hfg,mainMenu);
+    let y=4;
+    ['Guarda come crescono i risparmi quando anche gli interessi producono interessi.','Scrivi quanto metti all\'inizio, quanto aggiungi ogni mese, per quanti anni e a che tasso.','Gli interessi si calcolano ogni mese. Il calcolo non tiene conto di tasse, costi e inflazione.']
+      .forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,'COMINCIA',YEL,BLK,()=>step(0),['OK','1']);y+=4;
+    if(S.sim.anni){button(1,y,CW,3,'VEDI L\'ULTIMO CALCOLO',ORA,WHT,simReport,['2']);y+=4}
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',BLK,YEL,mainMenu,['ESC'])},mainMenu)}
+  intro()}
+function simReport(){const s=S.sim,th=TH.sim;
+  /* Calcolo in centesimi interi: ogni mese l'interesse e' arrotondato al centesimo (0,5 per eccesso), poi si aggiunge il versamento */
+  const tb=BigInt(Math.round(s.tasso*100)),mc=toC(s.mese);let bal=toC(s.ini),vers=bal;const yrs=[];
+  for(let m=1;m<=s.anni*12;m++){bal+= (bal*tb*2n+120000n)/240000n + mc;vers+=mc;if(m%12===0)yrs.push({a:m/12,v:vers,t:bal})}
+  const fin=yrs[yrs.length-1];
+  const items=[['h','RISULTATO DOPO '+s.anni+(s.anni===1?' ANNO':' ANNI')],
+   ['t',[['Hai versato',eurC(fin.v)],['Interessi',eurC(fin.t-fin.v),LGRN],['Totale',eurC(fin.t),YEL]]]];
+  if(s.tasso>0){const r72=72/s.tasso;items.push(['p','Regola del 72: al '+fmt(s.tasso,s.tasso%1?1:0)+'% un capitale raddoppia in circa '+fmt(r72,r72<10?1:0)+' anni.'])}
+  if(fin.v>0n)items.push(['p','Gli interessi sono il '+fmt(Number(fin.t-fin.v)/Number(fin.t)*100,0)+'% del totale finale.',LGRY]);
+  items.push(['r','Esempio teorico: tasse, costi e inflazione abbassano il risultato. I rendimenti non sono garantiti.']);
+  items.push('BREAK');
+  const lines=[[[0,'\u2588',LBLU],[2,'versato',WHT],[11,'\u2588',YEL],[13,'interessi',WHT]],[[0,'ANNO',LGRY],[CW-13,'TOTALE (EURO)',LGRY]]];
+  const maxRows=ROWS-9-3,stp=Math.ceil(yrs.length/maxRows);const mx=Number(fin.t)||1;
+  const tv=yrs.map(y=>fmtC(y.t)),nw=Math.max(9,...tv.map(x=>x.length)),bw=Math.max(3,CW-3-1-nw);
+  yrs.forEach((y,i)=>{if((i+1)%stp!==0&&i!==yrs.length-1&&i!==0)return;
+    const tw=Math.max(y.t>0n?1:0,Math.round(Number(y.t)/mx*bw)),vw=Math.min(tw,Math.round(Number(y.v)/mx*bw));
+    lines.push([[0,lpad(y.a,2),WHT],[3,'\u2588'.repeat(vw),LBLU],[3+vw,'\u2588'.repeat(tw-vw),YEL],[CW-nw,lpad(tv[i],nw),WHT]])});
+  items.push(['lines',lines]);
+  pager({th,title:'INTERESSE COMPOSTO',right:'',items,onBack:simStart,backLabel:'RIFAI',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Quiz ===== */
+const QUIZ=[
+ ['Il saldo del mese \u00e8...',['entrate meno uscite','entrate pi\u00f9 uscite','solo le spese fisse'],'Saldo = entrate - uscite. Se \u00e8 positivo stai risparmiando.'],
+ ['Quale di queste \u00e8 una spesa fissa?',['l\'affitto','una cena fuori','un regalo di compleanno'],'L\'affitto \u00e8 quasi uguale ogni mese: \u00e8 una spesa fissa.'],
+ ['Con la regola 50/30/20, quanto va al risparmio?',['il 20%','il 30%','il 50%'],'50% bisogni, 30% desideri, 20% risparmio e debiti.'],
+ ['Su 2.000 \u20ac al mese, la regola 50/30/20 d\u00e0 ai bisogni...',['1.000 \u20ac','600 \u20ac','400 \u20ac'],'Il 50% di 2.000 \u20ac fa 1.000 \u20ac.'],
+ ['Un fondo emergenze di solito copre...',['3-6 mesi di spese essenziali','una settimana di spesa','dieci anni di stipendio'],'Da 3 a 6 mesi di spese essenziali.'],
+ ['1.000 \u20ac al 10% composto l\'anno, dopo 2 anni diventano...',['1.210 \u20ac','1.200 \u20ac','1.100 \u20ac'],'1.000 x 1,10 = 1.100, poi 1.100 x 1,10 = 1.210 \u20ac.'],
+ ['Con la regola del 72, al 6% l\'anno un capitale raddoppia in circa...',['12 anni','6 anni','72 anni'],'72 diviso 6 fa 12.'],
+ ['Se i prezzi salgono e i tuoi soldi restano fermi nel cassetto...',['comprano un po\' meno','valgono di pi\u00f9','non cambia niente'],'L\'inflazione riduce quello che puoi comprare con gli stessi soldi.'],
+ ['Il TAEG di un prestito indica...',['il costo totale annuo, spese comprese','solo la rata mensile','il numero delle rate'],'Il TAEG comprende interessi e spese: serve per confrontare i prestiti.'],
+ ['"Paga prima te stesso" significa...',['risparmiare appena arrivano i soldi','spendere tutto per s\u00e9','pagare i debiti per ultimi'],'Metti da parte subito una cifra fissa, poi spendi il resto.'],
+ ['Quale \u00e8 un desiderio e non un bisogno?',['un telefono nuovo se il vecchio va bene','la bolletta della luce','la spesa per mangiare'],'Il telefono nuovo \u00e8 piacevole ma rinunciabile.'],
+ ['Per tagliare le spese conviene partire da...',['spese variabili e abbonamenti inutili','le medicine','l\'affitto'],'Le spese variabili si possono cambiare subito, ogni giorno.']];
+function quizStart(){const qs=shuffle(QUIZ).slice(0,10).map(q=>{const opts=shuffle(q[1].map((t,i)=>({t,ok:i===0})));return{q:q[0],opts,ex:q[2]}});
+  let i=0,score=0,ans=null;const th=TH.quiz;
+  function draw(){cls(th.bg,th.bd,th.fg);header('QUIZ','DOMANDA '+(i+1)+'/10',th.hbg,th.hfg,mainMenu);
+    const q=qs[i];put(1,4,'PUNTI: '+score,YEL);let y=6;
+    wrap(q.q,CW).forEach(l=>{put(1,y,l,CYN);y++});y++;
+    q.opts.forEach((o,j)=>{const ls=wrap(o.t,CW-4);const h=ls.length+2;let bg=[LBLU,PUR,ORA][j],fg=WHT;
+      if(ans!==null){if(o.ok){bg=GRN}else if(j===ans){bg=RED}else{bg=DGRY;fg=GRY}}
+      fill(1,y,CW,h,bg,' ',fg);put(2,y+1,'ABC'[j],bg,fg);ls.forEach((l,k)=>put(4,y+1+k,l,fg,bg));
+      if(ans===null)hotspot(1,y,CW,h,()=>answer(j),['ABC'[j],String(j+1)]);y+=h+1});
+    if(ans!==null){const ok=q.opts[ans].ok;put(1,y,ok?'GIUSTO!':'SBAGLIATO.',ok?LGRN:LRED);y++;
+      wrap(q.ex,CW).forEach(l=>{put(1,y,l,WHT);y++});
+      button(1,ROWS-4,CW,3,i<9?'AVANTI \u25ba':'VEDI IL PUNTEGGIO \u25ba',CYN,BLK,()=>{if(i<9){i++;ans=null;draw()}else end()},['OK','NEXT'])}
+  }
+  function answer(j){ans=j;if(qs[i].opts[j].ok){score++;sfx.ok()}else sfx.bad();draw()}
+  function end(){const best=Math.max(S.best||0,score),rec=score>(S.best||0)&&score>0;S.best=best;save();
+    show(function drawEnd(){cls(th.bg,th.bd,th.fg);header('QUIZ','FINE',th.hbg,th.hfg,mainMenu);
+      let y=6;center(y,' HAI FATTO '+score+' SU 10 ',BLK,score>=7?LGRN:score>=5?YEL:LRED);y+=2;
+      center(y,'\u2588'.repeat(score)+'\u2592'.repeat(10-score),score>=7?LGRN:score>=5?YEL:LRED);y+=2;
+      const msg=score===10?'Perfetto! Sei un vero esperto del bilancio di casa.':score>=7?'Molto bene! Conosci le regole del risparmio.':score>=5?'Discreto. Ripassa le lezioni per fare meglio.':'Non scoraggiarti: leggi le lezioni e riprova.';
+      wrap(msg,CW).forEach(l=>{put(1,y,l,WHT);y++});y++;
+      put(1,y,'RECORD: '+best+' SU 10',CYN);if(rec)put(18,y,'NUOVO!',YEL);y+=3;
+      button(1,y,CW,3,'RIGIOCA',CYN,BLK,quizStart,['OK','1']);y+=4;
+      button(1,y,CW,3,'LEZIONI',LBLU,WHT,lessonList,['2']);y+=4;
+      button(1,y,CW,3,'\u25c4 TORNA AL MENU',DGRY,WHT,mainMenu,['ESC']);
+    },mainMenu);sfx.sel()}
+  show(draw,mainMenu)}
+/* ===== Menu principale ===== */
+function mainMenu(){
+  show(function draw(){cls(BLK,BLU,WHT);
+    fill(0,0,COLS,1,ORA,'\u2580',RED);fill(0,1,COLS,1,LGRN,'\u2580',YEL);
+    put(1,3,' IL SALVADANAIO ',BLK,YEL);put(1,4,' 64 ',WHT,RED);
+    put(1,6,'Corso di',LGRY);put(1,7,'economia',LGRY);put(1,8,'domestica',LGRY);put(1,9,'VERSIONE ITALIANA',CYN);
+    drawPig(18,3,-1);
+    fill(0,10,COLS,1,LBLU,'\u2580',CYN);fill(0,11,COLS,1,BLU,'\u2580',PUR);
+    const items=[['LEZIONI',LBLU,WHT,lessonList],['IL MIO BILANCIO',GRN,WHT,bilancioStart],['OBIETTIVO RISPARMIO',PUR,WHT,objStart],
+      ['INTERESSE COMPOSTO',ORA,WHT,simStart],['QUIZ',RED,WHT,quizStart],['SUONO: '+(S.snd?'SI':'NO'),DGRY,LGRY,()=>{S.snd=!S.snd;save();if(S.snd){audioInit();sfx.sel()}draw()}],
+      ['FINE PROGRAMMA',GRY,BLK,fine]];
+    const slot=Math.max(4,Math.floor((ROWS-5-13)/7)),h=Math.min(5,slot-1),gap=slot-h;
+    items.forEach((it,i)=>{const y=13+i*slot,m=y+Math.floor(h/2);button(1,y,CW,h,'',it[1],it[2],()=>{sfx.sel();it[3]()},[String(i+1)]);
+      put(2,m,String(i+1),it[1],it[2]);put(5,m,it[0],it[2],it[1])});
+    put(1,ROWS-3,'READY.',LGRY);put(COLS-1-12,ROWS-5,'ByCSD \u00b7 v1.0',WHT);put(1,ROWS-2,'TOCCA UNA VOCE O PREMI 1-7',GRY);
+  },null)}
+function fine(){show(function draw(){cls(BLU,LBLU,LBLU);put(0,1,'BREAK IN 30');put(0,2,'READY.');
+    put(0,3,'LIST 10-30');put(0,4,'10 REM IL SALVADANAIO 64');put(0,5,'20 PRINT "RISPARMIA OGNI MESE"');put(0,6,'30 GOTO 20');put(0,7,'READY.');cursor={x:0,y:8};
+    button(1,11,CW,3,'RUN  (RIPARTI)',LBLU,WHT,mainMenu,['OK','R']);
+    wrap('Il programma \u00e8 fermo. Tocca RUN per tornare al menu.',CW).forEach((l,i)=>put(1,15+i,l,LBLU));
+  },mainMenu)}
+/* ===== Accensione e caricamento da cassetta ===== */
+let skipFlag=false,wake=null;
+const w=ms=>new Promise(r=>{wake=r;setTimeout(r,ms)});
+/* BASIC iniziale: RUN avvia il caricamento; il gesto abilita audio e schermo intero. */
+function power(){show(function draw(){mode='text';bootLines=[];typing='';bootScreen();
+  button(7,Math.floor(ROWS/2)-2,15,5,['RUN','','AVVIO'],WHT,BLK,()=>{audioInit();goFull();boot()},['OK','R']);
+},null)}
+async function boot(){skipFlag=false;cur=bootScreen;anyTap=null;hot=[];
+  mode='text';bootLines=[];typing='';bootScreen();await w(900);if(skipFlag)return;
+  await type('LOAD"SALVADANAIO"');if(skipFlag)return;await w(250);
+  bootLines.push('');bootLines.push('PRESS PLAY ON TAPE');bootScreen(true);await w(900);if(skipFlag)return;
+  bootLines.push('OK');bootScreen(true);await w(400);if(skipFlag)return;
+  bootLines.push('');bootLines.push('SEARCHING FOR SALVADANAIO');bootScreen(true);await w(300);if(skipFlag)return;
+  mode='pilot';tapeOn();await w(1100);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('FOUND SALVADANAIO');bootScreen(true);await w(800);if(skipFlag)return;
+  mode='data';tapeOn();await w(2200);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('LOADING');bootLines.push('READY.');bootScreen();await w(500);if(skipFlag)return;
+  await type('RUN');if(skipFlag)return;await w(400);if(skipFlag)return;endBoot()}
+let bootLines=[],typing='';
+function bootScreen(nocur){cls(BLU,LBLU,LBLU);center(1,'*** COMMODORE 64 BASIC V2 ***');put(0,3,' 64K RAM SYSTEM');put(0,4,' 38911 BASIC BYTES FREE');put(0,6,'READY.');
+  let y=7;bootLines.forEach(l=>{put(0,y,l);y++});if(typing!==null)put(0,y,typing);if(!nocur)cursor={x:typing?typing.length:0,y:y}}
+async function type(s){typing='';for(const c of s){typing+=c;bootScreen();sfx.click();await w(110);if(skipFlag)return}
+  bootLines.push(typing);typing='';bootScreen()}
+function endBoot(){anyTap=null;tapeOff();mode='text';typing='';sfx.sel();mainMenu()}
+/* ===== Avvio ===== */
+window.addEventListener('resize',()=>{layout()});
+layout();power();requestAnimationFrame(loop);
+</script>
+</body>
+</html>

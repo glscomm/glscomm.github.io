@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le mie app</title>
+<meta name="theme-color" content="#F3F3F3">
+<style>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
+.kicker{font:19px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}h1+.kicker{margin-top:-2px}
+.updated{font:14px/1.4 var(--sans);color:var(--muted);margin:6px 0 14px}
+.lede{font:400 clamp(18px,4.4vw,21px)/1.3 var(--sans);margin:22px 0 26px}.lede:has(+ul){margin-bottom:8px}.lede:not(.lede~.lede){padding-top:16px}.lede+ul{font-size:16px}.lede+ul li::marker{color:color-mix(in srgb,var(--ink) 50%,transparent)}
+html{scroll-behavior:smooth}
+p{margin:0 0 10px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 30%,transparent)}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+.group{font:500 16px/1.4 var(--sans);color:var(--ink);margin:26px 0 2px}
+details.more{padding:16px 0;border-bottom:1px solid var(--rule);interpolate-size:allow-keywords}details.more::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease-out,content-visibility .25s allow-discrete}details.more[open]::details-content{block-size:auto}details.more[open]>:not(summary){animation:reveal .25s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(-6px)}}
+details.more summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 16px;column-gap:12px;border-radius:4px}
+details.more summary b{font:600 18px/1.3 var(--sans)}
+details.more summary span{grid-column:1;margin-top:2px;font-size:15px;line-height:1.45;color:var(--muted)}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"";grid-column:2;grid-row:1/span 2;align-self:center;width:7px;height:7px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more ul{margin:10px 0 0;padding-left:19px}
+details.more iframe{display:block;width:100%;height:85vh;border:1px solid var(--rule);border-radius:20px;margin:12px 0 0;background:var(--card)}
+@media (prefers-reduced-motion:reduce){details.more::details-content{transition:none}details.more[open]>:not(summary){animation:none}}
+
+.app-link{display:block;padding:18px 0;border-bottom:1px solid var(--rule);text-decoration:none}.app-link b{display:block;font:600 18px/1.3 var(--sans)}.app-link span,.app-link small{display:block;margin-top:6px;color:var(--muted)}
+#stage{position:fixed;inset:0;z-index:50;background:#000}#stage[hidden]{display:none}#stage iframe{display:block;width:100%;height:100%;border:0;background:#fff}
+#back{position:fixed;top:max(6px,env(safe-area-inset-top));left:6px;z-index:51;width:34px;height:34px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font:18px/34px var(--sans);padding:0;opacity:.55;cursor:pointer}
+body.inapp{overflow:hidden}
+</style>
+</head>
+<body><div class="wrap">
+<h1>Le mie app, tutte in un posto</h1>
+<p class="kicker">Raccolta app, 12 applicazioni</p>
+<p class="updated">Aggiornato il 21 ottobre 2026</p>
+<p class="lede">Tocca il titolo di un'app per aprirla. Ogni app ha il suo indirizzo fisso.</p>
+<ul>
+<li>Al primo tocco dentro l'app si va a schermo intero.</li>
+<li>Per tornare a questo elenco usa il gesto Indietro.</li>
+</ul>
+
+<p class="group">In ordine di creazione</p>
+
+<a class="app-link" href="verdure-per-minestrone.html"><b>1. Verdure per il minestrone</b><span>54 verdure divise per gruppo, con la stagione accanto. 11 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="giro-delle-capitali.html"><b>2. Giro delle capitali</b><span>Otto paesi, tre risposte, correzione immediata. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="capitali-primi-passi.html"><b>3. Capitali: primi passi</b><span>Tre giochi con bandiere grandi, per i più piccoli con un adulto. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="dieci-parole-casuali.html"><b>4. Dieci parole casuali</b><span>1000 parole con sillabe, definizione, etimologia, sinonimi e contrari. Versione 1.0 delle 23:45. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="numeri-casuali.html"><b>5. Numeri casuali</b><span>Griglia 4 × 4 da leggere, da una a quattro cifre. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="slot-classica.html"><b>6. Slot classica</b><span>Tre rulli, puntata e tabella vincite, solo crediti virtuali. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="commodore-64.html"><b>7. Commodore 64</b><span>Emulatore con tastiera e joystick: carica file .prg e .d64. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="zx-spectrum-48k.html"><b>8. ZX Spectrum 48K</b><span>Emulatore con la ROM originale: carica file .tap e .tzx. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="mistero-a-villa-martini.html"><b>9. Mistero a Villa Martini</b><span>Il giallo in stile 1984, in orizzontale e senza cornice. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="salvadanaio-64.html"><b>10. Il Salvadanaio 64</b><span>Economia domestica in stile Commodore 64: bilancio, risparmio, interesse composto e quiz. 19 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="province-64.html"><b>11. Province 64</b><span>Le 110 province con le sigle delle targhe, lette dalla voce di SAM. 19 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<a class="app-link" href="diritti-umani-64.html"><b>12. Diritti umani 64</b><span>La Dichiarazione universale del 1948 in stile Commodore 64, con la lettura a voce. 20 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+
+<div class="sources"><p>La versione da scaricare e usare senza Internet, con le prime undici app in un solo file, è <a href="le-mie-app-offline.html">qui</a>.</p></div></div>
+</body></html>
