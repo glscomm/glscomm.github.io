@@ -1,0 +1,37 @@
+{
+ "id": "/gazzetta/",
+ "name": "La Gazzetta dello Sport",
+ "short_name": "Gazzetta",
+ "description": "Il sito originale della Gazzetta dello Sport, a schermo intero.",
+ "lang": "it",
+ "dir": "ltr",
+ "start_url": "./",
+ "scope": "./",
+ "display": "fullscreen",
+ "display_override": [
+  "fullscreen",
+  "standalone"
+ ],
+ "background_color": "#F8D7DA",
+ "theme_color": "#F8D7DA",
+ "icons": [
+  {
+   "src": "icona-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icona-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icona-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

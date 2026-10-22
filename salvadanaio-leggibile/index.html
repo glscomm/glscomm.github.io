@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="it">
+<head><script>(function(){try{window.localStorage.length}catch(x){var m={};var st={getItem:function(k){return k in m?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}};try{Object.defineProperty(window,'localStorage',{value:st,configurable:true})}catch(y){}}})();</script>
+<meta charset="utf-8"><link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" href="icona-192.png"><link rel="apple-touch-icon" href="icona-180.png"><meta name="mobile-web-app-capable" content="yes"><script data-or="portrait">(function(){/* Schermo intero: al primo tocco, e quel tocco non preme niente. Installata dalla schermata Home parte gia' a schermo intero. */
+var d=document,e=d.documentElement,w=window,s=d.currentScript,or=s&&s.getAttribute('data-or'),menu=!!(s&&s.hasAttribute('data-menu'));
+var F=w.FS1={off:false,fails:0};
+/* Aperta dal menu' principale, dentro il menu' stesso: lo schermo intero lo tiene il menu', il primo tocco non serve. */
+var P=null;try{var fe=w.frameElement;if(fe&&fe.id==='app-stage'&&w.parent.STAGE)P=w.parent.STAGE}catch(x){P=null}
+if(P){(function(){
+e.classList.add('in-menu');var pd=w.parent.document;
+function pfs(){return !!(pd.fullscreenElement||pd.webkitFullscreenElement)||P.inApp()}
+function gfs(){return pfs()?e:null}
+try{Object.defineProperty(d,'fullscreenElement',{configurable:true,get:gfs});Object.defineProperty(d,'webkitFullscreenElement',{configurable:true,get:gfs});
+Object.defineProperty(d,'fullscreenEnabled',{configurable:true,get:function(){return true}});Object.defineProperty(d,'webkitFullscreenEnabled',{configurable:true,get:function(){return true}})}catch(x){}
+var rq=function(){return P.fs()};try{w.Element.prototype.requestFullscreen=rq;w.Element.prototype.webkitRequestFullscreen=rq}catch(x){}
+d.exitFullscreen=d.webkitExitFullscreen=function(){return Promise.resolve()};
+function tap(){if(!pfs()&&F.fails<3)P.fs().then(function(){F.fails=0},function(){F.fails++})}
+w.addEventListener('pointerup',tap,true);w.addEventListener('touchend',tap,true);w.addEventListener('keydown',function(v){if(v.key!=='Escape')tap()},true);
+function H(){P.hold(4000)}
+['alert','confirm','prompt','open','print'].forEach(function(k){var o=w[k];if(typeof o==='function')w[k]=function(){H();return o.apply(w,arguments)}});
+try{var IP=w.HTMLInputElement.prototype;['click','showPicker'].forEach(function(k){var o=IP[k];if(typeof o==='function')IP[k]=function(){if(this.type==='file'||this.type==='color')H();return o.apply(this,arguments)}})}catch(x){}
+w.addEventListener('click',function(v){var t=v.target;if(t&&t.closest&&t.closest('input[type=file],input[type=color],label'))H()},true);
+w.addEventListener('click',function(v){if(v.defaultPrevented)return;var t=v.target,a=t&&t.closest&&t.closest('a[href]');if(!a)return;var h=a.getAttribute('href')||'';
+if(h.charAt(0)==='#'){v.preventDefault();var id=h.slice(1);try{id=decodeURIComponent(id)}catch(x){}var el=id?(d.getElementById(id)||d.getElementsByName(id)[0]):null;if(el)el.scrollIntoView();else if(!id)w.scrollTo(0,0);return}
+if(a.target||a.hasAttribute('download'))return;var u;try{u=new URL(a.href,location.href)}catch(x){return}
+if(u.origin!==location.origin){v.preventDefault();H();w.open(u.href,'_blank','noopener')}},false);
+})();return}
+function on(){return !!(d.fullscreenElement||d.webkitFullscreenElement)}
+function mq(q){try{return w.matchMedia(q).matches}catch(x){return false}}
+function inApp(){return mq('(display-mode: fullscreen)')}
+var req=e.requestFullscreen||e.webkitRequestFullscreen;
+var can=!!req&&!!(d.fullscreenEnabled||d.webkitFullscreenEnabled);
+function lock(){if(!or)return;try{var o=screen.orientation;if(o&&o.lock)o.lock(or).catch(function(){})}catch(x){}}
+if(inApp()){e.classList.add('fs-app');lock()}
+if(mq('(display-mode: standalone)'))e.classList.add('pwa');
+function need(){return can&&!F.off&&F.fails<2&&!on()&&!inApp()&&!e.classList.contains('inst')}
+var pend=0,pp=0;
+function sa(){return mq('(display-mode: standalone)')}
+function go(){if(pend||on())return;pend=1;try{var p=req.call(e,{navigationUI:'hide'});if(p&&p.then)p.then(function(){pend=0;F.fails=0;lock()},function(){pend=0;F.fails++});else pend=0}catch(x){pend=0;F.fails++}}
+var g=0,g0=0,gEnd=0;
+function act(){if(!g)return false;var t=Date.now();if((gEnd&&t>gEnd)||t-g0>5000){g=0;return false}return true}
+function eat(v){v.stopImmediatePropagation();v.stopPropagation();if(v.cancelable)v.preventDefault()}
+function skip(t){return menu&&t&&t.closest&&t.closest('a[href],#back')}
+function start(v){if(act()){eat(v);return}if(!need()||skip(v.target))return;if(F.pass){var ok=false;try{ok=!!F.pass(v)}catch(x){ok=false}if(ok){pp=sa()?0:1;if(pp&&(v.pointerType==='mouse'||v.type==='mousedown'))go();return}}g=1;g0=Date.now();gEnd=0;eat(v);if(v.pointerType==='mouse'||v.type==='mousedown')go()}
+function mid(v){if(act())eat(v)}
+function end(v){if(pp){pp=0;go()}if(!act())return;eat(v);go();if(!gEnd)gEnd=Date.now()+450}
+function fin(v){pp=0;if(!act())return;eat(v);if(!gEnd)gEnd=Date.now()+450}
+var o={capture:true,passive:false};
+w.addEventListener('pointerdown',start,o);
+w.addEventListener('touchstart',function(v){if(act())eat(v);else if(!w.PointerEvent)start(v)},o);
+w.addEventListener('mousedown',function(v){if(act())eat(v);else if(!w.PointerEvent)start(v)},o);
+['pointermove','touchmove','mouseup','contextmenu','dblclick','auxclick','selectstart'].forEach(function(t){w.addEventListener(t,mid,o)});
+w.addEventListener('pointerup',end,o);w.addEventListener('touchend',end,o);
+w.addEventListener('pointercancel',fin,o);w.addEventListener('touchcancel',fin,o);
+w.addEventListener('click',mid,o);
+w.addEventListener('keydown',function(v){if(need()&&v.key!=='Escape')go()},true);
+if(w.top===w&&'serviceWorker' in navigator&&location.protocol==='https:'&&/(^|\.)(netlify\.app|github\.io)$/.test(location.hostname))w.addEventListener('load',function(){navigator.serviceWorker.register(location.pathname.replace(/[^\/]*$/,'')+'sw.js',{scope:location.pathname.replace(/[^\/]*$/,'')}).catch(function(){})});
+})();</script><script id="inst-js">(function(){/* Salva come app: con ?installa nell'indirizzo compare un riquadro per installare proprio questa app (tasto Installa di Chrome, o le istruzioni). */
+var w=window,d=document,e=d.documentElement;
+if(w.top!==w||!/[?&]installa(=|&|$)/.test(location.search))return;
+function mq(x){try{return w.matchMedia(x).matches}catch(y){return false}}
+function clean(){try{var u=new URL(location.href);u.searchParams.delete('installa');history.replaceState(history.state,'',u.pathname+u.search+u.hash)}catch(y){}}
+if(mq('(display-mode: fullscreen)')||mq('(display-mode: standalone)')||mq('(display-mode: minimal-ui)')){clean();return}
+e.classList.add('inst');
+var N="Il Salvadanaio",bip=null,host=null,R=null,done=false;
+w.addEventListener('beforeinstallprompt',function(v){v.preventDefault();bip=v;show()});
+w.addEventListener('appinstalled',function(){done=true;bip=null;show()});
+function close(){e.classList.remove('inst');clean();if(host&&host.parentNode)host.parentNode.removeChild(host);host=null;R=null}
+function $(i){return R.getElementById(i)}
+function show(){if(!R)return;$('go').hidden=!bip||done;$('how').hidden=done;$('ok').hidden=!done;$('lead').hidden=done;$('no').textContent=done?'Chiudi':'Usa l\u2019app senza installarla'}
+function mine(v){var p=v.composedPath?v.composedPath():[];return !!host&&p.indexOf(host)>=0}
+function which(v){var p=v.composedPath();for(var i=0;i<p.length&&p[i]!==host;i++){var n=p[i];if(n.id==='go'||n.id==='no')return n.id}return null}
+/* i tocchi sul riquadro non arrivano all'app che sta sotto */
+['pointerdown','pointerup','pointermove','touchstart','touchend','touchmove','mousedown','mouseup','dblclick','contextmenu','keydown','keyup','wheel'].forEach(function(t){
+ w.addEventListener(t,function(v){if(mine(v))v.stopImmediatePropagation()},{capture:true,passive:true})});
+w.addEventListener('click',function(v){if(!mine(v))return;v.stopImmediatePropagation();var b=which(v);
+ if(b==='no')close();
+ else if(b==='go'&&bip){var p=bip;bip=null;show();try{p.prompt();if(p.userChoice)p.userChoice.then(function(c){if(c&&c.outcome==='accepted')done=true;show()},function(){})}catch(x){show()}}
+},true);
+var CSS='<style>:host{all:initial}*{box-sizing:border-box}[hidden]{display:none!important}'+
+'.bg{position:fixed;inset:0;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:16px 16px calc(78px + env(safe-area-inset-bottom));overflow:auto}'+
+'.box{background:#fff;color:#141414;border-radius:20px;width:100%;max-width:440px;max-height:100%;overflow:auto;padding:22px 20px 18px;font:17px/1.45 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif;text-align:left}'+
+'.k{margin:0 0 4px;font-size:15px;color:#6E6C68}h2{margin:0 0 12px;font:700 24px/1.2 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif}p{margin:0 0 12px}'+
+'ol{margin:0 0 12px;padding-left:22px}li{margin:0 0 6px}b{font-weight:700}.s{font-size:15px;color:#4A4844}'+
+'button{display:block;width:100%;min-height:52px;border-radius:14px;font:600 18px/1.2 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif;cursor:pointer;margin:0 0 12px;-webkit-tap-highlight-color:transparent}'+
+'#go{border:0;background:#141414;color:#fff}#no{border:1.5px solid #CFCDC8;background:#fff;color:#141414;margin:4px 0 0}</style>';
+var HTML='<div class="bg"><div class="box" role="dialog" aria-modal="true" aria-labelledby="h">'+
+'<p class="k">Salva come app</p><h2 id="h"></h2>'+
+'<p id="lead">Avrà la sua icona fra le app del telefono e partirà sempre a schermo intero, senza la barra di Chrome.</p>'+
+'<button id="go" type="button" hidden>Installa l\u2019app</button>'+
+'<div id="how"><p><b>Se il tasto «Installa l\u2019app» non c\u2019è:</b></p><ol>'+
+'<li>Tocca i tre puntini in alto a destra.</li>'+
+'<li>Scegli <b>«Installa app»</b>. Se non c\u2019è, scegli «Aggiungi a schermata Home».</li>'+
+'<li>Nella finestra che si apre scegli <b>«Installa»</b>, non «Crea scorciatoia»: la scorciatoia è solo un collegamento che si apre in Chrome.</li></ol>'+
+'<p class="s">Se Chrome propone solo la scorciatoia, quest’app è già installata: cercala fra le app del telefono.</p></div>'+
+'<p id="ok" hidden><b>Fatto.</b> Adesso la trovi fra le app del telefono, e da lì parte a schermo intero.</p>'+
+'<button id="no" type="button"></button></div></div>';
+function build(){if(host)return;host=d.createElement('div');host.id='inst-host';host.setAttribute('style','position:fixed;inset:0;z-index:2147483647;display:block');
+ R=host.attachShadow({mode:'open'});R.innerHTML=CSS+HTML;$('h').textContent='«'+N+'»';(d.body||e).appendChild(host);show()}
+if(d.body)build();else d.addEventListener('DOMContentLoaded',build);
+})();</script>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#10141B">
+<title>Il Salvadanaio</title>
+<style>
+html,body{margin:0;height:100%;background:#10141B;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+#cv{position:absolute;left:0;top:0;touch-action:none}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<script>
+'use strict';
+const F500='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',F700='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';
+/* ===== Palette moderna, scura (stessi ruoli dei 16 colori originali) ===== */
+const PAL=['#10141B','#F5F7FB','#CF4B4B','#5CCFDB','#8A63D2','#278753','#18224A','#FFD166','#BA5C1A','#2E2018','#FF8A8A','#343A46','#727B8B','#78E3A4','#4F70E0','#C7CCD6','#2A1C4D','#A9BBFF'];
+const BLK=0,WHT=1,RED=2,CYN=3,PUR=4,GRN=5,BLU=6,YEL=7,ORA=8,BRN=9,LRED=10,DGRY=11,GRY=12,LGRN=13,LBLU=14,LGRY=15,PURD=16,LBT=17;
+const COLS=30,MINR=45,CW=28;
+let ROWS=MINR;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let CH=[],FG=[],BG=[];
+let scrBg=BLU,border=LBLU,txt=LBLU,hot=[],cursor=null,dirty=true,mode='text',flash=null,blink=true;
+let cur=null,curBack=null,inputH=null,anyTap=null,busy=false;
+/* ===== Carattere leggibile (Atkinson Hyperlegible Mono, incluso nell'app) ===== */
+const FAM='SalvMono';
+(function(){try{[['500',F500],['700',F700]].forEach(([wt,b])=>{const f=new FontFace(FAM,'url(data:font/woff2;base64,'+b+')',{weight:wt});document.fonts.add(f);f.load().then(()=>{dirty=true},()=>{})})}catch(e){}})();
+/* ===== Memoria ===== */
+let S={};try{S=JSON.parse(localStorage.getItem('salvadanaio64')||'{}')||{}}catch(e){S={}}
+function save(){try{localStorage.setItem('salvadanaio64',JSON.stringify(S))}catch(e){}}
+if(S.snd===undefined)S.snd=true;
+/* ===== Schermo ===== */
+let GX=0,GY=0,CX=10,CY=16,FS=14,VW=0,VH=0,DPR=1;
+const SA=document.createElement('div');SA.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+function safe(){if(!SA.parentNode)document.body.appendChild(SA);const c=getComputedStyle(SA);return{t:parseFloat(c.paddingTop)||0,r:parseFloat(c.paddingRight)||0,b:parseFloat(c.paddingBottom)||0,l:parseFloat(c.paddingLeft)||0}}
+function layout(){
+  const vw=window.innerWidth,vh=window.innerHeight,sa=safe();
+  const pad=Math.max(4,Math.round(Math.min(vw,vh)*0.012));
+  const aw=vw-2*pad-sa.l-sa.r,ah=vh-2*pad-sa.t-sa.b;
+  let cx=aw/COLS,rows=Math.floor(ah/(cx*1.5));
+  rows=Math.max(MINR,Math.min(72,rows));
+  const cy=ah/rows;if(cx>cy*0.85)cx=cy*0.85;
+  const changed=rows!==ROWS||!CH.length;
+  ROWS=rows;CX=cx;CY=cy;
+  FS=Math.min(cx/0.632*0.97,cy*0.95);
+  GX=sa.l+pad+(aw-COLS*cx)/2;GY=sa.t+pad+(ah-ROWS*cy)/2;
+  if(changed){const n=COLS*ROWS;CH=new Array(n).fill(' ');FG=new Array(n).fill(txt);BG=new Array(n).fill(-1)}
+  DPR=Math.min(window.devicePixelRatio||1,3);VW=vw;VH=vh;
+  cv.style.width=vw+'px';cv.style.height=vh+'px';cv.style.left='0px';cv.style.top='0px';
+  cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);
+  if(changed&&cur)cur();
+  dirty=true;
+}
+function cls(bg,bd,fg){scrBg=bg;border=bd;txt=fg;CH.fill(' ');FG.fill(fg);BG.fill(-1);hot=[];cursor=null;flash=null;dirty=true}
+function put(x,y,s,fg,bg){s=String(s);if(fg===undefined)fg=txt;if(bg===undefined)bg=-1;
+  for(let i=0;i<s.length;i++){const xx=x+i;if(xx<0||xx>=COLS||y<0||y>=ROWS)continue;const k=y*COLS+xx;CH[k]=s[i];FG[k]=fg;BG[k]=bg}dirty=true}
+function fill(x,y,w,h,bg,ch,fg){for(let j=0;j<h;j++)put(x,y+j,(ch||' ').repeat(w),fg===undefined?txt:fg,bg)}
+function center(y,s,fg,bg){put(Math.floor((COLS-s.length)/2),y,s,fg,bg)}
+function wrap(t,w){const out=[];String(t).split('\n').forEach(par=>{let line='';par.split(' ').forEach(wd=>{if(!wd)return;
+  while(wd.length>w){if(line){out.push(line);line=''}out.push(wd.slice(0,w));wd=wd.slice(w)}
+  if(!line)line=wd;else if(line.length+1+wd.length<=w)line+=' '+wd;else{out.push(line);line=wd}});out.push(line)});return out}
+function hotspot(x,y,w,h,fn,keys){hot.push({x,y,w,h,fn,keys:keys||[]})}
+function button(x,y,w,h,label,bg,fg,fn,keys){fill(x,y,w,h,bg,' ',fg);const ls=Array.isArray(label)?label:[label];
+  const y0=y+Math.floor((h-ls.length)/2);ls.forEach((l,i)=>put(x+Math.max(0,Math.floor((w-l.length)/2)),y0+i,l.slice(0,w),fg,bg));hotspot(x,y,w,h,fn,keys)}
+/* ===== Disegno: stessa griglia di 30 colonne, testo vero e forme vettoriali ===== */
+const PARTS='\u258f\u258e\u258d\u258c\u258b\u258a\u2589',BARCH='\u2588'+PARTS,TRACK='\u2592';
+const PIGR1='\u2584\u2588\u2588\u2588\u2588\u2588\u2584\u2584';
+function col(i){return PAL[i]||PAL[0]}
+function rr(x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function drawPigV(bx,by,bw,bh){
+  const s=Math.min(bw/11,bh/6.6),ox=bx+(bw-11*s)/2,oy=by+(bh-6.6*s)/2;
+  const X=v=>ox+v*s,Y=v=>oy+v*s;
+  const body=col(LRED),dark='#E46A6A',snout='#FFB3B3';
+  ctx.save();
+  ctx.fillStyle=dark;[[3.0,4.6],[7.3,4.6]].forEach(([lx,ly])=>{rr(X(lx),Y(ly),0.95*s,1.6*s,0.35*s);ctx.fill()});
+  ctx.fillStyle=body;[[1.9,4.7],[6.2,4.7]].forEach(([lx,ly])=>{rr(X(lx),Y(ly),1.0*s,1.75*s,0.38*s);ctx.fill()});
+  ctx.strokeStyle=body;ctx.lineWidth=0.32*s;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X(0.95),Y(3.0));ctx.bezierCurveTo(X(0.1),Y(2.9),X(0.2),Y(1.9),X(0.75),Y(2.1));ctx.stroke();
+  ctx.fillStyle=body;ctx.beginPath();ctx.ellipse(X(5.1),Y(3.35),4.25*s,2.2*s,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.moveTo(X(6.9),Y(1.75));ctx.lineTo(X(7.5),Y(0.75));ctx.lineTo(X(8.3),Y(1.9));ctx.closePath();ctx.fillStyle=dark;ctx.fill();
+  ctx.fillStyle=snout;ctx.beginPath();ctx.ellipse(X(9.55),Y(3.3),0.85*s,0.72*s,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=dark;ctx.beginPath();ctx.arc(X(9.3),Y(3.3),0.15*s,0,Math.PI*2);ctx.arc(X(9.8),Y(3.3),0.15*s,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=col(BLK);ctx.beginPath();ctx.arc(X(7.75),Y(2.55),0.24*s,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=dark;rr(X(4.3),Y(1.35),1.9*s,0.32*s,0.16*s);ctx.fill();
+  ctx.fillStyle=col(YEL);ctx.beginPath();ctx.arc(X(5.25),Y(0.62),0.6*s,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#C99A2E';ctx.lineWidth=Math.max(1,0.12*s);ctx.beginPath();ctx.arc(X(5.25),Y(0.62),0.36*s,0,Math.PI*2);ctx.stroke();
+  ctx.restore();
+}
+function findPigs(){const out=[];
+  for(let y=0;y+5<ROWS;y++)for(let x=5;x<COLS;x++){const k=y*COLS+x;if(CH[k]!=='\u25cf')continue;
+    const px=x-5;let row='';for(let i=0;i<PIGR1.length;i++){const xx=px+2+i;row+=xx<COLS?CH[(y+1)*COLS+xx]:''}
+    if(row===PIGR1)out.push({x:px,y,w:11,h:6})}
+  return out}
+function inR(r,x,y){return x>=r.x&&x<r.x+r.w&&y>=r.y&&y<r.y+r.h}
+let lastMode='text',modeT0=0;
+function render(){
+  const t=performance.now();if(mode!==lastMode){lastMode=mode;modeT0=t}
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  const sb=col(scrBg);ctx.fillStyle=sb;ctx.fillRect(0,0,VW,VH);
+  document.body.style.background=sb;
+  if(mode==='blank'){dirty=false;return}
+  const n=COLS*ROWS,cov=new Uint8Array(n),bold=new Uint8Array(n),ins=Math.max(1.5,Math.min(CX,CY)*0.12),rad=Math.min(14,CY*0.5);
+  /* tasti: un blocco arrotondato per ogni zona da toccare con un colore di fondo */
+  const hb=[];
+  hot.forEach(h=>{const cnt={};let tot=0;
+    for(let y=h.y;y<h.y+h.h;y++)for(let x=h.x;x<h.x+h.w;x++){if(x<0||x>=COLS||y<0||y>=ROWS)continue;tot++;const b=BG[y*COLS+x];cnt[b]=(cnt[b]||0)+1}
+    let best=-1,bc=0;for(const b in cnt)if(cnt[b]>bc){bc=cnt[b];best=+b}
+    if(best>=0&&best!==scrBg&&bc>=tot*0.6){hb.push({x:h.x,y:h.y,w:h.w,h:h.h,c:best});
+      for(let y=h.y;y<h.y+h.h;y++)for(let x=h.x;x<h.x+h.w;x++){if(x<0||x>=COLS||y<0||y>=ROWS)continue;const k=y*COLS+x;bold[k]=1;if(BG[k]===best)cov[k]=1}}});
+  /* sfondi colorati rimasti: righe uguali e consecutive diventano un riquadro */
+  const blocks=[];let open={};
+  for(let y=0;y<ROWS;y++){const nx={};let x=0;
+    while(x<COLS){const k=y*COLS+x,b=BG[k];if(b<0||b===scrBg||cov[k]){x++;continue}
+      let e=x;while(e+1<COLS&&BG[y*COLS+e+1]===b&&!cov[y*COLS+e+1])e++;
+      const key=x+','+e+','+b;let bl=open[key];if(bl&&bl.y+bl.h===y)bl.h++;else{bl={x,y,w:e-x+1,h:1,c:b};blocks.push(bl)}nx[key]=bl;
+      for(let i=x;i<=e;i++)bold[y*COLS+i]=1;x=e+1}
+    open=nx}
+  const inHot=b=>hb.some(h=>b.x>=h.x&&b.y>=h.y&&b.x+b.w<=h.x+h.w&&b.y+b.h<=h.y+h.h);
+  const under=[],over=[];blocks.forEach(b=>(inHot(b)?over:under).push(b));
+  const pxr=b=>[GX+b.x*CX,GY+b.y*CY,b.w*CX,b.h*CY];
+  const edge=b=>b.x===0||b.x+b.w===COLS;
+  function drawBlock(b,round){const [x,y,w,h]=pxr(b);
+    if(!round){ctx.fillStyle=col(b.c);ctx.fillRect(x,y,w,h);return}
+    let u=-1;for(const xx of [b.x-1,b.x+b.w]){if(xx<0||xx>=COLS)continue;const ub=BG[b.y*COLS+xx];if(ub>=0&&ub!==scrBg&&ub!==b.c){u=ub;break}}
+    if(u>=0){ctx.fillStyle=col(u);ctx.fillRect(x,y,w,h)}
+    ctx.fillStyle=col(b.c);rr(x+ins,y+ins,w-2*ins,h-2*ins,b.w===1&&b.h===1?CY*0.25:rad);ctx.fill()}
+  under.forEach(b=>drawBlock(b,!edge(b)));
+  hb.forEach(b=>drawBlock(b,true));
+  over.forEach(b=>drawBlock(b,true));
+  if(flash){const f=hb.find(b=>b.x===flash.x&&b.y===flash.y&&b.w===flash.w&&b.h===flash.h);const [x,y,w,h]=pxr(flash);
+    ctx.fillStyle='rgba(255,255,255,0.32)';if(f){rr(x+ins,y+ins,w-2*ins,h-2*ins,rad);ctx.fill()}else ctx.fillRect(x,y,w,h)}
+  /* salvadanaio disegnato */
+  const pigs=findPigs();pigs.forEach(p=>drawPigV(GX+p.x*CX,GY+p.y*CY,p.w*CX,p.h*CY));
+  const skip=(x,y)=>pigs.some(p=>inR(p,x,y));
+  /* testo e simboli */
+  ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  const base=CY*0.5+FS*0.334;let curF='';
+  for(let y=0;y<ROWS;y++){const py=GY+y*CY;
+    for(let x=0;x<COLS;x++){const k=y*COLS+x,c=CH[k];if(c===' '||skip(x,y))continue;
+      const px=GX+x*CX,fc=col(FG[k]);
+      if(BARCH.includes(c)||c===TRACK){
+        let e=x;while(e+1<COLS&&(BARCH.includes(CH[k+e+1-x])||CH[k+e+1-x]===TRACK))e++;
+        const bh=Math.max(4,CY*0.5),by=py+(CY-bh)/2,r=bh/2;
+        let tr=-1;for(let i=x;i<=e;i++)if(CH[y*COLS+i]===TRACK){tr=FG[y*COLS+i];break}
+        if(tr>=0){ctx.globalAlpha=0.35;ctx.fillStyle=col(tr);rr(px,by,(e-x+1)*CX,bh,r);ctx.fill();ctx.globalAlpha=1}
+        let i=x;while(i<=e){const kk=y*COLS+i;if(!BARCH.includes(CH[kk])){i++;continue}
+          let j=i,wpx=0;const f=FG[kk];while(j<=e&&BARCH.includes(CH[y*COLS+j])&&FG[y*COLS+j]===f){const cc=CH[y*COLS+j];wpx+=cc==='\u2588'?CX:CX*(PARTS.indexOf(cc)+1)/8;if(cc!=='\u2588'){j++;break}j++}
+          ctx.fillStyle=col(f);rr(GX+i*CX,by,Math.max(wpx,bh*0.6),bh,r);ctx.fill();i=j}
+        x=e;continue}
+      ctx.fillStyle=fc;
+      if(c==='\u2580'){ctx.fillRect(px,py,CX+0.5,CY/2);continue}
+      if(c==='\u2584'){ctx.fillRect(px,py+CY/2,CX+0.5,CY/2);continue}
+      if(c==='\u2590'){ctx.fillRect(px+CX/2,py,CX/2+0.5,CY);continue}
+      if(c==='\u2502'){const lw=Math.max(2,CX*0.18);ctx.fillRect(px+(CX-lw)/2,py,lw,CY);continue}
+      if(c==='\u25cf'){ctx.beginPath();ctx.arc(px+CX/2,py+CY/2,Math.min(CX,CY)*0.36,0,Math.PI*2);ctx.fill();continue}
+      if(c==='\u25ba'||c==='\u25c4'){const hh=FS*0.62,ww=hh*0.8,cx2=px+CX/2,cy2=py+CY/2,d=c==='\u25ba'?1:-1;
+        ctx.beginPath();ctx.moveTo(cx2-d*ww/2,cy2-hh/2);ctx.lineTo(cx2+d*ww/2,cy2);ctx.lineTo(cx2-d*ww/2,cy2+hh/2);ctx.closePath();ctx.fill();continue}
+      if(c==='\u2713'){const s2=FS*0.62,cx2=px+CX/2,cy2=py+CY/2;ctx.strokeStyle=fc;ctx.lineWidth=Math.max(2,FS*0.13);ctx.lineCap='round';ctx.lineJoin='round';
+        ctx.beginPath();ctx.moveTo(cx2-s2*0.45,cy2);ctx.lineTo(cx2-s2*0.1,cy2+s2*0.35);ctx.lineTo(cx2+s2*0.5,cy2-s2*0.4);ctx.stroke();continue}
+      const f=(bold[k]?'700 ':'500 ')+FS.toFixed(2)+'px '+FAM+',ui-monospace,monospace';if(f!==curF){ctx.font=f;curF=f}
+      ctx.fillText(c,px+CX/2,py+base)}}
+  /* cursore: una barretta che lampeggia */
+  if(cursor&&blink&&cursor.y<ROWS){ctx.fillStyle=col(txt===scrBg?WHT:txt);const lw=Math.max(2,CX*0.16);ctx.fillRect(GX+cursor.x*CX+1,GY+cursor.y*CY+CY*0.14,lw,CY*0.72)}
+  /* caricamento: una barra che avanza, senza lampi di colore */
+  if(mode==='pilot'||mode==='data'){const y=GY+(ROWS-4)*CY,x=GX+CX,w=CW*CX,bh=Math.max(6,CY*0.45);
+    ctx.globalAlpha=0.3;ctx.fillStyle=col(LBT);rr(x,y,w,bh,bh/2);ctx.fill();ctx.globalAlpha=1;ctx.fillStyle=col(CYN);
+    if(mode==='pilot'){const p=((t-modeT0)/900)%1,sw=w*0.28;rr(x+(w-sw)*(0.5-0.5*Math.cos(p*Math.PI*2)),y,sw,bh,bh/2)}
+    else{const p=Math.min(1,(t-modeT0)/2200);rr(x,y,Math.max(bh,w*p),bh,bh/2)}
+    ctx.fill()}
+  dirty=false;
+}
+let lastBlink=0;
+function loop(t){if(t-lastBlink>500){lastBlink=t;blink=!blink;if(cursor)dirty=true}
+  if(flash&&t>flash.until){flash=null;dirty=true}
+  if(dirty||mode==='pilot'||mode==='data')render();requestAnimationFrame(loop)}
+/* ===== Suono (stile SID) ===== */
+let AC=null,tapeOsc=null;
+function audioInit(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==='suspended')AC.resume().catch(()=>{})}
+function tone(f,d,type,v,when){if(!S.snd||!AC)return;try{const t=AC.currentTime+(when||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v||0.05,t);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+0.03)}catch(e){}}
+const sfx={
+  click(){tone(1760,0.03,'square',0.025)},
+  sel(){tone(660,0.05,'square',0.04);tone(990,0.08,'square',0.04,0.05)},
+  page(){tone(523,0.05,'triangle',0.08)},
+  ok(){[523,659,784,1047].forEach((f,i)=>tone(f,0.12,'triangle',0.12,i*0.08))},
+  bad(){tone(150,0.35,'sawtooth',0.05);tone(110,0.35,'sawtooth',0.05,0.12)},
+  err(){tone(220,0.15,'square',0.04)}
+};
+function tapeOn(){if(!S.snd||!AC)return;try{tapeOsc=AC.createOscillator();const g=AC.createGain();tapeOsc.type='square';g.gain.value=0.012;
+  tapeOsc.connect(g);g.connect(AC.destination);tapeOsc.start();
+  const step=()=>{if(!tapeOsc)return;tapeOsc.frequency.setValueAtTime(mode==='pilot'?1200:600+Math.random()*1800,AC.currentTime);setTimeout(step,25)};step()}catch(e){tapeOsc=null}}
+function tapeOff(){if(tapeOsc){try{tapeOsc.stop()}catch(e){}tapeOsc=null}}
+/* ===== Schermo intero ===== */
+function goFull(){const d=document;if(d.fullscreenElement||d.webkitFullscreenElement)return;const el=d.documentElement;
+  try{const fn=el.requestFullscreen||el.webkitRequestFullscreen;if(!fn)return;const p=fn.call(el,{navigationUI:'hide'});
+    if(p&&p.then)p.then(()=>{try{screen.orientation.lock('portrait').catch(()=>{})}catch(e){}}).catch(()=>{})}catch(e){}}
+/* Schermo intero subito: prova all'avvio, poi al primo tocco ovunque (Chrome lo consente solo dopo un gesto) */
+goFull();addEventListener('load',goFull);
+['pointerdown','touchend','click','keydown'].forEach(t=>document.addEventListener(t,goFull,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)goFull()});
+/* ===== Tocco e tastiera ===== */
+cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();goFull();
+  const r=cv.getBoundingClientRect();const px=e.clientX-r.left,py=e.clientY-r.top;
+  const cx=Math.max(0,Math.min(COLS-1,Math.floor((px-GX)/CX))),cy=Math.max(0,Math.min(ROWS-1,Math.floor((py-GY)/CY)));
+  if(anyTap){const f=anyTap;f();return}
+  if(busy)return;
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(cx>=h.x&&cx<h.x+h.w&&cy>=h.y&&cy<h.y+h.h){press(h);return}}
+});
+/* RUN all'apertura: lo stesso tocco avvia il programma e mette lo schermo intero */
+if(window.FS1)FS1.pass=e=>{if(e.target!==cv||anyTap||busy)return false;const r=cv.getBoundingClientRect();
+  const cx=Math.max(0,Math.min(COLS-1,Math.floor((e.clientX-r.left-GX)/CX))),cy=Math.max(0,Math.min(ROWS-1,Math.floor((e.clientY-r.top-GY)/CY)));
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(cx>=h.x&&cx<h.x+h.w&&cy>=h.y&&cy<h.y+h.h)return !!h.run}return false};
+function press(h){busy=true;flash={x:h.x,y:h.y,w:h.w,h:h.h,until:performance.now()+110};dirty=true;sfx.click();
+  setTimeout(()=>{busy=false;h.fn()},100)}
+const KEYMAP={Backspace:'DEL',Enter:'OK',Escape:'ESC',Delete:'C','.':',',',':',',ArrowRight:'NEXT',ArrowLeft:'PREV',' ':'NEXT'};
+document.addEventListener('keydown',e=>{audioInit();if(anyTap){anyTap();e.preventDefault();return}
+  let k=KEYMAP[e.key]||e.key.toUpperCase();if(busy)return;
+  if(inputH&&(/^[0-9]$/.test(k)||['DEL','OK','ESC','C',','].includes(k))){e.preventDefault();inputH(k,true);return}
+  for(let i=hot.length-1;i>=0;i--){const h=hot[i];if(h.keys.includes(k)){e.preventDefault();press(h);return}}
+});
+/* Tasto Indietro di Android */
+let trapped=false;
+function trap(){if(!trapped){try{history.pushState({s64:1},'');trapped=true}catch(e){}}}
+window.addEventListener('popstate',()=>{trapped=false;if(curBack){const f=curBack;f()}});
+function show(fn,back){cur=fn;curBack=back||null;inputH=null;anyTap=null;if(back)trap();fn()}
+/* ===== Utilità numeri ===== */
+function fmt(n,d){d=d||0;const neg=n<0;let s=Math.abs(n).toFixed(d);let [i,f]=s.split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return(neg?'-':'')+i+(f?','+f:'')}
+function eur(n,d){return fmt(n,d)+' \u20ac'}
+/* Importi in centesimi interi (BigInt): niente errori di virgola mobile, centesimi sempre visibili */
+function toC(v){return BigInt(Math.round(Number(v)*100))}
+function fmtC(c){c=BigInt(c);const neg=c<0n;if(neg)c=-c;const i=(c/100n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'),f=(c%100n).toString().padStart(2,'0');return(neg?'-':'')+i+','+f}
+function eurC(c){return fmtC(c)+' \u20ac'}
+function strC(s){const p=String(s).split(',');return BigInt(p[0]||'0')*100n+BigInt(((p[1]||'')+'00').slice(0,2))}
+function pad(s,n){s=String(s);return s.length>=n?s.slice(0,n):s+' '.repeat(n-s.length)}
+function lpad(s,n){s=String(s);return s.length>=n?s:' '.repeat(n-s.length)+s}
+const PART='\u258f\u258e\u258d\u258c\u258b\u258a\u2589';
+function barStr(fr,w){fr=Math.max(0,Math.min(1,fr));let u=Math.round(fr*w*8);if(fr>0&&u===0)u=1;return '\u2588'.repeat(Math.floor(u/8))+(u%8?PART[u%8-1]:'')}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ===== Intestazione e blocchi di testo ===== */
+function header(title,right,bg,fg,onBack){fill(0,0,COLS,3,bg,' ',fg);
+  if(onBack){button(0,0,5,3,'\u25c4',BLK,fg===BLK?WHT:fg,onBack,['ESC'])}
+  const tx=onBack?6:1;put(tx,1,title,fg,bg);if(right&&tx+title.length+1<COLS-1-right.length)put(COLS-1-right.length,1,right,fg,bg)}
+/* Ogni descrittore diventa un blocco di righe; ogni riga e' un elenco di pezzi [x,testo,colore,sfondo] */
+function build(d,th){if(d==='BREAK')return 'BREAK';const k=d[0],v=d[1],c=d[2];const L=[];
+  if(k==='p'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.fg:c]]));L.push([])}
+  else if(k==='h'){wrap(v,CW).forEach(s=>L.push([[0,s,c===undefined?th.hd:c]]))}
+  else if(k==='f'){const s=' '+v+' ';L.push([[Math.max(0,Math.floor((CW-s.length)/2)),s,th.ffg,th.fbg]]);L.push([])}
+  else if(k==='t'){v.forEach(r=>{const l=r[0],val=r[1],n=Math.max(1,CW-l.length-val.length-2);
+    if(l.length+val.length+2>CW){L.push([[0,l,th.fg]]);L.push([[CW-val.length,val,r[2]===undefined?th.hd:r[2]]]);return}
+    L.push([[0,l,th.fg],[l.length+1,'\u00b7'.repeat(n),th.dot],[CW-val.length,val,r[2]===undefined?th.hd:r[2]]])});L.push([])}
+  else if(k==='r'){const bg=c===undefined?th.rbg:c;L.push([[0,' '.repeat(CW),th.rfg,bg]]);
+    wrap(v,CW-2).forEach(s=>L.push([[0,' '+pad(s,CW-1),th.rfg,bg]]));L.push([[0,' '.repeat(CW),th.rfg,bg]]);L.push([])}
+  else if(k==='bars'){const mx=Number(d[2])||1,vs=v.map(it=>fmtC(it.v)),vw=Math.max(6,...vs.map(x=>x.length)),bw=Math.max(3,CW-10-1-vw);v.forEach((it,i)=>{L.push([[0,pad(it.l,10),th.fg],[10,barStr(Number(it.v)/mx,bw),it.c],[CW-vw,lpad(vs[i],vw),th.hd]])});L.push([])}
+  else if(k==='lines'){v.forEach(x=>L.push(x))}
+  else if(k==='gap'){L.push([])}
+  return L}
+function paginate(items,th,avail){const pages=[];let pg=[];
+  items.forEach(d=>{const b=build(d,th);if(b==='BREAK'){if(pg.length)pages.push(pg);pg=[];return}
+    const need=b.length-(b.length&&b[b.length-1].length===0?1:0);
+    if(pg.length&&pg.length+need>avail){pages.push(pg);pg=[]}
+    b.forEach(l=>{if(pg.length>=avail){if(l.length===0)return;pages.push(pg);pg=[]}if(pg.length===0&&l.length===0)return;pg.push(l)})});
+  if(pg.length)pages.push(pg);return pages.length?pages:[[]]}
+function drawLines(lines,y0,th){lines.forEach((l,i)=>l.forEach(sg=>put(1+sg[0],y0+i,sg[1],sg[2]===undefined?th.fg:sg[2],sg[3]===undefined?-1:sg[3])))}
+/* Pagine sfogliabili */
+function pager(o){let page=o.page||0;
+  function draw(){const th=o.th;cls(th.bg,th.bd,th.fg);
+    const avail=ROWS-9,pages=paginate(o.items,th,avail);page=Math.max(0,Math.min(page,pages.length-1));
+    header(o.title,o.right||'',th.hbg,th.hfg,o.onBack);
+    drawLines(pages[page],4,th);
+    const fy=ROWS-4,last=page===pages.length-1;
+    if(page>0)button(1,fy,8,3,'\u25c4 PREC',th.kbg,th.kfg,()=>{page--;sfx.page();draw()},['PREV']);
+    else button(1,fy,8,3,'\u25c4 '+(o.backLabel||'MENU'),th.kbg,th.kfg,o.onBack,['PREV']);
+    put(10,fy+1,lpad('PAG '+(page+1)+'/'+pages.length,9).padEnd(10),th.dim);
+    if(!last)button(21,fy,8,3,'SEGUE \u25ba',th.nbg,th.nfg,()=>{page++;sfx.page();draw()},['NEXT','OK']);
+    else button(21,fy,8,3,o.endLabel||'FINE',th.nbg,th.nfg,o.onEnd||o.onBack,['NEXT','OK']);
+    if(o.extra)o.extra(page,pages.length);
+  }
+  show(draw,o.onBack)}
+/* ===== Tastierino numerico ===== */
+function askNumber(o){let s=o.def!==undefined&&o.def!==null?(o.unit==='eur'&&o.def%1?Number(o.def).toFixed(2):String(o.def)).replace('.',','):'';let fresh=s!=='';let err=null;
+  const th=o.th;
+  function key(k){
+    if(/^[0-9]$/.test(k)){if(fresh){s='';fresh=false}const parts=s.split(',');
+      if(parts.length===2){if(parts[1].length<(o.dec||0))s+=k;else sfx.err()}else if(parts[0].length<7){s=(s==='0'?'':s)+k}else sfx.err()}
+    else if(k===','){if(!o.dec)sfx.err();else{if(fresh){s='0';fresh=false}if(!s.includes(','))s=(s||'0')+','}}
+    else if(k==='DEL'){fresh=false;s=s.slice(0,-1)}
+    else if(k==='C'){fresh=false;s=''}
+    else if(k==='ESC'){o.onBack();return}
+    else if(k==='OK'){const v=parseFloat(s.replace(',','.'));
+      if(s===''||isNaN(v)||v<o.min||v>o.max){err=['?REDO FROM START','Scrivi un numero da '+(o.unit==='eur'?eurC(toC(o.min))+' a '+eurC(toC(o.max)):fmt(o.min)+' a '+fmt(o.max))+'.'];sfx.err();draw();return}
+      sfx.sel();o.onOK(v);return}
+    err=null;draw()}
+  function draw(){cls(th.bg,th.bd,th.fg);header(o.title,o.right||'',th.hbg,th.hfg,o.onBack);
+    let y=4;if(o.step){put(1,y,o.step,th.dim);y+=2}
+    wrap(o.label,CW).forEach(l=>{put(1,y,l,th.hd);y++});
+    wrap(o.help,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++;
+    put(1,y,'? '+s,th.fg);cursor={x:3+s.length,y:y};y+=2;
+    const v=parseFloat(s.replace(',','.'));
+    if(s!==''&&!isNaN(v))put(1,y,'= '+(o.unit==='%'?fmt(v,(s.split(',')[1]||'').length)+' %':o.unit==='anni'?fmt(v)+(v===1?' anno':' anni'):eurC(strC(s))),th.hd);
+    y+=2;
+    if(err){put(1,y,err[0],th.err);wrap(err[1],CW).forEach((l,i)=>put(1,y+1+i,l,th.fg))}
+    else if(fresh)wrap('Tocca OK per confermare, oppure scrivi un altro numero.',CW).forEach((l,i)=>put(1,y+i,l,th.dim));
+    keypad(th,o.dec,key)}
+  show(()=>{draw();inputH=key},o.onBack)}
+function keypad(th,dec,key){const kh=ROWS>=60?4:3,y0=ROWS-1-(4*kh+3),xs=[1,8,15,22],ws=[6,6,6,7];
+  const rows=[['7','8','9','DEL'],['4','5','6','C'],['1','2','3',','],['ESC','0','OK']];
+  rows.forEach((r,j)=>{const y=y0+j*(kh+1);
+    if(j<3)r.forEach((k,i)=>{let bg=LGRY,fg=BLK,l=k;
+      if(k==='DEL'){bg=RED;fg=WHT;l='DEL'}else if(k==='C'){bg=ORA;fg=WHT;l='CANC'}else if(k===','){bg=dec?GRY:DGRY;fg=dec?WHT:GRY;l=','}
+      button(xs[i],y,ws[i],kh,l,bg,fg,()=>key(k))});
+    else{button(1,y,6,kh,'\u25c4ESCI',DGRY,WHT,()=>key('ESC'));button(8,y,6,kh,'0',LGRY,BLK,()=>key('0'));button(15,y,14,kh,'OK  RETURN',GRN,WHT,()=>key('OK'))}});
+}
+/* ===== Temi colore ===== */
+const TH={
+  les:{bg:BLU,bd:LBLU,fg:WHT,hd:YEL,dim:LBT,dot:LBLU,ffg:BLK,fbg:CYN,rfg:WHT,rbg:LBLU,hbg:LBLU,hfg:WHT,kbg:LBLU,kfg:WHT,nbg:CYN,nfg:BLK,err:LRED},
+  bil:{bg:BLK,bd:GRN,fg:LGRN,hd:WHT,dim:GRN,dot:GRY,ffg:BLK,fbg:LGRN,rfg:WHT,rbg:GRN,hbg:GRN,hfg:WHT,kbg:DGRY,kfg:WHT,nbg:LGRN,nfg:BLK,err:LRED},
+  obj:{bg:PURD,bd:LRED,fg:WHT,hd:YEL,dim:LRED,dot:LRED,ffg:BLK,fbg:YEL,rfg:BLK,rbg:LRED,hbg:LRED,hfg:BLK,kbg:BLK,kfg:WHT,nbg:YEL,nfg:BLK,err:YEL},
+  sim:{bg:BRN,bd:ORA,fg:WHT,hd:YEL,dim:LGRY,dot:ORA,ffg:BLK,fbg:YEL,rfg:WHT,rbg:ORA,hbg:ORA,hfg:WHT,kbg:BLK,kfg:YEL,nbg:YEL,nfg:BLK,err:LRED},
+  quiz:{bg:BLK,bd:RED,fg:WHT,hd:CYN,dim:GRY,dot:GRY,ffg:BLK,fbg:CYN,rfg:WHT,rbg:RED,hbg:RED,hfg:WHT,kbg:DGRY,kfg:WHT,nbg:CYN,nfg:BLK,err:LRED}
+};
+/* ===== Lezioni ===== */
+const LESSONS=[
+{t:'ENTRATE E USCITE',p:[
+ ['p','Le ENTRATE sono i soldi che arrivano: stipendio, pensione, affitti incassati, regali.'],
+ ['p','Le USCITE sono i soldi che escono: spesa, bollette, benzina, svago.'],
+ ['f','SALDO = ENTRATE - USCITE'],
+ ['h','ESEMPIO'],
+ ['t',[['Entrate','1.500,00 \u20ac'],['Uscite','1.350,00 \u20ac'],['Saldo','+150,00 \u20ac',LGRN]]],
+ ['p','Saldo positivo: stai risparmiando. Saldo negativo: stai usando i risparmi o ti stai indebitando.'],
+ ['h','LE PICCOLE SPESE'],
+ ['p','Un caff\u00e8 al bar da 1,20 \u20ac al giorno fa 36 \u20ac in un mese e 438 \u20ac in un anno.'],
+ ['r','RICORDA: per un mese scrivi tutte le spese, anche le pi\u00f9 piccole.']]},
+{t:'SPESE FISSE E VARIABILI',p:[
+ ['p','Le spese FISSE sono quasi uguali ogni mese: affitto o mutuo, bollette, assicurazione, abbonamenti.'],
+ ['p','Le spese VARIABILI cambiano: spesa, carburante, ristoranti, vestiti, regali.'],
+ ['p','Le fisse si cambiano di rado: una volta l\'anno confronta tariffe e gestori.'],
+ ['p','Le variabili si controllano ogni giorno: \u00e8 l\u00ec che si risparmia pi\u00f9 in fretta.'],
+ ['h','ESEMPIO'],
+ ['t',[['3 abbonamenti','9,99 \u20ac'],['Al mese','29,97 \u20ac'],['In un anno','359,64 \u20ac',LRED]]],
+ ['r','RICORDA: disdici gli abbonamenti che non usi.']]},
+{t:'BISOGNI E DESIDERI',p:[
+ ['p','Un BISOGNO \u00e8 una cosa che serve davvero: casa, cibo, salute, luce, il trasporto per il lavoro.'],
+ ['p','Un DESIDERIO \u00e8 piacevole ma rinunciabile: la cena fuori, il telefono nuovo, la vacanza.'],
+ ['p','I desideri non sono un errore: basta decidere prima quanto spenderci.'],
+ ['h','IL TRUCCO DELLE 48 ORE'],
+ ['p','Davanti a un acquisto non necessario aspetta due giorni. Se lo vuoi ancora, controlla se rientra nel budget.'],
+ ['h','QUANTE ORE DI LAVORO COSTA?'],
+ ['p','Un oggetto da 120 \u20ac, se guadagni 10 \u20ac netti l\'ora, costa 12 ore di lavoro.'],
+ ['r','RICORDA: prima i bisogni, poi i desideri.']]},
+{t:'LA REGOLA 50/30/20',p:[
+ ['p','Un modo semplice per dividere le entrate nette di ogni mese:'],
+ ['t',[['Bisogni','50 %',LBLU],['Desideri','30 %',YEL],['Risparmio e debiti','20 %',LGRN]]],
+ ['h','ESEMPIO SU 1.500 \u20ac'],
+ ['t',[['Bisogni','750,00 \u20ac',LBLU],['Desideri','450,00 \u20ac',YEL],['Risparmio','300,00 \u20ac',LGRN]]],
+ ['p','\u00c8 una linea guida, non una legge: con entrate basse i bisogni possono superare la met\u00e0.'],
+ ['r','RICORDA: se il 20% \u00e8 troppo, parti dal 5% e poi aumenta.']]},
+{t:'PAGA PRIMA TE STESSO',p:[
+ ['p','Molti risparmiano quello che avanza a fine mese. Spesso non avanza niente.'],
+ ['p','Meglio fare il contrario: appena arriva lo stipendio sposta subito una cifra fissa sul conto dei risparmi.'],
+ ['p','Il modo pi\u00f9 comodo \u00e8 un bonifico automatico ogni mese, il giorno dopo lo stipendio.'],
+ ['h','RISPARMIARE 100 \u20ac AL MESE'],
+ ['t',[['In 1 anno','1.200,00 \u20ac'],['In 5 anni','6.000,00 \u20ac'],['In 10 anni','12.000,00 \u20ac',LGRN]]],
+ ['r','RICORDA: prima metti da parte, poi spendi il resto.']]},
+{t:'IL FONDO EMERGENZE',p:[
+ ['p','Gli imprevisti arrivano: l\'auto guasta, il dentista, la caldaia da cambiare.'],
+ ['p','Il fondo emergenze \u00e8 una riserva solo per queste cose. Di solito copre da 3 a 6 mesi di spese essenziali.'],
+ ['h','ESEMPIO'],
+ ['t',[['Spese essenziali','1.200,00 \u20ac'],['Fondo minimo (x3)','3.600,00 \u20ac'],['Fondo ampio (x6)','7.200,00 \u20ac',LGRN]]],
+ ['p','Tienilo separato dal conto di tutti i giorni, ma facile da prelevare in fretta.'],
+ ['r','RICORDA: se lo usi, ricostruiscilo un po\' alla volta.']]},
+{t:'L\'INTERESSE COMPOSTO',p:[
+ ['p','Con l\'interesse composto anche gli interessi guadagnati producono nuovi interessi.'],
+ ['h','1.000 \u20ac AL 5% L\'ANNO'],
+ ['t',[['Dopo 1 anno','1.050,00 \u20ac'],['Dopo 2 anni','1.102,50 \u20ac'],['Dopo 10 anni','1.628,89 \u20ac'],['Dopo 20 anni','2.653,30 \u20ac',LGRN]]],
+ ['h','LA REGOLA DEL 72'],
+ ['p','72 diviso il tasso annuo d\u00e0 circa gli anni per raddoppiare: al 6% circa 12 anni, al 3% circa 24.'],
+ ['p','Il tempo conta pi\u00f9 della cifra: cominciare presto aiuta molto.'],
+ ['r','Esempi senza tasse n\u00e9 costi. I rendimenti veri non sono garantiti.']]},
+{t:'L\'INFLAZIONE',p:[
+ ['p','Con il tempo i prezzi salgono: con gli stessi soldi si compra un po\' meno. Questa \u00e8 l\'inflazione.'],
+ ['h','SPESA DA 100 \u20ac, +2% L\'ANNO'],
+ ['t',[['Oggi','100,00 \u20ac'],['Fra 1 anno','102,00 \u20ac'],['Fra 10 anni','121,90 \u20ac',LRED]]],
+ ['p','I soldi fermi nel cassetto perdono valore anno dopo anno.'],
+ ['p','Per capire quanto guadagni davvero, togli l\'inflazione dal rendimento: 3% meno 2% di inflazione fa circa 1%.'],
+ ['r','RICORDA: guarda il rendimento meno l\'inflazione.']]},
+{t:'DEBITI, RATE E TAEG',p:[
+ ['p','Comprare a rate costa: oltre al prezzo paghi gli interessi e spesso delle spese.'],
+ ['p','Il TAN \u00e8 solo il tasso di interesse. Il TAEG \u00e8 il costo totale annuo, spese comprese. Confronta sempre il TAEG.'],
+ ['h','1.000 \u20ac IN 12 RATE AL 15%'],
+ ['t',[['Rata al mese','90,26 \u20ac'],['Totale pagato','1.083,12 \u20ac'],['Interessi','83,12 \u20ac',LRED]]],
+ ['p','Tasso zero? Controlla il TAEG: possono esserci spese. Le carte revolving hanno rate piccole ma tassi alti.'],
+ ['p','Molte banche considerano sostenibili rate fino a circa un terzo delle entrate nette.'],
+ ['r','RICORDA: guarda il totale da pagare, non solo la rata.']]}
+];
+function lessonList(){const th=TH.les;
+  show(function draw(){cls(th.bg,th.bd,th.fg);header('LEZIONI','9 SCHEDE',th.hbg,th.hfg,mainMenu);
+    const read=S.read||[];const y0=4;const h=Math.max(3,Math.min(5,Math.floor((ROWS-7-y0)/9)));
+    LESSONS.forEach((l,i)=>{const y=y0+i*h,m=y+Math.floor(h/2),bg=i%2?CYN:LBLU,fg=i%2?BLK:WHT;
+      button(1,y,CW,h,'',bg,fg,()=>lesson(i,0),[String(i+1)]);
+      put(2,m,String(i+1),bg,fg);put(4,m,l.t,fg,bg);if(read.includes(i))put(27,m,'\u2713',fg,bg)});
+    const y=y0+LESSONS.length*h+1;wrap('Tocca una lezione. Il segno \u2713 indica quelle gi\u00e0 lette.',CW).forEach((l,i)=>put(1,y+i,l,th.dim));
+  },mainMenu)}
+function lesson(i,page){const L=LESSONS[i];
+  pager({th:TH.les,title:'LEZIONE '+(i+1),right:(i+1)+'/9',items:[['h',L.t,CYN],['gap']].concat(L.p),page:page||0,backLabel:'ELENCO',
+    onBack:lessonList,endLabel:i<8?'LEZ.'+(i+2)+'\u25ba':'FINE',
+    onEnd:()=>{S.read=S.read||[];if(!S.read.includes(i)){S.read.push(i);save()}sfx.sel();if(i<8)lesson(i+1,0);else lessonList()}})}
+/* ===== Il mio bilancio ===== */
+const BIL=[
+ {k:'entrate',l:'ENTRATE DEL MESE',h:'Stipendio, pensione e ogni altra entrata netta del mese.',min:1},
+ {k:'casa',l:'CASA',h:'Affitto o rata del mutuo, condominio.',n:'CASA',t:'N',c:LBLU},
+ {k:'bollette',l:'BOLLETTE',h:'Luce, gas, acqua, telefono, rifiuti (media al mese).',n:'BOLLETTE',t:'N',c:YEL},
+ {k:'spesa',l:'SPESA',h:'Cibo e prodotti per la casa.',n:'SPESA',t:'N',c:LGRN},
+ {k:'trasporti',l:'TRASPORTI',h:'Benzina, bus, assicurazione e bollo divisi per 12.',n:'TRASPORTI',t:'N',c:CYN},
+ {k:'salute',l:'SALUTE',h:'Medicine, visite, dentista (media al mese).',n:'SALUTE',t:'N',c:LRED},
+ {k:'svago',l:'SVAGO',h:'Bar, ristoranti, uscite, hobby, vacanze (media al mese).',n:'SVAGO',t:'D',c:ORA},
+ {k:'abbon',l:'ABBONAMENTI',h:'TV, streaming, palestra, riviste.',n:'ABBONAM.',t:'D',c:PUR},
+ {k:'altro',l:'ALTRO',h:'Vestiti, regali e tutto il resto.',n:'ALTRO',t:'D',c:LGRY}];
+function bilancioStart(){const th=TH.bil;const has=S.bil&&S.bil.entrate;
+  show(function draw(){cls(th.bg,th.bd,th.fg);header('IL MIO BILANCIO','',th.hbg,th.hfg,mainMenu);
+    let y=4;['p','p'].forEach(()=>{});
+    const t=['Scrivi le entrate e le uscite di un mese tipo. Per i centesimi usa il tasto ",".','Alla fine vedi il saldo, dove vanno i soldi e il confronto con la regola 50/30/20.','I numeri restano solo su questo telefono.'];
+    t.forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,has?'RICOMINCIA (USA I DATI DI PRIMA)':'COMINCIA',LGRN,BLK,()=>bilStep(0),['OK','1']);y+=4;
+    if(has){button(1,y,CW,3,'VEDI L\'ULTIMO RISULTATO',GRN,WHT,bilReport,['2']);y+=4}
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',DGRY,WHT,mainMenu,['ESC']);
+  },mainMenu)}
+function bilStep(i){const f=BIL[i];S.bil=S.bil||{};
+  askNumber({th:TH.bil,title:'IL MIO BILANCIO',right:(i+1)+'/'+BIL.length,step:'PASSO '+(i+1)+'/'+BIL.length+': '+(i===0?'ENTRATE':'USCITE, '+(f.t==='N'?'BISOGNO':'DESIDERIO')),
+    label:f.l+(i===0?' (EURO)':' (EURO/MESE)'),help:f.h,def:S.bil[f.k]!==undefined?S.bil[f.k]:(i===0?null:0),min:f.min||0,max:9999999.99,dec:2,unit:'eur',
+    onBack:()=>{if(i>0)bilStep(i-1);else bilancioStart()},
+    onOK:v=>{S.bil[f.k]=v;save();if(i<BIL.length-1)bilStep(i+1);else bilReport()}})}
+function bilReport(){const b=S.bil,th=TH.bil,E=toC(b.entrate);
+  const cats=BIL.slice(1).map(f=>({l:f.n,v:toC(b[f.k]||0),c:f.c,t:f.t}));
+  const U=cats.reduce((a,c)=>a+c.v,0n),saldo=E-U;
+  const N=cats.filter(c=>c.t==='N').reduce((a,c)=>a+c.v,0n),D=U-N;
+  const pn=Number(N)/Number(E)*100,pd=Number(D)/Number(E)*100,ps=Number(saldo)/Number(E)*100;
+  const sorted=cats.filter(c=>c.v>0n).sort((a,c)=>c.v>a.v?1:c.v<a.v?-1:0);
+  const items=[['h','RIEPILOGO DEL MESE'],['t',[['Entrate',eurC(E)],['Uscite',eurC(U)],['Saldo',(saldo>=0n?'+':'')+eurC(saldo),saldo>=0n?LGRN:LRED],['Risparmio',fmt(Math.max(0,ps),0)+' %',saldo>=0n?LGRN:LRED]]]];
+  if(sorted.length){items.push(['h','DOVE VANNO I SOLDI (EURO)']);items.push(['bars',sorted,sorted[0].v])}
+  items.push('BREAK');
+  items.push(['h','LA REGOLA 50/30/20']);
+  const rule=(name,p,target,col,good)=>{const q=Math.round(p),ok=good?q<=target:q>=target;
+    return [[[0,pad(name,11),WHT],[11,lpad(fmt(Math.max(0,p),0)+'%',5),ok?LGRN:LRED],[17,'meta '+target+'%',GRN]],
+      [[0,barStr(Math.max(0,p)/100,CW),col],[Math.min(CW-1,Math.round(target/100*CW)),'\u2502',WHT]]]};
+  const rl=[].concat(rule('BISOGNI',pn,50,LBLU,true),[[]],rule('DESIDERI',pd,30,ORA,true),[[]],rule('RISPARMIO',ps,20,LGRN,false),[[]]);
+  items.push(['lines',rl]);
+  items.push(['h','COSA PUOI FARE']);
+  const tips=[];
+  if(saldo<0n)tips.push(['r','Spendi pi\u00f9 di quanto entra: '+eurC(-saldo)+' al mese. Parti dai desideri.',RED]);
+  else if(Math.round(ps)<10)tips.push(['r','Risparmi meno del 10%. Prova a mettere da parte una cifra fissa appena arriva lo stipendio.',ORA]);
+  if(Math.round(pn)>50)tips.push(['r','I bisogni superano il 50%. Confronta tariffe di bollette, assicurazioni e telefono.',ORA]);
+  if(Math.round(pd)>30)tips.push(['r','I desideri superano il 30%: qui \u00e8 pi\u00f9 facile tagliare.',ORA]);
+  if(!tips.length)tips.push(['r','Ottimo equilibrio: il tuo bilancio rispetta la regola 50/30/20.',GRN]);
+  tips.forEach(t=>items.push(t));
+  if(sorted.length)items.push(['p','La voce pi\u00f9 pesante \u00e8 '+sorted[0].l+': '+fmt(Number(sorted[0].v)/Number(E)*100,0)+'% delle entrate.']);
+  if(N>0n)items.push(['p','Fondo emergenze consigliato: da '+eurC(N*3n)+' a '+eurC(N*6n)+' (3-6 mesi di bisogni).',WHT]);
+  pager({th,title:'IL MIO BILANCIO',right:'RISULTATO',items,onBack:bilancioStart,backLabel:'INDIET',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Obiettivo di risparmio ===== */
+const PIG=[
+ ['     \u25cf    ',YEL],
+ ['  \u2584\u2588\u2588\u2588\u2588\u2588\u2584\u2584 ',LRED],
+ [' \u2590\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2584',LRED],
+ ['\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c',LRED],
+ [' \u2580\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2580 ',LRED],
+ ['  \u2588\u2580  \u2588\u2580   ',LRED]];
+function drawPig(x,y,bg){PIG.forEach((r,i)=>put(x,y+i,r[0],r[1],bg));put(x+7,y+2,'\u00b7',BLK,LRED)}
+function objStart(){const th=TH.obj;S.obj=S.obj||{};
+  const steps=[
+   {k:'costo',l:'QUANTO COSTA?',h:'Il prezzo della cosa che vuoi comprare: una vacanza, un elettrodomestico, un regalo.',min:1},
+   {k:'gia',l:'QUANTO HAI GIA\'?',h:'I soldi che hai gi\u00e0 messo da parte per questo obiettivo. Se non hai niente scrivi 0.',min:0},
+   {k:'mese',l:'QUANTO AL MESE?',h:'La cifra che puoi mettere da parte ogni mese.',min:1}];
+  function step(i){const f=steps[i];
+    askNumber({th,title:'OBIETTIVO',right:(i+1)+'/3',step:'PASSO '+(i+1)+' DI 3',label:f.l+' (EURO)',help:f.h,def:S.obj[f.k]!==undefined?S.obj[f.k]:(i===1?0:null),
+      min:f.min,max:9999999.99,dec:2,unit:'eur',onBack:()=>{if(i>0)step(i-1);else intro()},
+      onOK:v=>{S.obj[f.k]=v;save();if(i===1&&v>=S.obj.costo)return objReport();if(i<2)step(i+1);else objReport()}})}
+  function intro(){show(function draw(){cls(th.bg,th.bd,th.fg);header('OBIETTIVO RISPARMIO','',th.hbg,th.hfg,mainMenu);
+    drawPig(9,5,-1);let y=13;
+    ['Vuoi comprare qualcosa senza fare debiti? Mettere da parte un po\' ogni mese \u00e8 il modo pi\u00f9 sicuro.','Scrivi quanto costa, quanto hai gi\u00e0 e quanto puoi risparmiare al mese: ti dico quando ci arrivi.']
+      .forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,'COMINCIA',YEL,BLK,()=>step(0),['OK','1']);y+=4;
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',BLK,WHT,mainMenu,['ESC'])},mainMenu)}
+  intro()}
+function mesiTxt(m){const a=Math.floor(m/12),r=m%12;const p=[];if(a)p.push(a+(a===1?' anno':' anni'));if(r||!a)p.push(r+(r===1?' mese':' mesi'));return p.join(' e ')}
+function objReport(){const o=S.obj,th=TH.obj;const eur=(n)=>eurC(toC(n));const cC=Math.round(o.costo*100),gC=Math.round(o.gia*100),mC=Math.round(o.mese*100);const rest=Math.max(0,cC-gC)/100;const items=[];
+  items.push(['lines',PIG.map((r,i)=>i===2?[[8,r[0],r[1]],[15,'\u00b7',BLK,LRED]]:[[8,r[0],r[1]]]).concat([[]])]);
+  items.push(['t',[['Obiettivo',eur(o.costo)],['Hai gi\u00e0',eur(o.gia)],['Mancano',eur(rest),rest?YEL:LGRN]]]);
+  const fr=Math.min(1,o.gia/o.costo);
+  items.push(['lines',[[[0,'A che punto sei: '+fmt(fr*100,0)+'%',WHT]],[[0,'\u2592'.repeat(CW),LRED],[0,barStr(fr,CW),YEL]],[]]]);
+  if(!rest){items.push(['r','Hai gi\u00e0 raggiunto l\'obiettivo! Puoi comprarlo senza debiti.',GRN])}
+  else{const m=Math.ceil((cC-gC)/mC);items.push(['f','CI ARRIVI IN '+m+(m===1?' MESE':' MESI')]);
+    if(m>=12)items.push(['p','Cio\u00e8 '+mesiTxt(m)+', mettendo da parte '+eur(o.mese)+' al mese.']);
+    else items.push(['p','Mettendo da parte '+eur(o.mese)+' al mese.']);
+    const m2=Math.ceil((cC-gC)/Math.ceil(mC*12/10));
+    if(m2<m)items.push(['r','Con il 20% in pi\u00f9 al mese ('+eur(Math.ceil(mC*12/10)/100)+') ci arrivi in '+mesiTxt(m2)+'.']);
+    items.push(['p','Consiglio: tieni questi soldi separati dal conto di tutti i giorni.',YEL])}
+  pager({th,title:'OBIETTIVO',right:'RISULTATO',items,onBack:objStart,backLabel:'RIFAI',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Interesse composto ===== */
+function simStart(){const th=TH.sim;S.sim=S.sim||{};
+  const steps=[
+   {k:'ini',l:'CAPITALE INIZIALE',h:'Quanto metti subito. Se parti da zero scrivi 0. Per i centesimi usa il tasto ",".',min:0,max:9999999.99,dec:2,unit:'eur',def:0},
+   {k:'mese',l:'VERSAMENTO MENSILE',h:'Quanto aggiungi ogni mese. Se hai un capitale iniziale puoi scrivere 0.',min:0,max:999999.99,dec:2,unit:'eur',def:100},
+   {k:'anni',l:'PER QUANTI ANNI?',h:'Da 1 a 50 anni.',min:1,max:50,dec:0,unit:'anni',def:10},
+   {k:'tasso',l:'TASSO ANNUO (%)',h:'Il rendimento all\'anno, per esempio 3. Per la virgola usa il tasto ",".',min:0,max:20,dec:2,unit:'%',def:3}];
+  function step(i){const f=steps[i];
+    askNumber({th,title:'INTERESSE COMPOSTO',right:(i+1)+'/4',step:'PASSO '+(i+1)+' DI 4',label:f.l,help:f.h,def:S.sim[f.k]!==undefined?S.sim[f.k]:f.def,
+      min:(f.k==='mese'&&!S.sim.ini)?0.01:f.min,max:f.max,dec:f.dec,unit:f.unit,onBack:()=>{if(i>0)step(i-1);else intro()},
+      onOK:v=>{S.sim[f.k]=v;save();if(i<3)step(i+1);else simReport()}})}
+  function intro(){show(function draw(){cls(th.bg,th.bd,th.fg);header('INTERESSE COMPOSTO','',th.hbg,th.hfg,mainMenu);
+    let y=4;
+    ['Guarda come crescono i risparmi quando anche gli interessi producono interessi.','Scrivi quanto metti all\'inizio, quanto aggiungi ogni mese, per quanti anni e a che tasso.','Gli interessi si calcolano ogni mese. Il calcolo non tiene conto di tasse, costi e inflazione.']
+      .forEach(p=>{wrap(p,CW).forEach(l=>{put(1,y,l,th.fg);y++});y++});
+    y++;button(1,y,CW,3,'COMINCIA',YEL,BLK,()=>step(0),['OK','1']);y+=4;
+    if(S.sim.anni){button(1,y,CW,3,'VEDI L\'ULTIMO CALCOLO',ORA,WHT,simReport,['2']);y+=4}
+    button(1,y,CW,3,'\u25c4 TORNA AL MENU',BLK,YEL,mainMenu,['ESC'])},mainMenu)}
+  intro()}
+function simReport(){const s=S.sim,th=TH.sim;
+  /* Calcolo in centesimi interi: ogni mese l'interesse e' arrotondato al centesimo (0,5 per eccesso), poi si aggiunge il versamento */
+  const tb=BigInt(Math.round(s.tasso*100)),mc=toC(s.mese);let bal=toC(s.ini),vers=bal;const yrs=[];
+  for(let m=1;m<=s.anni*12;m++){bal+= (bal*tb*2n+120000n)/240000n + mc;vers+=mc;if(m%12===0)yrs.push({a:m/12,v:vers,t:bal})}
+  const fin=yrs[yrs.length-1];
+  const items=[['h','RISULTATO DOPO '+s.anni+(s.anni===1?' ANNO':' ANNI')],
+   ['t',[['Hai versato',eurC(fin.v)],['Interessi',eurC(fin.t-fin.v),LGRN],['Totale',eurC(fin.t),YEL]]]];
+  if(s.tasso>0){const r72=72/s.tasso;items.push(['p','Regola del 72: al '+fmt(s.tasso,s.tasso%1?1:0)+'% un capitale raddoppia in circa '+fmt(r72,r72<10?1:0)+' anni.'])}
+  if(fin.v>0n)items.push(['p','Gli interessi sono il '+fmt(Number(fin.t-fin.v)/Number(fin.t)*100,0)+'% del totale finale.',LGRY]);
+  items.push(['r','Esempio teorico: tasse, costi e inflazione abbassano il risultato. I rendimenti non sono garantiti.']);
+  items.push('BREAK');
+  const lines=[[[0,'\u2588',LBLU],[2,'versato',WHT],[11,'\u2588',YEL],[13,'interessi',WHT]],[[0,'ANNO',LGRY],[CW-13,'TOTALE (EURO)',LGRY]]];
+  const maxRows=ROWS-9-3,stp=Math.ceil(yrs.length/maxRows);const mx=Number(fin.t)||1;
+  const tv=yrs.map(y=>fmtC(y.t)),nw=Math.max(9,...tv.map(x=>x.length)),bw=Math.max(3,CW-3-1-nw);
+  yrs.forEach((y,i)=>{if((i+1)%stp!==0&&i!==yrs.length-1&&i!==0)return;
+    const tw=Math.max(y.t>0n?1:0,Math.round(Number(y.t)/mx*bw)),vw=Math.min(tw,Math.round(Number(y.v)/mx*bw));
+    lines.push([[0,lpad(y.a,2),WHT],[3,'\u2588'.repeat(vw),LBLU],[3+vw,'\u2588'.repeat(tw-vw),YEL],[CW-nw,lpad(tv[i],nw),WHT]])});
+  items.push(['lines',lines]);
+  pager({th,title:'INTERESSE COMPOSTO',right:'',items,onBack:simStart,backLabel:'RIFAI',endLabel:'MENU',onEnd:mainMenu})}
+/* ===== Quiz ===== */
+const QUIZ=[
+ ['Il saldo del mese \u00e8...',['entrate meno uscite','entrate pi\u00f9 uscite','solo le spese fisse'],'Saldo = entrate - uscite. Se \u00e8 positivo stai risparmiando.'],
+ ['Quale di queste \u00e8 una spesa fissa?',['l\'affitto','una cena fuori','un regalo di compleanno'],'L\'affitto \u00e8 quasi uguale ogni mese: \u00e8 una spesa fissa.'],
+ ['Con la regola 50/30/20, quanto va al risparmio?',['il 20%','il 30%','il 50%'],'50% bisogni, 30% desideri, 20% risparmio e debiti.'],
+ ['Su 2.000 \u20ac al mese, la regola 50/30/20 d\u00e0 ai bisogni...',['1.000 \u20ac','600 \u20ac','400 \u20ac'],'Il 50% di 2.000 \u20ac fa 1.000 \u20ac.'],
+ ['Un fondo emergenze di solito copre...',['3-6 mesi di spese essenziali','una settimana di spesa','dieci anni di stipendio'],'Da 3 a 6 mesi di spese essenziali.'],
+ ['1.000 \u20ac al 10% composto l\'anno, dopo 2 anni diventano...',['1.210 \u20ac','1.200 \u20ac','1.100 \u20ac'],'1.000 x 1,10 = 1.100, poi 1.100 x 1,10 = 1.210 \u20ac.'],
+ ['Con la regola del 72, al 6% l\'anno un capitale raddoppia in circa...',['12 anni','6 anni','72 anni'],'72 diviso 6 fa 12.'],
+ ['Se i prezzi salgono e i tuoi soldi restano fermi nel cassetto...',['comprano un po\' meno','valgono di pi\u00f9','non cambia niente'],'L\'inflazione riduce quello che puoi comprare con gli stessi soldi.'],
+ ['Il TAEG di un prestito indica...',['il costo totale annuo, spese comprese','solo la rata mensile','il numero delle rate'],'Il TAEG comprende interessi e spese: serve per confrontare i prestiti.'],
+ ['"Paga prima te stesso" significa...',['risparmiare appena arrivano i soldi','spendere tutto per s\u00e9','pagare i debiti per ultimi'],'Metti da parte subito una cifra fissa, poi spendi il resto.'],
+ ['Quale \u00e8 un desiderio e non un bisogno?',['un telefono nuovo se il vecchio va bene','la bolletta della luce','la spesa per mangiare'],'Il telefono nuovo \u00e8 piacevole ma rinunciabile.'],
+ ['Per tagliare le spese conviene partire da...',['spese variabili e abbonamenti inutili','le medicine','l\'affitto'],'Le spese variabili si possono cambiare subito, ogni giorno.']];
+function quizStart(){const qs=shuffle(QUIZ).slice(0,10).map(q=>{const opts=shuffle(q[1].map((t,i)=>({t,ok:i===0})));return{q:q[0],opts,ex:q[2]}});
+  let i=0,score=0,ans=null;const th=TH.quiz;
+  function draw(){cls(th.bg,th.bd,th.fg);header('QUIZ','DOMANDA '+(i+1)+'/10',th.hbg,th.hfg,mainMenu);
+    const q=qs[i];put(1,4,'PUNTI: '+score,YEL);let y=6;
+    wrap(q.q,CW).forEach(l=>{put(1,y,l,CYN);y++});y++;
+    q.opts.forEach((o,j)=>{const ls=wrap(o.t,CW-4);const h=ls.length+2;let bg=[LBLU,PUR,ORA][j],fg=WHT;
+      if(ans!==null){if(o.ok){bg=GRN}else if(j===ans){bg=RED}else{bg=DGRY;fg=GRY}}
+      fill(1,y,CW,h,bg,' ',fg);put(2,y+1,'ABC'[j],bg,fg);ls.forEach((l,k)=>put(4,y+1+k,l,fg,bg));
+      if(ans===null)hotspot(1,y,CW,h,()=>answer(j),['ABC'[j],String(j+1)]);y+=h+1});
+    if(ans!==null){const ok=q.opts[ans].ok;put(1,y,ok?'GIUSTO!':'SBAGLIATO.',ok?LGRN:LRED);y++;
+      wrap(q.ex,CW).forEach(l=>{put(1,y,l,WHT);y++});
+      button(1,ROWS-4,CW,3,i<9?'AVANTI \u25ba':'VEDI IL PUNTEGGIO \u25ba',CYN,BLK,()=>{if(i<9){i++;ans=null;draw()}else end()},['OK','NEXT'])}
+  }
+  function answer(j){ans=j;if(qs[i].opts[j].ok){score++;sfx.ok()}else sfx.bad();draw()}
+  function end(){const best=Math.max(S.best||0,score),rec=score>(S.best||0)&&score>0;S.best=best;save();
+    show(function drawEnd(){cls(th.bg,th.bd,th.fg);header('QUIZ','FINE',th.hbg,th.hfg,mainMenu);
+      let y=6;center(y,' HAI FATTO '+score+' SU 10 ',BLK,score>=7?LGRN:score>=5?YEL:LRED);y+=2;
+      center(y,'\u2588'.repeat(score)+'\u2592'.repeat(10-score),score>=7?LGRN:score>=5?YEL:LRED);y+=2;
+      const msg=score===10?'Perfetto! Sei un vero esperto del bilancio di casa.':score>=7?'Molto bene! Conosci le regole del risparmio.':score>=5?'Discreto. Ripassa le lezioni per fare meglio.':'Non scoraggiarti: leggi le lezioni e riprova.';
+      wrap(msg,CW).forEach(l=>{put(1,y,l,WHT);y++});y++;
+      put(1,y,'RECORD: '+best+' SU 10',CYN);if(rec)put(18,y,'NUOVO!',YEL);y+=3;
+      button(1,y,CW,3,'RIGIOCA',CYN,BLK,quizStart,['OK','1']);y+=4;
+      button(1,y,CW,3,'LEZIONI',LBLU,WHT,lessonList,['2']);y+=4;
+      button(1,y,CW,3,'\u25c4 TORNA AL MENU',DGRY,WHT,mainMenu,['ESC']);
+    },mainMenu);sfx.sel()}
+  show(draw,mainMenu)}
+/* ===== Menu principale ===== */
+function mainMenu(){
+  show(function draw(){cls(BLK,BLU,WHT);
+    fill(0,0,COLS,1,ORA,'\u2580',RED);fill(0,1,COLS,1,LGRN,'\u2580',YEL);
+    put(1,3,' IL SALVADANAIO ',BLK,YEL);put(1,4,' 64 ',WHT,RED);
+    put(1,6,'Corso di',LGRY);put(1,7,'economia',LGRY);put(1,8,'domestica',LGRY);put(1,9,'VERSIONE ITALIANA',CYN);
+    drawPig(18,3,-1);
+    fill(0,10,COLS,1,LBLU,'\u2580',CYN);fill(0,11,COLS,1,BLU,'\u2580',PUR);
+    const items=[['LEZIONI',LBLU,WHT,lessonList],['IL MIO BILANCIO',GRN,WHT,bilancioStart],['OBIETTIVO RISPARMIO',PUR,WHT,objStart],
+      ['INTERESSE COMPOSTO',ORA,WHT,simStart],['QUIZ',RED,WHT,quizStart],['SUONO: '+(S.snd?'SI':'NO'),DGRY,LGRY,()=>{S.snd=!S.snd;save();if(S.snd){audioInit();sfx.sel()}draw()}],
+      ['FINE PROGRAMMA',GRY,BLK,fine]];
+    const slot=Math.max(4,Math.floor((ROWS-5-13)/7)),h=Math.min(5,slot-1),gap=slot-h;
+    items.forEach((it,i)=>{const y=13+i*slot,m=y+Math.floor(h/2);button(1,y,CW,h,'',it[1],it[2],()=>{sfx.sel();it[3]()},[String(i+1)]);
+      put(2,m,String(i+1),it[1],it[2]);put(5,m,it[0],it[2],it[1])});
+    put(1,ROWS-3,'READY.',LGRY);put(COLS-1-12,ROWS-5,'ByCSD \u00b7 v1.0',WHT);put(1,ROWS-2,'TOCCA UNA VOCE O PREMI 1-7',GRY);
+  },null)}
+function fine(){show(function draw(){cls(BLU,LBLU,LBT);put(0,1,'BREAK IN 30');put(0,2,'READY.');
+    put(0,3,'LIST 10-30');put(0,4,'10 REM IL SALVADANAIO 64');put(0,5,'20 PRINT "RISPARMIA OGNI MESE"');put(0,6,'30 GOTO 20');put(0,7,'READY.');cursor={x:0,y:8};
+    button(1,11,CW,3,'RUN  (RIPARTI)',LBLU,WHT,mainMenu,['OK','R']);
+    wrap('Il programma \u00e8 fermo. Tocca RUN per tornare al menu.',CW).forEach((l,i)=>put(1,15+i,l,LBT));
+  },mainMenu)}
+/* ===== Accensione e caricamento da cassetta ===== */
+let skipFlag=false,wake=null;
+const w=ms=>new Promise(r=>{wake=r;setTimeout(r,ms)});
+/* BASIC iniziale: RUN avvia il caricamento; il gesto abilita audio e schermo intero. */
+function power(){show(function draw(){mode='text';bootLines=[];typing='';bootScreen();
+  button(7,Math.floor(ROWS/2)-2,15,5,['RUN','','AVVIO'],WHT,BLK,()=>{audioInit();goFull();boot()},['OK','R']);hot[hot.length-1].run=1;
+},null)}
+async function boot(){skipFlag=false;cur=bootScreen;anyTap=null;hot=[];
+  mode='text';bootLines=[];typing='';bootScreen();await w(900);if(skipFlag)return;
+  await type('LOAD"SALVADANAIO"');if(skipFlag)return;await w(250);
+  bootLines.push('');bootLines.push('PRESS PLAY ON TAPE');bootScreen(true);await w(900);if(skipFlag)return;
+  bootLines.push('OK');bootScreen(true);await w(400);if(skipFlag)return;
+  bootLines.push('');bootLines.push('SEARCHING FOR SALVADANAIO');bootScreen(true);await w(300);if(skipFlag)return;
+  mode='pilot';tapeOn();await w(1100);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('FOUND SALVADANAIO');bootScreen(true);await w(800);if(skipFlag)return;
+  mode='data';tapeOn();await w(2200);if(skipFlag)return;
+  mode='text';tapeOff();bootLines.push('LOADING');bootLines.push('READY.');bootScreen();await w(500);if(skipFlag)return;
+  await type('RUN');if(skipFlag)return;await w(400);if(skipFlag)return;endBoot()}
+let bootLines=[],typing='';
+function bootScreen(nocur){cls(BLU,LBLU,LBT);center(1,'*** COMMODORE 64 BASIC V2 ***');put(0,3,' 64K RAM SYSTEM');put(0,4,' 38911 BASIC BYTES FREE');put(0,6,'READY.');
+  let y=7;bootLines.forEach(l=>{put(0,y,l);y++});if(typing!==null)put(0,y,typing);if(!nocur)cursor={x:typing?typing.length:0,y:y}}
+async function type(s){typing='';for(const c of s){typing+=c;bootScreen();sfx.click();await w(110);if(skipFlag)return}
+  bootLines.push(typing);typing='';bootScreen()}
+function endBoot(){anyTap=null;tapeOff();mode='text';typing='';sfx.sel();mainMenu()}
+/* ===== Avvio ===== */
+window.addEventListener('resize',()=>{layout()});
+layout();power();requestAnimationFrame(loop);
+</script>
+</body>
+</html>

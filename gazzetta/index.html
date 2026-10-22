@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gazzetta dello Sport</title>
+<meta name="description" content="Il sito originale della Gazzetta dello Sport, a schermo intero.">
+<meta property="og:title" content="Gazzetta dello Sport">
+<meta property="og:description" content="Il sito originale, a schermo intero.">
+<meta property="og:image" content="https://glscomm.github.io/gazzetta/icona-512.png">
+<meta name="theme-color" content="#F8D7DA">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gazzetta">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icona-192.png">
+<link rel="apple-touch-icon" href="icona-180.png">
+<script>/* Angolo libero per il bottone di Netlify */if(/(^|\.)netlify\.app$/.test(location.hostname))document.documentElement.classList.add('nl-angolo');</script>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#F8D7DA}
+#sito{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);width:100%;height:calc(100% - env(safe-area-inset-top,0px));border:0;display:block;background:#fff}
+html.nl-angolo #sito{height:calc(100% - env(safe-area-inset-top,0px) - 66px)}
+</style>
+</head>
+<body>
+<iframe id="sito" src="https://www.gazzetta.it/" title="La Gazzetta dello Sport" allow="fullscreen; autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share" allowfullscreen></iframe>
+<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});</script>
+<script id="inst-js">(function(){/* Salva come app: con ?installa nell'indirizzo compare un riquadro per installare proprio questa app (tasto Installa di Chrome, o le istruzioni). */
+var w=window,d=document,e=d.documentElement;
+var K='gazzetta-riquadro-visto',V=false;try{V=!!localStorage.getItem(K)}catch(y){}if(w.top!==w||(V&&!/[?&]installa(=|&|$)/.test(location.search)))return;try{localStorage.setItem(K,'1')}catch(y){}
+function mq(x){try{return w.matchMedia(x).matches}catch(y){return false}}
+function clean(){try{var u=new URL(location.href);u.searchParams.delete('installa');history.replaceState(history.state,'',u.pathname+u.search+u.hash)}catch(y){}}
+if(mq('(display-mode: fullscreen)')||mq('(display-mode: standalone)')||mq('(display-mode: minimal-ui)')){clean();return}
+e.classList.add('inst');
+var N="Gazzetta dello Sport",bip=null,host=null,R=null,done=false;
+w.addEventListener('beforeinstallprompt',function(v){v.preventDefault();bip=v;show()});
+w.addEventListener('appinstalled',function(){done=true;bip=null;show()});
+function close(){e.classList.remove('inst');clean();if(host&&host.parentNode)host.parentNode.removeChild(host);host=null;R=null}
+function $(i){return R.getElementById(i)}
+function show(){if(!R)return;$('go').hidden=!bip||done;$('how').hidden=done;$('ok').hidden=!done;$('lead').hidden=done;$('no').textContent=done?'Chiudi':'Usa l\u2019app senza installarla'}
+function mine(v){var p=v.composedPath?v.composedPath():[];return !!host&&p.indexOf(host)>=0}
+function which(v){var p=v.composedPath();for(var i=0;i<p.length&&p[i]!==host;i++){var n=p[i];if(n.id==='go'||n.id==='no')return n.id}return null}
+/* i tocchi sul riquadro non arrivano all'app che sta sotto */
+['pointerdown','pointerup','pointermove','touchstart','touchend','touchmove','mousedown','mouseup','dblclick','contextmenu','keydown','keyup','wheel'].forEach(function(t){
+ w.addEventListener(t,function(v){if(mine(v))v.stopImmediatePropagation()},{capture:true,passive:true})});
+w.addEventListener('click',function(v){if(!mine(v))return;v.stopImmediatePropagation();var b=which(v);
+ if(b==='no')close();
+ else if(b==='go'&&bip){var p=bip;bip=null;show();try{p.prompt();if(p.userChoice)p.userChoice.then(function(c){if(c&&c.outcome==='accepted')done=true;show()},function(){})}catch(x){show()}}
+},true);
+var CSS='<style>:host{all:initial}*{box-sizing:border-box}[hidden]{display:none!important}'+
+'.bg{position:fixed;inset:0;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:16px 16px calc(78px + env(safe-area-inset-bottom));overflow:auto}'+
+'.box{background:#fff;color:#141414;border-radius:20px;width:100%;max-width:440px;max-height:100%;overflow:auto;padding:22px 20px 18px;font:17px/1.45 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif;text-align:left}'+
+'.k{margin:0 0 4px;font-size:15px;color:#6E6C68}h2{margin:0 0 12px;font:700 24px/1.2 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif}p{margin:0 0 12px}'+
+'ol{margin:0 0 12px;padding-left:22px}li{margin:0 0 6px}b{font-weight:700}.s{font-size:15px;color:#4A4844}'+
+'button{display:block;width:100%;min-height:52px;border-radius:14px;font:600 18px/1.2 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif;cursor:pointer;margin:0 0 12px;-webkit-tap-highlight-color:transparent}'+
+'#go{border:0;background:#141414;color:#fff}#no{border:1.5px solid #CFCDC8;background:#fff;color:#141414;margin:4px 0 0}</style>';
+var HTML='<div class="bg"><div class="box" role="dialog" aria-modal="true" aria-labelledby="h">'+
+'<p class="k">Salva come app</p><h2 id="h"></h2>'+
+'<p id="lead">Avrà la sua icona fra le app del telefono e partirà sempre a schermo intero, senza la barra di Chrome.</p>'+
+'<button id="go" type="button" hidden>Installa l\u2019app</button>'+
+'<div id="how"><p><b>Se il tasto «Installa l\u2019app» non c\u2019è:</b></p><ol>'+
+'<li>Tocca i tre puntini in alto a destra.</li>'+
+'<li>Scegli <b>«Installa app»</b>. Se non c\u2019è, scegli «Aggiungi a schermata Home».</li>'+
+'<li>Nella finestra che si apre scegli <b>«Installa»</b>, non «Crea scorciatoia»: la scorciatoia è solo un collegamento che si apre in Chrome.</li></ol>'+
+'<p class="s">Se Chrome propone solo la scorciatoia, quest’app è già installata: cercala fra le app del telefono.</p></div>'+
+'<p id="ok" hidden><b>Fatto.</b> Adesso la trovi fra le app del telefono, e da lì parte a schermo intero.</p>'+
+'<button id="no" type="button"></button></div></div>';
+function build(){if(host)return;host=d.createElement('div');host.id='inst-host';host.setAttribute('style','position:fixed;inset:0;z-index:2147483647;display:block');
+ R=host.attachShadow({mode:'open'});R.innerHTML=CSS+HTML;$('h').textContent='«'+N+'»';(d.body||e).appendChild(host);show()}
+if(d.body)build();else d.addEventListener('DOMContentLoaded',build);
+})();</script>
+</body>
+</html>
