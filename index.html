@@ -13,7 +13,7 @@
 @font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
 @media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px calc(24px + env(safe-area-inset-bottom))}
 .wrap{max-width:680px;margin:0 auto}
 h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
 h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
@@ -49,6 +49,7 @@ body.inapp{overflow:hidden}
 <p class="lede">Tocca il titolo di un'app per aprirla. Ogni app ha il suo indirizzo fisso.</p>
 <ul>
 <li>Al primo tocco dentro l'app si va a schermo intero.</li>
+<li>Le app 13, 14 e 15 si installano anche da sole: in Chrome, tre puntini e «Installa app».</li>
 <li>Per tornare a questo elenco usa il gesto Indietro.</li>
 </ul>
 
@@ -58,7 +59,7 @@ body.inapp{overflow:hidden}
 
 <a class="app-link" href="giro-delle-capitali.html"><b>2. Giro delle capitali</b><span>Otto paesi, tre risposte, correzione immediata. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
 
-<a class="app-link" href="capitali-primi-passi.html"><b>3. Capitali: primi passi</b><span>Tre giochi con bandiere grandi, per i più piccoli con un adulto. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
+<a class="app-link" href="capitali-primi-passi.html"><b>3. Capitali: Primi Passi</b><span>Tre giochi con bandiere grandi, per i più piccoli con un adulto. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
 
 <a class="app-link" href="dieci-parole-casuali.html"><b>4. Dieci parole casuali</b><span>1000 parole con sillabe, definizione, etimologia, sinonimi e contrari. Versione 1.0 delle 23:45. 18 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
 
@@ -77,8 +78,6 @@ body.inapp{overflow:hidden}
 <a class="app-link" href="province-64.html"><b>11. Province 64</b><span>Le 110 province con le sigle delle targhe, lette dalla voce di SAM. 19 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
 
 <a class="app-link" href="diritti-umani-64.html"><b>12. Diritti umani 64</b><span>La Dichiarazione universale del 1948 in stile Commodore 64, con la lettura a voce. 20 ottobre.</span><small>Si apre a schermo intero al primo tocco</small></a>
-
-<p class="group">Da installare, ognuna per conto suo</p>
 
 <a class="app-link" href="salvadanaio-leggibile/"><b>13. Il Salvadanaio</b><span>Il Salvadanaio 64 in versione leggibile: sfondo scuro, caratteri chiari, stessi tasti. 21 ottobre.</span><small>Installabile, funziona anche senza Internet</small></a>
 

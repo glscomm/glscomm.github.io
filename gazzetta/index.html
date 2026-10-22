@@ -15,11 +15,9 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icona-192.png">
 <link rel="apple-touch-icon" href="icona-180.png">
-<script>/* Angolo libero per il bottone di Netlify */if(/(^|\.)netlify\.app$/.test(location.hostname))document.documentElement.classList.add('nl-angolo');</script>
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#F8D7DA}
 #sito{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);width:100%;height:calc(100% - env(safe-area-inset-top,0px));border:0;display:block;background:#fff}
-html.nl-angolo #sito{height:calc(100% - env(safe-area-inset-top,0px) - 66px)}
 </style>
 </head>
 <body>
@@ -48,7 +46,7 @@ w.addEventListener('click',function(v){if(!mine(v))return;v.stopImmediatePropaga
  else if(b==='go'&&bip){var p=bip;bip=null;show();try{p.prompt();if(p.userChoice)p.userChoice.then(function(c){if(c&&c.outcome==='accepted')done=true;show()},function(){})}catch(x){show()}}
 },true);
 var CSS='<style>:host{all:initial}*{box-sizing:border-box}[hidden]{display:none!important}'+
-'.bg{position:fixed;inset:0;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:16px 16px calc(78px + env(safe-area-inset-bottom));overflow:auto}'+
+'.bg{position:fixed;inset:0;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom));overflow:auto}'+
 '.box{background:#fff;color:#141414;border-radius:20px;width:100%;max-width:440px;max-height:100%;overflow:auto;padding:22px 20px 18px;font:17px/1.45 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif;text-align:left}'+
 '.k{margin:0 0 4px;font-size:15px;color:#6E6C68}h2{margin:0 0 12px;font:700 24px/1.2 -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",sans-serif}p{margin:0 0 12px}'+
 'ol{margin:0 0 12px;padding-left:22px}li{margin:0 0 6px}b{font-weight:700}.s{font-size:15px;color:#4A4844}'+
