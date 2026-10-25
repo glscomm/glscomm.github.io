@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Archivio HTML ByCSD</title>
+<style>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
+h2{font:400 26px/1.15 var(--serif);margin:52px 0 14px}
+h3{font:600 17px/1.3 var(--sans);margin:0 0 5px}
+.kicker{font:19px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}h1+.kicker{margin-top:-2px}
+.updated{font:14px/1.4 var(--sans);color:var(--muted);margin:6px 0 14px}
+.lede{font:400 clamp(18px,4.4vw,21px)/1.3 var(--sans);margin:22px 0 26px}.lede:has(+ul){margin-bottom:8px}.lede:not(.lede~.lede){padding-top:16px}.lede+ul{font-size:16px}.lede+ul li::marker{color:color-mix(in srgb,var(--ink) 50%,transparent)}
+html{scroll-behavior:smooth}
+p{margin:0 0 10px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 30%,transparent);transition:text-decoration-color .15s}a:hover{text-decoration-color:currentColor}
+.card{background:var(--card);border-radius:20px;padding:14px 16px 18px;margin:10px 0;display:grid;gap:4px}.card+.card{margin-top:16px}.card h3{font-size:18px;margin-bottom:0}.card h3+.fact{margin-bottom:8px}
+.card .fact{font-size:15px;color:var(--muted)}
+.card .fact b{color:var(--ink);font-weight:500}
+.card h3 a::after{content:"\2197";font-weight:400;font-size:16px;margin-left:3px;color:color-mix(in srgb,var(--muted) 55%,transparent);text-decoration:none;display:inline-block;transform:translateY(2px)}
+@supports (corner-shape:squircle){.card{corner-shape:squircle;border-radius:32px}}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+.group{font:500 16px/1.4 var(--sans);color:var(--ink);margin:26px 0 2px}
+nav.jump{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 26px}nav.jump::before{content:"Vai a:";font:500 14px/1 var(--sans);color:var(--muted);margin-right:2px}
+nav.jump a{display:inline-flex;align-items:center;gap:7px;font:14px/1 var(--sans);text-decoration:none;background:color-mix(in srgb,var(--ground),var(--ink) 6%);border-radius:999px;padding:9px 13px;transition:background-color .15s}nav.jump a::after{content:"";width:5px;height:5px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+nav.jump+h2{margin-top:40px}
+.sources{margin-top:40px;font-size:13px;color:var(--muted)}.sources>b{display:block;font:500 16px/1.4 var(--sans);color:var(--ink);margin:0 0 6px}
+.sources li{margin:0 0 4px}
+.firma{margin-top:28px;font:500 15px/1 var(--mono);color:var(--muted);text-align:center}
+</style>
+</head>
+<body><div class="wrap">
+<h1>GitHub — Applicazioni web HTML</h1>
+<p class="kicker">Archivio GitHub, 15 app web, ByCSD</p>
+<p class="updated">Aggiornato il 25 ottobre 2026, ore 13:10</p>
+<p class="lede">Le 15 app web sono su glscomm.github.io: tocca un nome per aprirla, dalla più recente, Razze di gatti, alla prima.</p>
+<ul>
+<li>Le app Android da installare sono nell'altro indice: <a href="archivio-apk.html">GitHub — Applicazioni APK</a>.</li>
+<li>Il tuo menu <a href="https://glscomm.github.io/">Le mie app</a> resta com'era, con la <a href="https://glscomm.github.io/le-mie-app-offline.html">versione senza Internet</a>.</li>
+</ul>
+<nav class="jump"><a href="#app">Le 15 app</a><a href="#raccolte">Menu e versione offline</a></nav>
+
+<h2 id="app">Le 15 app, dalla più recente</h2>
+
+<p class="group">22 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/razze-gatti/">15. Razze di gatti</a></h3>
+  <div class="fact">87 razze con foto, carattere e cure.</div>
+  <div class="fact"><b>Installabile</b>, funziona anche senza Internet</div>
+</div>
+
+<p class="group">21 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/gazzetta/">14. Gazzetta</a></h3>
+  <div class="fact">Il sito della Gazzetta dello Sport a schermo intero.</div>
+  <div class="fact"><b>Installabile</b>, serve Internet</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/salvadanaio-leggibile/">13. Il Salvadanaio</a></h3>
+  <div class="fact">Il Salvadanaio 64 leggibile: sfondo scuro, caratteri chiari.</div>
+  <div class="fact"><b>Installabile</b>, funziona anche senza Internet</div>
+</div>
+
+<p class="group">20 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/diritti-umani-64.html">12. Diritti umani 64</a></h3>
+  <div class="fact">La Dichiarazione universale del 1948 in stile Commodore 64, con la voce.</div>
+</div>
+
+<p class="group">19 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/province-64.html">11. Province 64</a></h3>
+  <div class="fact">Le 110 province con le sigle delle targhe, lette dalla voce di SAM.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/salvadanaio-64.html">10. Il Salvadanaio 64</a></h3>
+  <div class="fact">Economia domestica in stile Commodore 64: bilancio, risparmio, quiz.</div>
+</div>
+
+<p class="group">18 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/mistero-a-villa-martini.html">9. Mistero a Villa Martini</a></h3>
+  <div class="fact">Il giallo in stile 1984, in orizzontale e senza cornice.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/zx-spectrum-48k.html">8. ZX Spectrum 48K</a></h3>
+  <div class="fact">Emulatore con la ROM originale: carica file .tap e .tzx.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/commodore-64.html">7. Commodore 64</a></h3>
+  <div class="fact">Emulatore con tastiera e joystick: carica file .prg e .d64.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/slot-classica.html">6. Slot classica</a></h3>
+  <div class="fact">Tre rulli, puntata e tabella vincite, solo crediti virtuali.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/numeri-casuali.html">5. Numeri casuali</a></h3>
+  <div class="fact">Griglia 4 × 4 da leggere, da una a quattro cifre.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/dieci-parole-casuali.html">4. Dieci parole casuali</a></h3>
+  <div class="fact">1000 parole con sillabe, definizione, etimologia, sinonimi e contrari.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/capitali-primi-passi.html">3. Capitali: Primi Passi</a></h3>
+  <div class="fact">Tre giochi con bandiere grandi, per i più piccoli con un adulto.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/giro-delle-capitali.html">2. Giro delle capitali</a></h3>
+  <div class="fact">Otto paesi, tre risposte, correzione immediata.</div>
+</div>
+
+<p class="group">11 ottobre 2026</p>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/verdure-per-minestrone.html">1. Verdure per il minestrone</a></h3>
+  <div class="fact">54 verdure divise per gruppo, con la stagione accanto.</div>
+</div>
+
+<h2 id="raccolte">Menu e versione offline</h2>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/">Le mie app</a></h3>
+  <div class="fact">Il menu con tutte le 15 app, che si aprono a schermo intero.</div>
+</div>
+<div class="card">
+  <h3><a href="https://glscomm.github.io/le-mie-app-offline.html">Le mie app, versione offline</a></h3>
+  <div class="fact">Le prime undici app in un solo file, da usare senza Internet.</div>
+</div>
+
+<div class="sources"><b>Archivi su GitHub</b><ul>
+<li><a href="https://github.com/glscomm/glscomm.github.io">Archivio glscomm.github.io</a>, dove stanno tutti i file HTML</li>
+<li>Le date sono quelle di creazione scritte nel tuo menu <a href="https://glscomm.github.io/">Le mie app</a></li>
+<li><a href="archivio-apk.html">GitHub — Applicazioni APK</a>, l'altro indice</li>
+</ul></div>
+<p class="firma">ByCSD</p>
+</div></body></html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Archivio APK ByCSD</title>
+<style>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
+h2{font:400 26px/1.15 var(--serif);margin:52px 0 14px}
+h3{font:600 17px/1.3 var(--sans);margin:0 0 5px}
+.kicker{font:19px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}h1+.kicker{margin-top:-2px}
+.updated{font:14px/1.4 var(--sans);color:var(--muted);margin:6px 0 14px}
+.lede{font:400 clamp(18px,4.4vw,21px)/1.3 var(--sans);margin:22px 0 26px}.lede:has(+ul){margin-bottom:8px}.lede:not(.lede~.lede){padding-top:16px}.lede+ul{font-size:16px}.lede+ul li::marker{color:color-mix(in srgb,var(--ink) 50%,transparent)}
+html{scroll-behavior:smooth}
+p{margin:0 0 10px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 30%,transparent);transition:text-decoration-color .15s}a:hover{text-decoration-color:currentColor}
+.card{background:var(--card);border-radius:20px;padding:14px 16px 18px;margin:10px 0;display:grid;gap:4px}.card+.card{margin-top:16px}.card>ul{margin-top:8px}.card h3{font-size:18px;margin-bottom:0}.card h3+.fact{margin-bottom:8px}
+.card .fact{font-size:15px;color:var(--muted)}
+.card .fact b{color:var(--ink);font-weight:500}
+.card h3 a::after{content:"\2197";font-weight:400;font-size:16px;margin-left:3px;color:color-mix(in srgb,var(--muted) 55%,transparent);text-decoration:none;display:inline-block;transform:translateY(2px)}
+@supports (corner-shape:squircle){.card{corner-shape:squircle;border-radius:32px}}
+.btn{display:block;text-align:center;background:var(--ink);color:var(--ground);border-radius:999px;padding:16px 18px;font:500 14px/1 var(--sans);text-decoration:none;margin:8px 0 2px}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+.group{font:500 16px/1.4 var(--sans);color:var(--ink);margin:26px 0 2px}
+details.more{padding:12px 0 0;interpolate-size:allow-keywords}details.more::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease-out,content-visibility .25s allow-discrete}details.more[open]::details-content{block-size:auto}
+details.more summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 16px;column-gap:12px}
+details.more summary b{font:600 16px/1.3 var(--sans)}
+details.more summary span{grid-column:1;margin-top:2px;font-size:15px;line-height:1.45;color:var(--muted)}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"";grid-column:2;grid-row:1/span 2;align-self:center;width:7px;height:7px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more ul{margin:10px 0 0;padding-left:19px}
+@media (prefers-reduced-motion:reduce){details.more::details-content{transition:none}}
+nav.jump{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 26px}nav.jump::before{content:"Vai a:";font:500 14px/1 var(--sans);color:var(--muted);margin-right:2px}
+nav.jump a{display:inline-flex;align-items:center;gap:7px;font:14px/1 var(--sans);text-decoration:none;background:color-mix(in srgb,var(--ground),var(--ink) 6%);border-radius:999px;padding:9px 13px;transition:background-color .15s}nav.jump a::after{content:"";width:5px;height:5px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+nav.jump+h2{margin-top:40px}
+.sources{margin-top:40px;font-size:13px;color:var(--muted)}.sources>b{display:block;font:500 16px/1.4 var(--sans);color:var(--ink);margin:0 0 6px}
+.sources li{margin:0 0 4px}
+.firma{margin-top:28px;font:500 15px/1 var(--mono);color:var(--muted);text-align:center}
+</style>
+</head>
+<body><div class="wrap">
+<h1>GitHub — Applicazioni APK</h1>
+<p class="kicker">Archivio GitHub, 3 app Android, ByCSD</p>
+<p class="updated">Aggiornato il 25 ottobre 2026, ore 13:10</p>
+<p class="lede">Le ultime da installare sono Musica 1.1 completa, Quadri 1.1 e Naviga 1.4; sotto c'è ogni versione, dalla più recente.</p>
+<ul>
+<li>Naviga 1.5 è <a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.5">pubblicata</a> ma senza il file APK: per ora si scarica la 1.4.</li>
+<li>Le app web sono nell'altro indice: <a href="archivio-html.html">GitHub — Applicazioni web HTML</a>.</li>
+</ul>
+<nav class="jump"><a href="#ultime">Ultime versioni</a><a href="#cronologia">Tutte le versioni</a></nav>
+
+<h2 id="ultime">Ultime versioni</h2>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/Musica-ByCSD/releases/tag/v1.1">Musica ByCSD 1.1 completa</a></h3>
+  <div class="fact"><b>25 ottobre, ore 9:04</b>, 123,4 MB</div>
+  <div class="fact">I 36 brani sono già dentro: niente pacchetti da importare.</div>
+  <a class="btn" href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.1/Musica-ByCSD-v1.1-completa.apk">Scarica Musica 1.1</a>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/quadri-v1.1">Quadri ByCSD 1.1</a></h3>
+  <div class="fact"><b>25 ottobre, ore 9:07</b>, 15,6 MB</div>
+  <div class="fact">Titolo «Galleria dei Grandi Pittori», 56 quadri, voce Nicola.</div>
+  <a class="btn" href="https://github.com/glscomm/glscomm.github.io/releases/download/quadri-v1.1/Quadri-ByCSD-v1.1.apk">Scarica Quadri 1.1</a>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.4">Naviga 1.4</a></h3>
+  <div class="fact"><b>24 ottobre, ore 20:16</b>, 17,7 MB</div>
+  <div class="fact">Ultima con il file APK; le voci si scaricano da sole al primo uso.</div>
+  <a class="btn" href="https://github.com/glscomm/glscomm.github.io/releases/download/naviga-v1.4/Naviga-v1.4.apk">Scarica Naviga 1.4</a>
+</div>
+
+<h2 id="cronologia">Tutte le versioni</h2>
+
+<p class="group">25 ottobre 2026</p>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.5">Naviga 1.5</a></h3>
+  <div class="fact"><b>Ore 11:18</b>, senza file APK</div>
+  <div class="fact">Titolo più grande, pagina «Notizie» con dieci agenzie, voci più robuste.</div>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/quadri-v1.1">Quadri 1.1</a></h3>
+  <div class="fact"><b>Ore 9:07, ultima versione</b>, 15,6 MB</div>
+  <div class="fact">File: <a href="https://github.com/glscomm/glscomm.github.io/releases/download/quadri-v1.1/Quadri-ByCSD-v1.1.apk">Quadri-ByCSD-v1.1.apk</a></div>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/Musica-ByCSD/releases/tag/v1.1">Musica 1.1 completa</a></h3>
+  <div class="fact"><b>Ore 9:04, ultima versione</b>, 123,4 MB</div>
+  <div class="fact">File: <a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.1/Musica-ByCSD-v1.1-completa.apk">Musica-ByCSD-v1.1-completa.apk</a></div>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/quadri-voce-v1">Quadri 1.0 con voce Nicola</a></h3>
+  <div class="fact"><b>Ore 8:44, precedente</b>, 15,6 MB</div>
+  <div class="fact">File: <a href="https://github.com/glscomm/glscomm.github.io/releases/download/quadri-voce-v1/Quadri-ByCSD-v1.0.apk">Quadri-ByCSD-v1.0.apk</a></div>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/Musica-ByCSD/releases/tag/v1.0">Musica 1.0</a></h3>
+  <div class="fact"><b>Ore 8:35, precedente</b>, app 4,1 MB più 13 pacchetti</div>
+  <div class="fact">File: <a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-v1.0.apk">Musica-ByCSD-v1.0.apk</a></div>
+  <details class="more"><summary><b>I 13 pacchetti di brani</b><span>Servono solo alla 1.0; la 1.1 li ha già dentro.</span></summary><ul>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-01-di-13.zip">Pacchetto 1 di 13</a>, 9,6 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-02-di-13.zip">Pacchetto 2 di 13</a>, 9,5 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-03-di-13.zip">Pacchetto 3 di 13</a>, 9,5 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-04-di-13.zip">Pacchetto 4 di 13</a>, 9,5 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-05-di-13.zip">Pacchetto 5 di 13</a>, 9,5 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-06-di-13.zip">Pacchetto 6 di 13</a>, 9,4 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-07-di-13.zip">Pacchetto 7 di 13</a>, 9,4 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-08-di-13.zip">Pacchetto 8 di 13</a>, 9,3 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-09-di-13.zip">Pacchetto 9 di 13</a>, 9,1 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-10-di-13.zip">Pacchetto 10 di 13</a>, 9,0 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-11-di-13.zip">Pacchetto 11 di 13</a>, 8,8 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-12-di-13.zip">Pacchetto 12 di 13</a>, 8,3 MB</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.0/Musica-ByCSD-pacchetto-13-di-13.zip">Pacchetto 13 di 13</a>, 8,3 MB</li>
+</ul></details>
+</div>
+
+<p class="group">24 ottobre 2026</p>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.4">Naviga 1.4</a></h3>
+  <div class="fact"><b>Ore 20:16, ultima con il file</b>, 17,7 MB</div>
+  <div class="fact">File: <a href="https://github.com/glscomm/glscomm.github.io/releases/download/naviga-v1.4/Naviga-v1.4.apk">Naviga-v1.4.apk</a></div>
+</div>
+
+<div class="card">
+  <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-voci-1">Naviga: voci italiane</a></h3>
+  <div class="fact"><b>Ore 19:47, file di supporto</b>, 32,6 MB ciascuna</div>
+  <div class="fact">Non si installano: Naviga le scarica da sola. <a href="https://github.com/glscomm/glscomm.github.io/releases/download/naviga-voci-1/naviga-voce-femminile.onnx">Serena</a>, <a href="https://github.com/glscomm/glscomm.github.io/releases/download/naviga-voci-1/naviga-voce-maschile.onnx">Giorgio</a>.</div>
+</div>
+
+<div class="sources"><b>Archivi su GitHub</b><ul>
+<li><a href="https://github.com/glscomm/glscomm.github.io/releases">Versioni di Naviga e Quadri</a>, archivio glscomm.github.io</li>
+<li><a href="https://github.com/glscomm/Musica-ByCSD/releases">Versioni di Musica</a>, archivio Musica-ByCSD</li>
+<li><a href="archivio-html.html">GitHub — Applicazioni web HTML</a>, l'altro indice</li>
+</ul></div>
+<p class="firma">ByCSD</p>
+</div></body></html>
