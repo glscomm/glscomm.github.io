@@ -37,18 +37,61 @@ nav.jump+h2{margin-top:40px}
 .sources{margin-top:40px;font-size:13px;color:var(--muted)}.sources>b{display:block;font:500 16px/1.4 var(--sans);color:var(--ink);margin:0 0 6px}
 .sources li{margin:0 0 4px}
 .firma{margin-top:28px;font:500 15px/1 var(--mono);color:var(--muted);text-align:center}
+/* stili mancanti */
+.card .time{font:12px/1.4 var(--mono);color:var(--muted);margin:0 0 2px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.card .fact .lab{display:inline-block;min-width:3em;margin-right:6px;font:700 15px/1.5 var(--sans);color:color-mix(in srgb,var(--ink) 50%,var(--muted))}
+.btn{display:block;text-align:center;background:var(--ink);color:var(--ground);border-radius:999px;padding:16px 18px;font:500 14px/1 var(--sans);text-decoration:none;margin:8px 0 2px}
+details.more{padding:12px 0 0}
+details.more summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 16px;column-gap:12px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary b{font:600 16px/1.3 var(--sans)}
+details.more summary span{grid-column:1;margin-top:2px;font-size:14px;line-height:1.45;color:var(--muted)}
+details.more summary::after{content:"";grid-column:2;grid-row:1/span 2;align-self:center;width:7px;height:7px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more ul{margin:10px 0 0;padding-left:19px}
+/* colori dei tipi di file */
+:root{--apk:#1B7A2E;--html:#1556B8;--altro:#B34700}
+.tipo{display:inline-block;font:700 12px/1 var(--mono);letter-spacing:.04em;color:#fff;border-radius:999px;padding:5px 9px;white-space:nowrap}
+.tipo.apk{background:var(--apk)}.tipo.html{background:var(--html)}.tipo.altro{background:var(--altro)}
+.card.t-apk{border-left:7px solid var(--apk)}.card.t-html{border-left:7px solid var(--html)}.card.t-altro{border-left:7px solid var(--altro)}
+.card.t-apk h3 a{color:var(--apk)}.card.t-html h3 a{color:var(--html)}.card.t-altro h3 a{color:var(--altro)}
+@media (prefers-color-scheme:dark){.card.t-apk h3 a{color:#7FD68F}.card.t-html h3 a{color:#8CB8FF}.card.t-altro h3 a{color:#FFB37A}}
+/* ultima o precedente */
+.stato{font:700 12px/1 var(--mono);border-radius:999px;padding:4px 8px;white-space:nowrap}
+.stato.ultima{background:var(--ink);color:var(--ground)}
+.stato.prec{border:1.5px dashed var(--muted);color:var(--muted);font-weight:400}
+.stato.nofile{border:1.5px solid #C62828;color:#C62828}
+@media (prefers-color-scheme:dark){.stato.nofile{border-color:#FF8A80;color:#FF8A80}}
+/* colori delle date */
+.c1{--d:#B71C1C}.c2{--d:#6A1B9A}.c3{--d:#AD1457}.c4{--d:#4E342E}.c5{--d:#00695C}.c6{--d:#283593}.c7{--d:#37474F}.c8{--d:#6B6200}
+h2.data{background:var(--d);color:#fff;border-radius:14px;padding:12px 16px;scroll-margin-top:10px}
+nav.jump a[class^=c]{background:var(--d);color:#fff;font-weight:500}
+nav.jump a[class^=c]::after{border-color:#fff}
+/* legenda */
+.legenda{background:var(--card);border-radius:16px;padding:12px 14px;margin:6px 0 10px}
+.legenda p{margin:0 0 8px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.legenda p:last-child{margin-bottom:0}
+.legenda .leg2{display:block;font-size:14px;color:var(--muted);line-height:1.6}
+
 </style>
 </head>
 <body><div class="wrap">
 <h1>Archivio GitHub completo, dal più recente</h1>
 <p class="kicker">Archivio GitHub glscomm, APK e app web, ByCSD</p>
-<p class="updated">Verificato il 25 ottobre 2026, ore 13:30</p>
+<p class="updated">Verificato il 25 ottobre 2026, ore 13:30. Colori aggiunti alle 14:55</p>
 <p class="lede">Sul tuo GitHub ci sono 3 app Android e 15 app web: le ultime da installare sono Quadri 1.1, Musica 1.1 e Naviga 1.4.</p>
 <ul>
 <li>Naviga 1.5 ha la sua pagina su GitHub, ma il file APK non è mai stato caricato.</li>
 <li>Questo elenco non si aggiorna da solo: le cose caricate dopo il 25 ottobre alle 13:30 non ci sono.</li>
 </ul>
-<nav class="jump"><a href="#d25">25 ottobre</a><a href="#d24">24 ottobre</a><a href="#d22">22 ottobre</a><a href="#d21">21 ottobre</a><a href="#d20">20 ottobre</a><a href="#d19">19 ottobre</a><a href="#d18">18 ottobre</a><a href="#d11">11 ottobre</a><a href="#archivi">I due archivi</a></nav>
+<nav class="jump"><a class="c1" href="#d25">25 ottobre</a><a class="c2" href="#d24">24 ottobre</a><a class="c3" href="#d22">22 ottobre</a><a class="c4" href="#d21">21 ottobre</a><a class="c5" href="#d20">20 ottobre</a><a class="c6" href="#d19">19 ottobre</a><a class="c7" href="#d18">18 ottobre</a><a class="c8" href="#d11">11 ottobre</a><a href="#archivi">I due archivi</a></nav>
+
+<p class="group">Legenda dei colori</p>
+<div class="legenda">
+<p><span class="tipo apk">APK</span> app Android <span class="tipo html">HTML</span> app web <span class="tipo altro">Altro</span> file e indici</p>
+<p class="leg2">La striscia a sinistra di ogni scheda ha il colore del tipo. Ogni giorno ha la sua fascia colorata, uguale al suo pulsante in «Vai a».</p>
+<p class="leg2"><span class="stato ultima">ultima versione</span> da installare, <span class="stato prec">versione precedente</span> da tenere solo come copia.</p>
+</div>
 
 <p class="group">Come leggerlo</p>
 <ul>
@@ -56,48 +99,48 @@ nav.jump+h2{margin-top:40px}
 <li>Per le app APK la data è quella di pubblicazione su GitHub. Per le app web è la data di creazione scritta nel menu «Le mie app», con accanto il giorno in cui sono arrivate su GitHub.</li>
 </ul>
 
-<h2 id="d25">25 ottobre 2026</h2>
+<h2 id="d25" class="data c1">25 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">Altro</span> ore 13:01, indici</p>
+<div class="card t-altro">
+  <p class="time"><span class="tipo altro">Altro</span> ore 13:01, indici</p>
   <h3><a href="https://glscomm.github.io/archivio-apk.html">Indici separati: APK e app web</a></h3>
   <div class="fact">Le due pagine di prima, una per tipo: <a href="https://glscomm.github.io/archivio-apk.html">GitHub — Applicazioni APK</a> e <a href="https://glscomm.github.io/archivio-html.html">GitHub — Applicazioni web HTML</a>.</div>
   <div class="fact">Questa pagina le riunisce in un unico elenco.</div>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> ore 11:18, senza file</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> ore 11:18, <span class="stato nofile">senza file</span></p>
   <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.5">Naviga 1.5</a></h3>
   <div class="fact">Titolo più grande, pagina «Notizie» con dieci agenzie, voci più robuste.</div>
   <div class="fact"><span class="lab">Con</span>l'APK non è stato caricato: per ora non si scarica</div>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> ore 09:07, ultima versione</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> ore 09:07, <span class="stato ultima">ultima versione</span></p>
   <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/quadri-v1.1">Quadri 1.1</a></h3>
   <div class="fact">«Galleria dei Grandi Pittori»: 56 quadri, 13 biografie, voce Nicola.</div>
   <div class="fact"><b>15,6 MB</b>, si installa sopra la 1.0 con «Aggiorna»</div>
   <a class="btn" href="https://github.com/glscomm/glscomm.github.io/releases/download/quadri-v1.1/Quadri-ByCSD-v1.1.apk">Scarica Quadri 1.1</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> ore 09:04, ultima versione</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> ore 09:04, <span class="stato ultima">ultima versione</span></p>
   <h3><a href="https://github.com/glscomm/Musica-ByCSD/releases/tag/v1.1">Musica 1.1 completa</a></h3>
   <div class="fact">Tutti i 36 brani già dentro, si ascolta anche senza Internet.</div>
   <div class="fact"><b>123 MB</b>, meglio scaricarla col Wi-Fi</div>
   <a class="btn" href="https://github.com/glscomm/Musica-ByCSD/releases/download/v1.1/Musica-ByCSD-v1.1-completa.apk">Scarica Musica 1.1</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> ore 08:44, versione precedente</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> ore 08:44, <span class="stato prec">versione precedente</span></p>
   <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/quadri-voce-v1">Quadri 1.0 con voce Nicola</a></h3>
   <div class="fact">56 quadri e 13 biografie letti senza Internet.</div>
   <div class="fact"><b>15,6 MB</b>, sostituita dalla 1.1</div>
   <a class="btn" href="https://github.com/glscomm/glscomm.github.io/releases/download/quadri-voce-v1/Quadri-ByCSD-v1.0.apk">Scarica Quadri 1.0</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> <span class="src">Altro</span> ore 08:35, versione precedente</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> <span class="tipo altro">Altro</span> ore 08:35, <span class="stato prec">versione precedente</span></p>
   <h3><a href="https://github.com/glscomm/Musica-ByCSD/releases/tag/v1.0">Musica 1.0 e i 13 pacchetti di brani</a></h3>
   <div class="fact">L'app senza brani, da riempire importando i 13 pacchetti.</div>
   <div class="fact"><b>4,1 MB</b> l'app, da 8,3 a 9,6 MB ogni pacchetto</div>
@@ -120,154 +163,154 @@ nav.jump+h2{margin-top:40px}
   </ul></details>
 </div>
 
-<h2 id="d24">24 ottobre 2026</h2>
+<h2 id="d24" class="data c2">24 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">APK</span> ore 20:16, ultima scaricabile</p>
+<div class="card t-apk">
+  <p class="time"><span class="tipo apk">APK</span> ore 20:16, <span class="stato ultima">ultima scaricabile</span></p>
   <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-v1.4">Naviga 1.4</a></h3>
   <div class="fact">Il browser Naviga, con la lettura a voce delle pagine.</div>
   <div class="fact"><b>17,7 MB</b>, si installa sopra la 1.3</div>
   <a class="btn" href="https://github.com/glscomm/glscomm.github.io/releases/download/naviga-v1.4/Naviga-v1.4.apk">Scarica Naviga 1.4</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">Altro</span> ore 19:47, file di servizio</p>
+<div class="card t-altro">
+  <p class="time"><span class="tipo altro">Altro</span> ore 19:47, file di servizio</p>
   <h3><a href="https://github.com/glscomm/glscomm.github.io/releases/tag/naviga-voci-1">Naviga: voci Serena e Giorgio</a></h3>
   <div class="fact">Le due voci italiane della lettura: Naviga le scarica da sola.</div>
   <div class="fact"><b>32,6 MB</b> ciascuna, non vanno installate a mano</div>
 </div>
 
-<h2 id="d22">22 ottobre 2026</h2>
+<h2 id="d22" class="data c3">22 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 15, su GitHub dal 22 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 15, su GitHub dal 22 ottobre</p>
   <h3><a href="https://glscomm.github.io/razze-gatti/">Razze di gatti</a></h3>
   <div class="fact">87 razze con foto, carattere e cure.</div>
   <div class="fact"><b>Installabile</b>, funziona anche senza Internet</div>
   <a class="btn" href="https://glscomm.github.io/razze-gatti/">Apri Razze di gatti</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">Altro</span> menu, aggiornato alle 18:01</p>
+<div class="card t-altro">
+  <p class="time"><span class="tipo altro">Altro</span> menu, aggiornato alle 18:01</p>
   <h3><a href="https://glscomm.github.io/">Le mie app</a></h3>
   <div class="fact">Il tuo menu con le 15 app web, in ordine di creazione.</div>
   <div class="fact">È la pagina principale di glscomm.github.io</div>
   <a class="btn" href="https://glscomm.github.io/">Apri Le mie app</a>
 </div>
 
-<h2 id="d21">21 ottobre 2026</h2>
+<h2 id="d21" class="data c4">21 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 14, su GitHub dal 22 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 14, su GitHub dal 22 ottobre</p>
   <h3><a href="https://glscomm.github.io/gazzetta/">Gazzetta</a></h3>
   <div class="fact">Il sito della Gazzetta dello Sport a schermo intero.</div>
   <div class="fact"><b>Installabile</b>, serve Internet</div>
   <a class="btn" href="https://glscomm.github.io/gazzetta/">Apri Gazzetta</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 13, su GitHub dal 22 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 13, su GitHub dal 22 ottobre</p>
   <h3><a href="https://glscomm.github.io/salvadanaio-leggibile/">Il Salvadanaio</a></h3>
   <div class="fact">Il Salvadanaio 64 leggibile: sfondo scuro, caratteri chiari.</div>
   <div class="fact"><b>Installabile</b>, funziona anche senza Internet</div>
   <a class="btn" href="https://glscomm.github.io/salvadanaio-leggibile/">Apri Il Salvadanaio</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">Altro</span> su GitHub dal 21 ottobre</p>
+<div class="card t-altro">
+  <p class="time"><span class="tipo altro">Altro</span> su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/le-mie-app-offline.html">Le mie app, versione senza Internet</a></h3>
   <div class="fact">Le prime undici app in un solo file, da scaricare.</div>
   <div class="fact">Pesa circa 1,4 MB</div>
   <a class="btn" href="https://glscomm.github.io/le-mie-app-offline.html">Apri la versione offline</a>
 </div>
 
-<h2 id="d20">20 ottobre 2026</h2>
+<h2 id="d20" class="data c5">20 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 12, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 12, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/diritti-umani-64.html">Diritti umani 64</a></h3>
   <div class="fact">La Dichiarazione universale del 1948 in stile Commodore 64, con la voce.</div>
   <a class="btn" href="https://glscomm.github.io/diritti-umani-64.html">Apri Diritti umani 64</a>
 </div>
 
-<h2 id="d19">19 ottobre 2026</h2>
+<h2 id="d19" class="data c6">19 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 11, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 11, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/province-64.html">Province 64</a></h3>
   <div class="fact">Le 110 province con le sigle delle targhe, lette dalla voce di SAM.</div>
   <a class="btn" href="https://glscomm.github.io/province-64.html">Apri Province 64</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 10, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 10, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/salvadanaio-64.html">Il Salvadanaio 64</a></h3>
   <div class="fact">Economia domestica in stile Commodore 64: bilancio, risparmio, quiz.</div>
   <a class="btn" href="https://glscomm.github.io/salvadanaio-64.html">Apri Il Salvadanaio 64</a>
 </div>
 
-<h2 id="d18">18 ottobre 2026</h2>
+<h2 id="d18" class="data c7">18 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 9, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 9, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/mistero-a-villa-martini.html">Mistero a Villa Martini</a></h3>
   <div class="fact">Il giallo in stile 1984, in orizzontale e senza cornice.</div>
   <a class="btn" href="https://glscomm.github.io/mistero-a-villa-martini.html">Apri Mistero a Villa Martini</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 8, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 8, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/zx-spectrum-48k.html">ZX Spectrum 48K</a></h3>
   <div class="fact">Emulatore con la ROM originale: carica file .tap e .tzx.</div>
   <a class="btn" href="https://glscomm.github.io/zx-spectrum-48k.html">Apri ZX Spectrum 48K</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 7, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 7, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/commodore-64.html">Commodore 64</a></h3>
   <div class="fact">Emulatore con tastiera e joystick: carica file .prg e .d64.</div>
   <a class="btn" href="https://glscomm.github.io/commodore-64.html">Apri Commodore 64</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 6, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 6, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/slot-classica.html">Slot classica</a></h3>
   <div class="fact">Tre rulli, puntata e tabella vincite, solo crediti virtuali.</div>
   <a class="btn" href="https://glscomm.github.io/slot-classica.html">Apri Slot classica</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 5, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 5, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/numeri-casuali.html">Numeri casuali</a></h3>
   <div class="fact">Griglia 4 × 4 da leggere, da una a quattro cifre.</div>
   <a class="btn" href="https://glscomm.github.io/numeri-casuali.html">Apri Numeri casuali</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 4, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 4, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/dieci-parole-casuali.html">Dieci parole casuali</a></h3>
   <div class="fact">1000 parole con sillabe, definizione, etimologia, sinonimi e contrari.</div>
   <a class="btn" href="https://glscomm.github.io/dieci-parole-casuali.html">Apri Dieci parole casuali</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 3, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 3, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/capitali-primi-passi.html">Capitali: Primi Passi</a></h3>
   <div class="fact">Tre giochi con bandiere grandi, per i più piccoli con un adulto.</div>
   <a class="btn" href="https://glscomm.github.io/capitali-primi-passi.html">Apri Capitali: Primi Passi</a>
 </div>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 2, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 2, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/giro-delle-capitali.html">Giro delle capitali</a></h3>
   <div class="fact">Otto paesi, tre risposte, correzione immediata.</div>
   <a class="btn" href="https://glscomm.github.io/giro-delle-capitali.html">Apri Giro delle capitali</a>
 </div>
 
-<h2 id="d11">11 ottobre 2026</h2>
+<h2 id="d11" class="data c8">11 ottobre 2026</h2>
 
-<div class="card">
-  <p class="time"><span class="src">HTML</span> app 1, su GitHub dal 21 ottobre</p>
+<div class="card t-html">
+  <p class="time"><span class="tipo html">HTML</span> app 1, su GitHub dal 21 ottobre</p>
   <h3><a href="https://glscomm.github.io/verdure-per-minestrone.html">Verdure per il minestrone</a></h3>
   <div class="fact">54 verdure divise per gruppo, con la stagione accanto.</div>
   <a class="btn" href="https://glscomm.github.io/verdure-per-minestrone.html">Apri Verdure per il minestrone</a>
