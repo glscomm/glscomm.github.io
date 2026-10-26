@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bonifico su Postepay</title>
+<style>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}img{background:color-mix(in srgb,var(--ground),var(--ink) 6%)}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
+h2{font:400 26px/1.15 var(--serif);margin:52px 0 14px}
+h3{font:600 17px/1.3 var(--sans);margin:0 0 5px}
+.kicker{font:19px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}h1+.kicker{margin-top:-2px}h2:has(+.kicker){margin-bottom:0}h2+.kicker{margin-bottom:12px}
+.updated{font:14px/1.4 var(--sans);color:var(--muted);margin:6px 0 14px}
+.lede{font:400 clamp(18px,4.4vw,21px)/1.3 var(--sans);margin:22px 0 26px}.lede:has(+ul){margin-bottom:8px}.lede:not(.lede~.lede){padding-top:16px}.lede+ul{font-size:16px}.lede+ul li::marker{color:color-mix(in srgb,var(--ink) 50%,transparent)}
+html{scroll-behavior:smooth}
+p{margin:0 0 10px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 30%,transparent);transition:text-decoration-color .15s}a:hover{text-decoration-color:currentColor}
+.src{font:11px/1 var(--mono);padding:2px 6px;border:1px solid var(--muted);border-radius:999px;white-space:nowrap;text-decoration:none;margin-left:4px;transition:background-color .15s,color .15s,border-color .15s}@media (hover:hover) and (pointer:fine){.src:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}}
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;white-space:nowrap;font:500 13px/1.4 var(--sans);color:var(--ink);padding:6px 10px 6px 0;border-bottom:1px solid var(--ink)}
+td{min-width:7em;padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 10px;padding:12px 0}
+ol.steps>li::before{content:counter(s);font:400 21px/1.2 var(--sans);color:var(--ink)}
+ol.steps>li>div{border-bottom:1px solid var(--rule);padding-bottom:12px;min-width:0}ol.steps>li:last-child>div{border-bottom:0}
+ol.steps .fact{font-size:16px;font-weight:400;color:var(--muted);margin:2px 0}
+ol.steps .fact b{color:inherit;font-weight:inherit}
+details.more{padding:16px 0;interpolate-size:allow-keywords}details.more::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease-out,content-visibility .25s allow-discrete}details.more[open]::details-content{block-size:auto}details.more[open]>:not(summary){animation:reveal .25s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(-6px)}}details.more summary{border-radius:4px;transition:background-color .15s,box-shadow .15s}@media (hover:hover) and (pointer:fine){details.more summary:hover{background:color-mix(in srgb,var(--ground),var(--ink) 4%);box-shadow:0 0 0 12px color-mix(in srgb,var(--ground),var(--ink) 4%)}}
+details.more summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 16px;column-gap:12px}
+details.more summary b{font:600 18px/1.3 var(--sans)}
+details.more summary span{grid-column:1;margin-top:2px;font-size:15px;line-height:1.45;color:var(--muted)}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"";grid-column:2;grid-row:1/span 2;align-self:center;width:7px;height:7px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more ul{margin:10px 0 0;padding-left:19px}
+@media (prefers-reduced-motion:reduce){details.more::details-content{transition:none}details.more[open]>:not(summary){animation:none}}
+.sources{margin-top:40px;font-size:13px;color:var(--muted)}.sources>b{display:block;font:500 16px/1.4 var(--sans);color:var(--ink);margin:0 0 6px}
+.sources li{margin:0 0 4px}
+</style>
+</head>
+<body><div class="wrap">
+<h1>Bonifico dal conto BancoPosta alla Postepay Evolution</h1>
+<p class="kicker">Guida, conto cointestato verso la carta di uno dei due</p>
+<p class="updated">Ricercato il 26 ottobre 2026, 16:15 · aggiornato alle 16:45</p>
+
+<p class="lede">Il modo più economico è un Postagiro dall’App Poste Italiane verso l’IBAN della carta, con beneficiario il titolare della carta.</p>
+<ul>
+<li><b>Come ho letto la richiesta</b>: conto BancoPosta cointestato a due persone, carta Postepay Evolution intestata a una delle due.</li>
+<li><b>Quale app</b>: oggi <a href="https://www.poste.it/bonifici-sepa-e-postagiro">poste.it</a> indica solo l’App Poste Italiane per bonifici e Postagiro, non più le app BancoPosta e PostePay.</li>
+</ul>
+
+<h2>Quale modo scegliere</h2>
+<p class="kicker">Costi da app o da poste.it, per le opzioni attuali del conto</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Modo</th><th>Start</th><th>Medium, Plus</th><th>Da sapere</th></tr></thead>
+<tbody>
+<tr><td><b>Postagiro</b></td><td>0,50 €</td><td>0 €</td><td>Solo verso conti BancoPosta e Postepay con IBAN</td></tr>
+<tr><td><b>Bonifico istantaneo</b></td><td>1 €</td><td>0 €</td><td>Arriva entro 10 secondi</td></tr>
+<tr><td><b>Bonifico ordinario</b></td><td>1 €</td><td>0 €</td><td>Arriva il giorno lavorativo dopo</td></tr>
+<tr><td><b>Ricarica Postepay</b></td><td>1 €</td><td>1 €</td><td>Basta il numero della carta, non l’IBAN</td></tr>
+<tr><td><b>Bonifico allo sportello</b></td><td colspan="2">3,50 € – 5,00 €, secondo la data di apertura del conto</td><td>Serve la carta di debito del conto</td></tr>
+</tbody></table></div>
+<p>Costi dai fogli informativi in vigore dal 1° ottobre 2026 <a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_START.pdf">Start</a><a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_MEDIUM.pdf">Medium</a><a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_PLUS.pdf">Plus</a>. Se il vostro conto è di un tipo più vecchio, i costi possono essere diversi: controllali nel foglio informativo del vostro conto o in Ufficio Postale. Ricevere un bonifico sulla Postepay Evolution costa 0 € <a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_PE.pdf">Foglio Postepay Evolution</a>.</p>
+
+<h2>Prima di tutto: l’IBAN della carta</h2>
+<ol class="steps">
+<li><div><h3><a href="https://www.poste.it/carte-postepay/postepay-evolution">Trova l’IBAN della Postepay Evolution</a></h3>
+<p class="fact">Lo trovi nell’App Poste Italiane, nell’area personale di postepay.it o in Ufficio Postale.</p>
+<p class="fact">Copialo, non riscriverlo a mano: un carattere sbagliato manda i soldi altrove.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Segnati il nome esatto del titolare della carta</a></h3>
+<p class="fact">È lui il beneficiario, anche se è uno dei due intestatari del conto.</p>
+<p class="fact">Non scrivere i nomi di tutti e due: la carta è intestata a una sola persona.</p></div></li>
+</ol>
+
+<h2>Dall’App Poste Italiane</h2>
+<p class="kicker">Il modo più comodo; i nomi dei pulsanti possono cambiare un po’ con gli aggiornamenti</p>
+<ol class="steps">
+<li><div><h3><a href="https://www.poste.it/applicazione-poste-italiane">Apri l’App Poste Italiane ed entra</a></h3>
+<p class="fact">Chi fa l’operazione usa le proprie credenziali, quelle abilitate sul conto cointestato.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Scegli il conto BancoPosta e la funzione Bonifico o Postagiro</a></h3>
+<p class="fact">Se hai più conti o carte, controlla che l’addebito sia sul conto cointestato.</p>
+<p class="fact">Scegli Postagiro per spendere meno, o bonifico istantaneo se servono subito.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Inserisci IBAN e beneficiario</a></h3>
+<p class="fact">IBAN: quello della Postepay Evolution.</p>
+<p class="fact">Beneficiario: nome e cognome del titolare della carta, scritti come sulla carta.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Scrivi importo e causale</a></h3>
+<p class="fact">Causale: una frase breve, per esempio «Trasferimento su carta Postepay».</p>
+<p class="fact">Non usare il bonifico «per detrazioni fiscali»: la Postepay Evolution non lo riceve.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Leggi la verifica del beneficiario</a></h3>
+<p class="fact">Prima di autorizzare, Poste ti dice se il nome corrisponde all’IBAN, in parte o per niente.</p>
+<p class="fact">Se non corrisponde, fermati e ricontrolla nome e IBAN.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_MEDIUM.pdf">Autorizza l’operazione</a></h3>
+<p class="fact">Con il Codice PosteID oppure con il Codice Dispositivo Conto.</p></div></li>
+</ol>
+
+<h2>Da computer, su poste.it</h2>
+<ol class="steps">
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Entra nella tua area personale di poste.it</a></h3>
+<p class="fact">Fai gli stessi passi dell’app: conto, Bonifico o Postagiro, IBAN, beneficiario, importo, causale.</p>
+<p class="fact">I costi sono gli stessi dell’app.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_MEDIUM.pdf">Conferma con PosteID o Codice Dispositivo Conto</a></h3>
+<p class="fact">Sono gli stessi codici che usi per autorizzare dall’app.</p></div></li>
+</ol>
+
+<h2>In Ufficio Postale</h2>
+<ol class="steps">
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Porta la carta di debito del conto e l’IBAN della Postepay</a></h3>
+<p class="fact">Allo sportello non ci sono limiti di importo, salvo quelli che hai cambiato tu dall’app.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Per fare prima, precompila in app</a></h3>
+<p class="fact">Prepari il bonifico in app o online e mostri allo sportello il QR Code che ottieni.</p></div></li>
+<li><div><h3><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_CBP_CONSNEW_MEDIUM.pdf">Costo del bonifico allo sportello</a></h3>
+<p class="fact">4,90 € per conti aperti fino al 2020, 3,50 € dal 2021 a marzo 2023, 5,00 € dopo.</p></div></li>
+</ol>
+
+<h2>L’alternativa: la ricarica Postepay</h2>
+<p>Dall’App Poste Italiane puoi anche ricaricare la carta direttamente dal conto, usando il numero della carta invece dell’IBAN <a class="src" href="https://www.poste.it/tutorial/app-poste-italiane/ricarica-postepay-e-telefonica-app-poste-italiane">Tutorial Poste</a>.</p>
+<ul>
+<li><b>Costo</b>: 1 € a ricarica con tutte le opzioni del conto, quindi costa più del Postagiro su Medium e Plus.</li>
+<li><b>Limiti</b>: al massimo 2.500 € e 2 ricariche al giorno, qualunque canale usi <a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_MEDIUM.pdf">Foglio Medium</a>.</li>
+<li><b>Differenza</b>: il Postagiro è un trasferimento tra IBAN; la ricarica non chiede l’IBAN, ma ha questi limiti.</li>
+</ul>
+
+<h2>Limiti da conoscere</h2>
+<details class="more" open><summary><b>Massimali di bonifici e Postagiro</b><span>Li vedi e li cambi in app, in Impostazioni e poi Massimali.</span></summary>
+<ul>
+<li>Puoi fissare un importo massimo per singola operazione oppure al giorno <a class="src" href="https://www.poste.it/bonifici-sepa-e-postagiro">poste.it</a>.</li>
+<li>I limiti che imposti valgono su tutti i canali, Ufficio Postale compreso.</li>
+<li>Un aumento grande può richiedere una verifica, con esito entro 72 ore.</li>
+</ul></details>
+<details class="more" open><summary><b>Quanto può contenere la carta</b><span>La Postepay Evolution arriva al massimo a 30.000 €.</span></summary>
+<ul>
+<li>Si possono ricaricare al massimo 100.000 € all’anno, sommando tutte le Postepay Evolution della persona <a class="src" href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_PE.pdf">Foglio Postepay Evolution</a>.</li>
+</ul></details>
+
+<h2>Prima di confermare</h2>
+<ul>
+<li><b>Conto di addebito</b>: è il conto cointestato giusto.</li>
+<li><b>IBAN</b>: è quello della Postepay Evolution, copiato e non riscritto.</li>
+<li><b>Beneficiario</b>: solo il titolare della carta, non l’altro cointestatario.</li>
+<li><b>Verifica del beneficiario</b>: dice che il nome corrisponde.</li>
+<li><b>Tipo</b>: Postagiro o bonifico istantaneo, mai «per detrazioni fiscali».</li>
+<li><b>Importo</b>: è giusto e resta dentro i massimali.</li>
+</ul>
+
+<div class="sources"><b>Fonti ufficiali e dove verificare</b><ul>
+<li><a href="https://www.poste.it/bonifici-sepa-e-postagiro">Poste Italiane, Postagiro e Bonifici</a></li>
+<li><a href="https://www.poste.it/carte-postepay/postepay-evolution">Poste Italiane, Postepay Evolution</a></li>
+<li><a href="https://www.poste.it/tutorial/app-poste-italiane/ricarica-postepay-e-telefonica-app-poste-italiane">Poste Italiane, tutorial ricarica Postepay con App Poste Italiane</a></li>
+<li><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_START.pdf">Foglio informativo servizi Conto BancoPosta Start</a>, dal 1° ottobre 2026</li>
+<li><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_MEDIUM.pdf">Foglio informativo servizi Conto BancoPosta Medium</a>, dal 1° ottobre 2026</li>
+<li><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_SP_SA_CBP_CONSNEW_PLUS.pdf">Foglio informativo servizi Conto BancoPosta Plus</a>, dal 1° ottobre 2026</li>
+<li><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_CBP_CONSNEW_MEDIUM.pdf">Foglio informativo Conto BancoPosta Medium, costi allo sportello</a>, dal 1° ottobre 2026</li>
+<li><a href="https://www.poste.it/resources/bancoposta/pdf/trasparenza/FI_PE.pdf">Foglio informativo Postepay Evolution</a></li>
+<li><a href="https://www.poste.it/conti-correnti-bancoposta">Poste Italiane, Conti correnti BancoPosta</a></li>
+</ul></div>
+</div></body></html>
