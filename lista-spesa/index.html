@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2E9D57">
+<title>Lista della spesa</title>
+<style>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--food:#2E9D57;--foodt:#E2F3E7;--non:#2F6FD6;--nont:#E2ECFB;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;--food:#3DBE6E;--foodt:#15301F;--non:#5A95F0;--nont:#172840;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:16.5px/1.35 var(--sans);padding:env(safe-area-inset-top) 8px 24px;min-height:100dvh}
+.wrap{max-width:none;margin:0}
+header{background:linear-gradient(110deg,var(--food),#1F9C9A 55%,var(--non));color:#fff;border-radius:14px;padding:10px 14px;margin:8px 0 8px;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
+h1{font:600 26.6px/1.1 var(--serif);margin:0;letter-spacing:-.01em}
+.updated{font:13.2px/1.3 var(--sans);opacity:.85;margin:0}
+.kicker{flex-basis:100%;font:15.4px/1.3 var(--sans);margin:2px 0 0;opacity:.95}
+nav.jump{display:flex;gap:6px;margin:0 0 6px}
+nav.jump a{flex:1;text-align:center;font:500 15.4px/1 var(--sans);text-decoration:none;color:#fff;border-radius:999px;padding:8px 10px}
+nav.jump a.food{background:var(--food)}nav.jump a.non{background:var(--non)}
+html{scroll-behavior:smooth}
+.group{font:600 15.4px/1 var(--sans);color:#fff;border-radius:8px;padding:6px 10px;margin:10px 0 5px;scroll-margin-top:8px}
+.group.food{background:var(--food)}.group.non{background:var(--non)}
+ul.check{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:5px}
+ul.check.food{--acc:var(--food);--tint:var(--foodt)}ul.check.non{--acc:var(--non);--tint:var(--nont)}
+ul.check li{display:flex;align-items:center;margin:0;background:var(--tint);border-left:4px solid var(--acc);border-radius:8px;padding-left:8px;transition:opacity .2s}
+ul.check li:has(input:checked){opacity:.5}
+ul.check label{flex:1;min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr);gap:0 8px;align-items:center;padding:7px 0;cursor:pointer;font-size:16.5px;line-height:1.25}
+ul.check input[type=checkbox]{appearance:none;-webkit-appearance:none;margin:0;width:18px;height:18px;border:1.5px solid var(--acc);border-radius:4px;display:grid;place-content:center;background:var(--card)}
+ul.check input[type=checkbox]:checked{background:var(--acc);border-color:var(--acc)}
+ul.check input[type=checkbox]:checked::after{content:"";width:13px;height:13px;animation:check .25s ease-out;background:#fff;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3 5 8.8l4.5-5.6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3 5 8.8l4.5-5.6'/%3E%3C/svg%3E") center/contain no-repeat}
+ul.check label span{justify-self:start;background:linear-gradient(currentColor,currentColor) no-repeat 0 58%/0 1.5px;transition:background-size .25s ease-out}ul.check input[type=checkbox]:checked+span{background-size:100% 1.5px}@keyframes check{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}@media (prefers-reduced-motion:reduce){ul.check label span{transition:none}ul.check input[type=checkbox]:checked::after{animation:none}}
+ul.check small{grid-column:2;font:13.2px/1.25 var(--sans);color:var(--muted)}ul.check small:empty{display:none}
+.x{border:0;background:none;color:var(--muted);font-size:17.6px;line-height:1;padding:0 8px;cursor:pointer;align-self:stretch}
+form.add{position:relative;display:flex;margin:12px 0 0}form.add input{flex:1;min-width:0;font:16.5px var(--sans);padding:9px 46px 9px 14px;border:1px solid transparent;border-radius:999px;background:var(--card);color:var(--ink);outline:none;transition:border-color .15s}form.add input:focus{border-color:rgba(0,0,0,.25)}@media (prefers-color-scheme:dark){form.add input:focus{border-color:rgba(255,255,255,.25)}}form.add .send{position:absolute;right:5px;top:50%;width:30px;height:30px;margin-top:-15px;padding:0;border:0;border-radius:50%;background:#0A84FF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 11.5v-9M3 6.5l4-4 4 4'/%3E%3C/svg%3E") center/14px no-repeat;cursor:pointer;transition:opacity .1s ease-out,filter .1s ease-out}form.add input:placeholder-shown+.send{opacity:0;filter:blur(2px);pointer-events:none}form.add select{flex:none;margin-right:6px;font:15.4px var(--sans);border:0;border-radius:999px;padding:0 12px;background:var(--card);color:var(--ink);cursor:pointer}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.tbtn{font:15.4px/1 var(--sans);border:0;background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;cursor:pointer}
+[hidden]{display:none!important}
+header .top{flex-basis:100%;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{flex:none;font:12.1px/1 var(--mono);letter-spacing:.02em;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:4px 8px;white-space:nowrap}
+.badge b{font:700 12.1px/1 var(--sans);letter-spacing:.03em}
+.empty{margin:0;padding:4px 2px;font:14.3px/1.3 var(--sans);color:var(--muted)}
+.donehead{display:flex;align-items:center;gap:8px;margin:20px 0 2px;font:600 14.3px/1 var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.donehead::after{content:"";flex:1;height:1px;background:var(--rule)}
+.donehead b{order:2;font:600 13.2px/1 var(--sans);color:var(--ink);background:var(--rule);border-radius:999px;padding:3px 8px;letter-spacing:0}
+.donehead::after{order:3}
+.group.sub.food,.group.sub.non{background:none;padding:4px 2px;margin:8px 0 4px;font-size:14.3px}
+.group.sub.food{color:var(--food)}.group.sub.non{color:var(--non)}
+ul.check input.cb{flex:none}ul.check input.cb:disabled{opacity:.35}
+ul.check .txt{flex:1;min-width:0;border:0;resize:none;overflow:hidden;display:block;background:transparent;color:var(--ink);font:16.5px/1.25 var(--sans);height:calc(2.5em + 12px);padding:6px 0;margin-left:8px;outline:none;border-radius:0}
+ul.check .txt::placeholder{color:var(--muted);opacity:.7}
+ul.check li:has(input.cb:checked) .txt{text-decoration:line-through;text-decoration-thickness:1.5px}
+ul.check li:focus-within{box-shadow:0 0 0 1.5px var(--acc)}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+<div class="top"><h1>Lista della spesa</h1><span class="badge" title="ByCSD v1.0"><b>ByCSD</b> v1.0</span></div>
+<p class="updated">Salvata il 24 ottobre 2026, 16:50</p>
+<p class="kicker">30 caselle vuote: 20 Food, 10 Non food</p>
+</header>
+<nav class="jump"><a class="food" href="#food">Food</a><a class="non" href="#nonfood">Non food</a></nav>
+
+<p class="group food" id="food">Food</p>
+<ul class="check food">
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+</ul>
+
+<p class="group non" id="nonfood">Non food</p>
+<ul class="check non">
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+<li><input type="checkbox" class="cb" disabled><textarea class="txt" rows="2" placeholder="Scrivi qui"></textarea></li>
+</ul>
+
+</div>
+<script>(()=>{const K='sesame-list:'+location.pathname+':'+document.title,L=[...document.querySelectorAll('ul.check')];if(!L.length)return;
+const N=[...document.querySelectorAll('p.group')].map(g=>g.textContent),C=L.map(u=>u.classList.contains('non')?'non':'food'),kick=document.querySelector('.kicker');
+const readStatic=u=>[...u.children].map(()=>['','',false]);
+let M=null;try{M=JSON.parse(localStorage.getItem(K))}catch(e){}
+M=L.map((u,i)=>M&&Array.isArray(M[i])?M[i]:readStatic(u));
+const E=L.map(u=>{const e=document.createElement('p');e.className='empty';e.textContent='Niente da prendere';u.after(e);return e});
+const sec=document.createElement('section');sec.className='presi';sec.innerHTML='<p class="donehead"><span>Già presi</span><b></b></p>';
+const D=L.map((u,i)=>{const p=document.createElement('p');p.className='group sub '+C[i];p.textContent=N[i];const d=document.createElement('ul');d.className='check done '+C[i];sec.append(p,d);return{p,d}});
+const row=(it,i,j)=>{const li=document.createElement('li');li.innerHTML='<input type="checkbox" class="cb" aria-label="Preso"><textarea class="txt" rows="2" placeholder="Scrivi qui" enterkeyhint="next" autocomplete="off"></textarea><button class="x" aria-label="Rimuovi">×</button>';const t=li.querySelector('.txt'),c=li.querySelector('.cb');t.value=it[0];c.checked=!!it[2];c.disabled=!it[0].trim();li.dataset.c=i;li.dataset.j=j;return li};
+const count=()=>{const F=M.map(x=>x.filter(it=>it[0].trim())),n=F.map(x=>x.length),tot=n.reduce((a,b)=>a+b,0),todo=F.reduce((a,x)=>a+x.filter(it=>!it[2]).length,0),free=M.reduce((a,x)=>a+x.length,0)-tot;kick.textContent=tot+(tot==1?' articolo: ':' articoli: ')+n.map((x,i)=>x+' '+N[i]).join(', ')+' · '+todo+' da prendere · '+free+(free==1?' casella libera':' caselle libere');sec.querySelector('b').textContent=tot-todo};
+const render=()=>{const ae=document.activeElement,fl=ae&&ae.classList&&ae.classList.contains('txt')?ae.parentElement.dataset:null,fc=fl&&fl.c,fj=fl&&fl.j,ss=fl?ae.selectionStart:0;L.forEach((u,i)=>{const a=[],b=[];M[i].forEach((it,j)=>(it[2]?b:a).push(row(it,i,j)));u.replaceChildren(...a);E[i].hidden=a.length>0;D[i].d.replaceChildren(...b);D[i].p.hidden=D[i].d.hidden=!b.length});sec.hidden=!M.some(x=>x.some(it=>it[2]));count();if(fl){const n=document.querySelector('ul.check li[data-c="'+fc+'"][data-j="'+fj+'"] .txt');if(n){n.focus();try{n.setSelectionRange(ss,ss)}catch(e){}}}};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(M))}catch(e){}};
+const f=document.createElement('form');f.className='add';f.innerHTML='<select aria-label="Reparto">'+N.map((g,i)=>'<option value="'+i+'">'+g+'</option>').join('')+'</select><input placeholder="Aggiungi un articolo"><button class="send" aria-label="Aggiungi"></button>';E[E.length-1].after(f);f.after(sec);
+const t=document.createElement('div');t.className='tools';t.innerHTML='<button type="button" class="tbtn">Togli tutte le spunte</button>';sec.after(t);
+render();let tm=0;
+document.addEventListener('change',e=>{if(e.target.type!=='checkbox')return;const li=e.target.closest('ul.check li');if(!li)return;if(!M[+li.dataset.c][+li.dataset.j][0].trim()){e.target.checked=false;return}M[+li.dataset.c][+li.dataset.j][2]=e.target.checked;save();count();clearTimeout(tm);tm=setTimeout(render,350)});
+document.addEventListener('click',e=>{const x=e.target.closest('ul.check .x');if(x){const li=x.parentElement;clearTimeout(tm);M[+li.dataset.c].splice(+li.dataset.j,1);save();render()}});
+document.addEventListener('input',e=>{if(!e.target.classList.contains('txt'))return;const li=e.target.parentElement;M[+li.dataset.c][+li.dataset.j][0]=e.target.value;li.querySelector('.cb').disabled=!e.target.value.trim();save();count()});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter'||!e.target.classList.contains('txt'))return;e.preventDefault();const a=[...e.target.closest('ul').querySelectorAll('.txt')],k=a.indexOf(e.target);if(a[k+1])a[k+1].focus();else e.target.blur()});
+f.addEventListener('submit',e=>{e.preventDefault();const v=f.querySelector('input').value.trim();if(v){clearTimeout(tm);M[+f.querySelector('select').value].push([v,'',false]);f.querySelector('input').value='';save();render()}});
+t.firstChild.addEventListener('click',()=>{clearTimeout(tm);M.forEach(x=>x.forEach(it=>it[2]=false));save();render()})})()</script>
+</body></html>
