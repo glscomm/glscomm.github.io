@@ -30,7 +30,7 @@ h1{font:600 27px/1.1 var(--serif);margin:0}
 .st i{width:12px;height:12px;border-radius:50%;background:#555}
 .st i.ok{background:var(--ok)}.st i.warn{background:var(--warn)}.st i.bad{background:var(--bad)}
 .st b{font-weight:500}
-.st span{color:var(--muted);font-size:16px}
+.st span{color:var(--muted);font-size:16px;overflow-wrap:anywhere}
 .meter{grid-column:2/-1;height:8px;border-radius:99px;background:#262626;overflow:hidden;margin:2px 0 2px}
 .meter u{display:block;height:100%;width:0;background:var(--ok);text-decoration:none;transition:width .08s linear}
 .meter.ai u{background:#8FB8FF}
@@ -89,6 +89,7 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
 
 <div class="card" id="stato">
   <div class="st"><i id="dLinea"></i><b>Linea</b><span id="vLinea">Spenta</span></div>
+  <div class="st"><i id="dModello"></i><b>Modello</b><span id="vModello">—</span></div>
   <div class="st"><i id="dMic"></i><b>Microfono</b><span id="vMic">Spento</span><div class="meter"><u id="mMic"></u></div></div>
   <div class="st"><i id="dVoce"></i><b>Voce di Gemini</b><span id="vVoce">In silenzio</span><div class="meter ai"><u id="mVoce"></u></div></div>
   <div class="st"><i id="dSchermo"></i><b>Schermo</b><span id="vSchermo">—</span></div>
@@ -125,10 +126,13 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
       <option value="gemini-3.8-live-extended-thinking">Gemini 3.8 Live Extended Thinking (quello del tuo link)</option>
       <option value="gemini-3.8-live">Gemini 3.8 Live (più svelto, ragiona meno)</option>
       <option value="gemini-3.1-flash-live-preview">Gemini 3.1 Flash Live Preview (versione di prova più vecchia)</option>
+      <option value="gemini-2.5-flash-native-audio-preview-12-2025">Gemini 2.5 Flash Live (audio nativo, il più vecchio)</option>
       <option value="altro">Altro: lo scrivo io</option>
     </select>
     <input id="modelAltro" type="text" placeholder="Nome del modello, per esempio gemini-3.8-live" autocapitalize="off" spellcheck="false" hidden style="margin-top:8px">
     <p class="note" id="modelNote"></p>
+    <p class="note" id="exNote"></p>
+    <button class="small" id="btnRiprova" type="button">Riprova i modelli migliori</button>
 
     <div id="thinkRow">
       <label class="f">Quanto ragiona prima di rispondere</label>
@@ -156,7 +160,7 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
   </div>
 </details>
 
-<footer><b>ByCSD</b> · Gemini Live diretto 1.1</footer>
+<footer><b>ByCSD</b> · Gemini Live diretto 1.2</footer>
 </div>
 
 <div id="nero" aria-label="Schermo nero: tocca due volte per tornare">
@@ -171,6 +175,9 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
 'use strict';
 const $ = s => document.querySelector(s);
 const LINK_MODEL = 'gemini-3.8-live-extended-thinking', FAST_MODEL = 'gemini-3.8-live';
+// i modelli Live con audio nativo e piano gratuito, dalla documentazione di Google (27 ottobre 2026), dal migliore al più vecchio.
+// Se uno dice «limite superato» o non parte, la pagina passa al successivo.
+const CHAIN = [LINK_MODEL, FAST_MODEL, 'gemini-3.1-flash-live-preview', 'gemini-2.5-flash-native-audio-preview-12-2025'];
 const VOICES = [['Charon','maschile, informativa'],['Orus','maschile, decisa'],['Puck','maschile, vivace'],['Fenrir','maschile, entusiasta'],['Iapetus','maschile, chiara'],['Algenib','maschile, roca'],['Alnilam','maschile, decisa'],['Schedar','maschile, pacata'],['Achird','maschile, amichevole'],['Sadaltager','maschile, competente'],['Umbriel','maschile, tranquilla'],['Enceladus','maschile, sussurrata'],['Kore','femminile, decisa'],['Aoede','femminile, leggera'],['Leda','femminile, giovanile'],['Zephyr','femminile, brillante'],['Sulafat','femminile, calda']];
 const SYS = 'Parla sempre e solo in italiano, con frasi naturali da conversazione telefonica, senza elenchi e senza simboli. ' +
   'I numeri, le ore, le date, le percentuali e i prezzi dilli sempre a parole italiane, mai in inglese: per esempio «ventitré», «le sedici e trenta», «milleduecento euro». ' +
@@ -214,9 +221,66 @@ function modelUI() {
   const m = chosenModel();
   $('#thinkRow').hidden = !isThinking(m);
   let t = 'Nome che la pagina manda a Google: models/' + m + '.';
-  if (m !== FAST_MODEL) t += ' Se Google lo rifiuta, per quella conversazione passo da solo a Gemini 3.8 Live e lo scrivo nel diario.';
+  t += ' Se Google lo rifiuta o dice «limite superato», passo da solo al modello successivo, in quest’ordine: ' + chainFor(m).join(' → ') + '. Lo scrivo nella riga «Modello» in alto e nel diario.';
   if (lastWorked) t += ' Ultima conversazione partita con: ' + lastWorked + '.';
   $('#modelNote').textContent = t;
+  exUI();
+}
+function chainFor(first) { const c = [first]; for (const x of CHAIN) if (!c.includes(x)) c.push(x); return c; }
+
+/* ---------- memoria dei modelli con il limite gratuito superato ---------- */
+var EKEY = 'gld-esauriti';
+function loadEx() {
+  let o = {}; try { o = JSON.parse(localStorage.getItem(EKEY) || '{}') || {}; } catch (e) { o = {}; }
+  const now = Date.now(); let tolti = false;
+  for (const k of Object.keys(o)) if (!o[k] || !(o[k].until > now)) { delete o[k]; tolti = true; }
+  if (tolti) saveEx(o);
+  return o;
+}
+function saveEx(o) { try { Object.keys(o).length ? localStorage.setItem(EKEY, JSON.stringify(o)) : localStorage.removeItem(EKEY); } catch (e) {} }
+// il limite giornaliero di Google riparte a mezzanotte del Pacifico (ora della California)
+function nextPacificMidnight(now) {
+  try {
+    const f = new Intl.DateTimeFormat('en-US', {timeZone: 'America/Los_Angeles', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h23'});
+    const parts = t => { const o = {}; for (const p of f.formatToParts(new Date(t))) o[p.type] = +p.value; return o; };
+    const off = t => { const p = parts(t); return Date.UTC(p.year, p.month - 1, p.day, p.hour % 24, p.minute, p.second) - Math.floor(t / 1000) * 1000; };
+    const p = parts(now), g = Date.UTC(p.year, p.month - 1, p.day + 1, 0, 0, 0);
+    let t = g - off(now); t = g - off(t);
+    return t > now ? t : now + 12 * 3600e3;
+  } catch (e) { return now + 12 * 3600e3; }
+}
+// per quanto non riprovo un modello: qualche minuto se è il limite al minuto, se no fino a quando riparte il limite del giorno
+function quotaSpan(reason) {
+  const now = Date.now(), r = reason || '';
+  const sec = r.match(/retry (?:in|after) (\d+(?:\.\d+)?)\s*s/i) || r.match(/retryDelay\D{0,6}(\d+(?:\.\d+)?)s/i);
+  if (/per[ _-]?day|perday|daily|\brpd\b|al giorno/i.test(r)) return {kind: 'giorno', until: nextPacificMidnight(now)};
+  if (sec) return {kind: 'minuto', until: now + Math.min(15 * 60, Math.max(60, Math.ceil(+sec[1]) + 5)) * 1000};
+  if (/per[ _-]?minute|perminute|\brpm\b|\btpm\b|al minuto|concurrent|sessions?/i.test(r)) return {kind: 'minuto', until: now + 3 * 60e3};
+  return {kind: 'giorno', until: nextPacificMidnight(now)};
+}
+function fmtUntil(t) {
+  const tz = {timeZone: 'Europe/Rome'}, d = new Date(t), oggi = new Date();
+  const day = x => x.toLocaleDateString('it-IT', Object.assign({year: 'numeric', month: '2-digit', day: '2-digit'}, tz));
+  const ora = d.toLocaleTimeString('it-IT', Object.assign({hour: '2-digit', minute: '2-digit'}, tz));
+  if (day(d) === day(oggi)) return ora + ' di oggi';
+  if (day(d) === day(new Date(oggi.getTime() + 864e5))) return ora + ' di domani';
+  return ora + ' del ' + d.toLocaleDateString('it-IT', Object.assign({day: 'numeric', month: 'long'}, tz));
+}
+function pausa(e) { return e.kind === 'minuto' ? 'per qualche minuto (fino alle ' + fmtUntil(e.until) + ')' : 'fino alle ' + fmtUntil(e.until) + ', ora italiana'; }
+function exUI() {
+  const ex = loadEx(), ks = Object.keys(ex);
+  $('#exNote').textContent = ks.length
+    ? 'Modelli che non riprovo perché hanno superato il limite gratuito: ' + ks.map(k => k + ' ' + pausa(ex[k])).join('; ') + '. Tocca il tasto qui sotto per farli riprovare subito.'
+    : 'Nessun modello in pausa: ogni conversazione parte da quello scelto.';
+  $('#btnRiprova').disabled = !ks.length;
+}
+function allOutMsg(rifiutati) {
+  const ex = loadEx(), ks = Object.keys(ex);
+  if (!ks.length) return 'Non riesco a collegarmi a Google con nessun modello.';
+  const primo = Math.min(...ks.map(k => ex[k].until));
+  let t = 'Tutti i modelli hanno superato il limite gratuito della tua chiave (' + ks.join(', ') + ')';
+  if (rifiutati && rifiutati.length) t += ', e ' + rifiutati.join(', ') + ' non è disponibile per la tua chiave';
+  return t + '. È il limite del piano gratuito di Google, non un guasto della pagina. Puoi riprovare più tardi: il primo modello torna libero alle ' + fmtUntil(primo) + ' (ora italiana). Oppure attiva il pagamento su AI Studio. Per riprovare prima, tocca «Riprova i modelli migliori» nelle impostazioni.';
 }
 let lastWorked = '';
 try { lastWorked = localStorage.getItem('gld-ultimo-modello') || ''; } catch (e) {}
@@ -231,13 +295,18 @@ function keyHint() {
   if (key && !/^AIza[\w-]{20,}$/.test(key)) n.textContent = 'Attenzione: le chiavi di Google di solito cominciano con «AIza». Controlla di averla copiata tutta. Resta solo in questo browser.';
   else n.textContent = key ? 'Chiave salvata solo in questo browser, su questo telefono. Non è scritta nella pagina e non va su GitHub.' : 'La chiave resta solo in questo browser, su questo telefono. Non è scritta nella pagina e non va su GitHub.';
 }
-$('#model').onchange = () => { S.model = $('#model').value; $('#modelAltro').hidden = S.model !== 'altro'; save(); modelUI(); };
-$('#modelAltro').oninput = () => { S.altro = $('#modelAltro').value; save(); modelUI(); };
+$('#model').onchange = () => { S.model = $('#model').value; $('#modelAltro').hidden = S.model !== 'altro'; save(); modelUI(); ui(); };
+$('#modelAltro').oninput = () => { S.altro = $('#modelAltro').value; save(); modelUI(); ui(); };
 voiceSel.onchange = () => { S.voice = voiceSel.value; save(); if (running()) log('La nuova voce vale dalla prossima conversazione.'); };
 document.querySelectorAll('#think button').forEach(b => b.onclick = () => { S.think = b.dataset.v; save(); fill(); });
 $('#optWake').onchange = () => { S.wake = $('#optWake').checked; save(); if (S.wake && running()) keepAwake(); if (!S.wake) releaseAwake(); ui(); };
 $('#optBg').onchange = () => { S.bg = $('#optBg').checked; save(); if (running()) (S.bg ? bgStart() : bgStop()); };
 $('#optNero').onchange = () => { S.autoNero = $('#optNero').checked; save(); };
+$('#btnRiprova').onclick = () => {
+  saveEx({});
+  log('Memoria dei limiti azzerata: ' + (running() ? 'dalla prossima conversazione' : 'alla prossima conversazione') + ' riparto da ' + chosenModel() + '.');
+  modelUI(); if (!running()) { if (connState === 'error') connState = 'off'; idleHint(); } ui();
+};
 $('#optSearch').onchange = () => { S.search = $('#optSearch').checked; save(); if (running()) log('Ricerca Google ' + (S.search ? 'accesa' : 'spenta') + ': vale dalla prossima conversazione. Questa resta ' + (sessSearch ? 'con la ricerca.' : 'senza ricerca.')); ui(); };
 
 /* ---------- diario ---------- */
@@ -455,18 +524,20 @@ $('#btnNero').onclick = neroOn;
 let mode = 'idle'; // idle | call | prova
 let ws = null, ready = false, everReady = false, handle = null, model = '', api = 'v1beta', triedOtherApi = false;
 let retries = 0, reconnectTimer = 0, connState = 'off', connAt = 0, fatal = false;
-// la ricerca si decide all'avvio e resta uguale per tutta la conversazione: riconnessioni, ripresa e cambio di modello
-let sessSearch = true, searchRefused = false, searchCount = 0, lastSearch = '';
+// la ricerca si decide all'avvio e resta uguale per riconnessioni e ripresa; a ogni cambio di modello si riprova con la ricerca
+let sessSearch = true, wantSearch = true, searchRefused = false, searchCount = 0, lastSearch = '';
+// cambio di modello: la catena di questa conversazione, i modelli già provati, da quale modello si è passati e perché
+let sessChain = [], tried = new Set(), switchedFrom = '', switchWhy = '', switchPrev = '', switchPrevWhy = '', rejected = [], sessVoice = 'Charon', voiceTried = false;
 const running = () => mode === 'call';
 function active() { return mode !== 'idle'; }
-Object.defineProperty(window, '__gld', {value: () => ({mode, connState, ready, handle, model, api, retries, micFixes, wakeState, ctx: ctx && ctx.state, ws: ws && ws.readyState, search: sessSearch, searchRefused, searchCount})});
+Object.defineProperty(window, '__gld', {value: () => ({mode, connState, ready, handle, model, api, retries, micFixes, wakeState, ctx: ctx && ctx.state, ws: ws && ws.readyState, search: sessSearch, searchRefused, searchCount, switchedFrom, tried: [...tried], voice: sessVoice})});
 function preferredApi() { try { return localStorage.getItem(AKEY) || 'v1beta'; } catch (e) { return 'v1beta'; } }
 function wsUrl() {
   if (TEST_WS) return TEST_WS + (TEST_WS.includes('?') ? '&' : '?') + 'api=' + api + '&model=' + encodeURIComponent(model);
   return WS_ROOT + api + '.GenerativeService.BidiGenerateContent?key=' + encodeURIComponent(key);
 }
 function setupMsg() {
-  const gen = {responseModalities: ['AUDIO'], speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: S.voice}}}};
+  const gen = {responseModalities: ['AUDIO'], speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: sessVoice}}}};
   if (isThinking(model)) gen.thinkingConfig = {thinkingLevel: S.think};
   const d = new Date(), tz = {timeZone: 'Europe/Rome'};
   const oggi = ' Quando si è aperta questa linea in Italia era ' + d.toLocaleDateString('it-IT', Object.assign({weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}, tz)) + ', ore ' + d.toLocaleTimeString('it-IT', Object.assign({hour: '2-digit', minute: '2-digit'}, tz)) + (sessSearch ? '; per l\'ora esatta di adesso, cercala.' : '.');
@@ -509,7 +580,7 @@ function onServer(m, me) {
     try { localStorage.setItem(AKEY, api); localStorage.setItem('gld-ultimo-modello', model); } catch (e) {}
     lastWorked = model; modelUI();
     if (me.__old) { const o = me.__old; me.__old = null; o.__draining = false; try { o.close(1000); } catch (e) {} }
-    log(wasResume ? (handle ? 'Linea ripresa: la conversazione continua.' : 'Linea di nuovo collegata.') : 'Collegato a Google con ' + model + (isThinking(model) ? ' (ragionamento ' + ({LOW: 'poco', MEDIUM: 'medio', HIGH: 'molto'})[S.think] + ')' : '') + '. Parla pure.');
+    log(wasResume ? (handle ? 'Linea ripresa: la conversazione continua.' : 'Linea di nuovo collegata.') : 'Collegato a Google con ' + model + (isThinking(model) ? ' (ragionamento ' + ({LOW: 'poco', MEDIUM: 'medio', HIGH: 'molto'})[S.think] + ')' : '') + (switchedFrom ? ', al posto di ' + switchedFrom + (switchWhy === 'quota' ? ' (limite superato)' : ' (non partito)') : '') + '. Voce: ' + sessVoice + '. Ricerca Google: ' + (sessSearch ? 'accesa' : (wantSearch ? 'non disponibile con questo modello' : 'spenta')) + '. Parla pure.');
     setHint('Parla pure. Puoi interromperlo quando vuoi.');
     if (!wasResume) send({realtimeInput: {text: 'La conversazione è appena iniziata. Saluta in una frase breve e chiedi di cosa vuole parlare.'}});
     if (S.autoNero && !wasResume) { clearTimeout(neroTimer); neroTimer = setTimeout(() => { if (running()) neroOn(); }, 30000); }
@@ -519,6 +590,12 @@ function onServer(m, me) {
   if (m.goAway) {
     log('Google avvisa che chiude la linea tra poco' + (m.goAway.timeLeft ? ' (' + m.goAway.timeLeft + ')' : '') + ': apro subito la linea nuova.');
     me.__draining = true; connect(); return;
+  }
+  if (m.error) {
+    // se Google manda l'errore come messaggio invece che come chiusura, lo tratto come una chiusura
+    const er = m.error, r = [er.message, er.status, er.code].filter(Boolean).join(' ');
+    me.onclose = null; try { me.close(1000); } catch (e) {}
+    onClosed({code: 1011, reason: r}, me); return;
   }
   if (m.toolCall && m.toolCall.functionCalls) log('Google ha chiesto una funzione che la pagina non ha: la ignoro.');
   if (m.serverContent) onContent(m.serverContent);
@@ -597,27 +674,59 @@ const said = ev => ev.reason ? ': «' + ev.reason.trim() + '»' : (ev.code && ev
 function onClosed(ev, me) {
   ws = null; ready = false;
   if (!running()) return;
-  const reason = (ev.reason || '').trim(), kind = classify(reason);
+  const reason = (ev.reason || '').trim(); let kind = classify(reason);
   log('La linea si è chiusa' + (said(ev) || ' senza motivo') + '.');
+  // con un modello di riserva la chiave ha già funzionato: «permesso negato» vuol dire che quel modello non è aperto alla chiave
+  if (kind === 'auth' && switchedFrom && !/api[ _]?key/i.test(reason)) kind = 'model';
   if (kind === 'auth') { stopAll('Google dice che la chiave non va bene. Controllala nelle impostazioni.' + (reason ? ' Messaggio di Google: «' + reason + '».' : ''), true); $('#impo').open = true; return; }
-  if (kind === 'quota') { stopAll('Google dice che la tua chiave ha superato un limite d\'uso. Riprova più tardi.' + (reason ? ' Messaggio di Google: «' + reason + '».' : ''), true); return; }
+  if (kind === 'quota') { onQuota(reason, me); return; }
   if (!everReady && navigator.onLine) {
-    // non è mai partita: provo l'altro indirizzo di Google, poi Gemini 3.8 Live
-    if (!triedOtherApi) { triedOtherApi = true; api = api === 'v1beta' ? 'v1alpha' : 'v1beta'; log('Riprovo con l\'indirizzo ' + api + ' di Google.'); retryNow(300); return; }
-    if (model !== FAST_MODEL && (kind === 'model' || kind === 'other')) {
-      log(model + ' non è partito: per questa conversazione passo a ' + FAST_MODEL + (sessSearch ? ', sempre con la ricerca Google' : '') + '.');
-      model = FAST_MODEL; api = 'v1beta'; triedOtherApi = false; handle = null; retryNow(300); return;
-    }
-    // ultima possibilità: Google rifiuta proprio la ricerca. Meglio parlare senza che non parlare.
+    // non è mai partita. Se Google rifiuta proprio la ricerca, con questo modello continuo senza: meglio parlare senza che non parlare.
     if (sessSearch && /google_?search|googlesearch|grounding|\btools?\b|search/i.test(reason)) {
-      log('Google non accetta la ricerca con ' + model + ': per questa conversazione continuo senza ricerca.');
-      sessSearch = false; searchRefused = true; api = 'v1beta'; triedOtherApi = false; handle = null; retryNow(300); return;
+      log('Google non accetta la ricerca con ' + model + ': con questo modello continuo senza ricerca.');
+      sessSearch = false; searchRefused = true; triedOtherApi = false; handle = null; retryNow(300); return;
+    }
+    // la voce non c'è per questo modello: provo un'altra voce maschile
+    if (!voiceTried && /voice|speaker/i.test(reason)) {
+      voiceTried = true; const v = sessVoice === 'Charon' ? 'Orus' : 'Charon';
+      log('Google non accetta la voce ' + sessVoice + ' con ' + model + ': uso la voce maschile ' + v + '.');
+      sessVoice = v; triedOtherApi = false; handle = null; retryNow(300); return;
+    }
+    // poi l'altro indirizzo di Google, poi il modello successivo della lista
+    if (!triedOtherApi) { triedOtherApi = true; api = api === 'v1beta' ? 'v1alpha' : 'v1beta'; log('Riprovo con l\'indirizzo ' + api + ' di Google.'); retryNow(300); return; }
+    if (kind === 'model' || kind === 'other') {
+      tried.add(model); rejected.push(model);
+      const nx = nextModel();
+      if (nx) { log(model + ' non è partito: per questa conversazione passo a ' + nx + '.'); switchTo(nx, model, 'rifiuto', me); return; }
+      if (Object.keys(loadEx()).length) { stopAll(allOutMsg(rejected), true); return; }
     }
     stopAll('Non riesco a collegarmi a Google' + (reason ? ': «' + reason + '».' : '.'), true); return;
   }
   // era già partita: la riprendo, con la stessa conversazione se Google me lo permette
   if (handle && kind === 'model' && retries >= 1) { log('Google non accetta di riprendere la conversazione di prima: riparto da capo, non ricorderà cosa vi siete detti.'); handle = null; }
   scheduleReconnect();
+}
+// il modello successivo della lista: non ancora provato in questa conversazione e senza il limite superato
+function nextModel() { const ex = loadEx(); return sessChain.find(x => !tried.has(x) && !ex[x]) || ''; }
+function onQuota(reason, me) {
+  const sp = quotaSpan(reason), ex = loadEx();
+  ex[model] = {until: sp.until, kind: sp.kind, at: Date.now()}; saveEx(ex);
+  tried.add(model);
+  const prev = model, nx = nextModel();
+  if (!nx) { stopAll(allOutMsg(rejected), true); modelUI(); return; }
+  log('Limite superato con ' + prev + ': passo a ' + nx + '. Non riprovo ' + prev + ' ' + pausa(ex[prev]) + '.');
+  switchTo(nx, prev, 'quota', me);
+}
+// cambio di modello: la ripresa del modello di prima non vale per il nuovo, quindi la conversazione riparte da capo
+function switchTo(nx, prev, why, me) {
+  if (me && me.__old) { try { me.__old.close(1000); } catch (e) {} me.__old = null; }
+  if (everReady) log('Con ' + nx + ' la conversazione riparte da capo: non sa cosa vi siete detti con ' + prev + '.');
+  model = nx; handle = null; api = preferredApi(); triedOtherApi = false; everReady = false; retries = 0;
+  if (!switchedFrom) { switchedFrom = prev; switchWhy = why; }
+  switchPrev = prev; switchPrevWhy = why;
+  sessSearch = wantSearch; voiceTried = false; sessVoice = S.voice;
+  setHint((why === 'quota' ? 'Limite superato con ' + prev : prev + ' non è partito') + ': passo a ' + nx + '…');
+  modelUI(); retryNow(300);
 }
 function retryNow(ms) { clearTimeout(reconnectTimer); connState = 'reconnecting'; ui(); reconnectTimer = setTimeout(connect, ms); }
 function scheduleReconnect() {
@@ -637,15 +746,23 @@ const goBtn = $('#go');
 async function startCall() {
   if (!key && !TEST_WS) { $('#impo').open = true; $('#key').focus(); setHint('Prima incolla la tua chiave qui sotto, poi tocca «Parla».'); return; }
   if (mode === 'prova') stopAll('', true);
+  // la lista dei modelli parte da quello scelto; salto quelli che hanno ancora il limite superato
+  const scelto = chosenModel(), ex = loadEx();
+  sessChain = chainFor(scelto); tried = new Set(); rejected = []; switchedFrom = ''; switchWhy = ''; switchPrev = ''; switchPrevWhy = '';
+  const primo = sessChain.find(x => !ex[x]);
+  if (!primo) { connState = 'error'; fatal = true; const t = allOutMsg(); log(t); setHint(t); modelUI(); ui(); return; }
   mode = 'call'; fatal = false; everReady = false; handle = null; retries = 0; micFixes = 0;
-  sessSearch = !!S.search; searchRefused = false; searchCount = 0; lastSearch = ''; searchBox = null;
-  model = chosenModel(); api = preferredApi(); triedOtherApi = false;
+  wantSearch = !!S.search; sessSearch = wantSearch; searchRefused = false; searchCount = 0; lastSearch = ''; searchBox = null;
+  sessVoice = S.voice; voiceTried = false;
+  model = primo; api = preferredApi(); triedOtherApi = false;
+  if (primo !== scelto) { switchedFrom = switchPrev = scelto; switchWhy = switchPrevWhy = 'quota'; }
   userLine = aiLine = null; ui();
   setHint('Mi collego a Gemini…');
   try { await ensureCtx(); await startMic(); }
   catch (e) { stopAll(micError(e), true); return; }
   keepAwake(); bgStart();
-  log('Conversazione avviata. Modello scelto: ' + model + '. Voce: ' + S.voice + '. Ricerca Google: ' + (sessSearch ? 'accesa' : 'spenta') + '.');
+  log('Conversazione avviata. Modello scelto: ' + scelto + '. Voce: ' + S.voice + '. Ricerca Google: ' + (sessSearch ? 'accesa' : 'spenta') + '.');
+  if (primo !== scelto) log(sessChain.slice(0, sessChain.indexOf(primo)).filter(x => ex[x]).map(x => x + ' ha superato il limite gratuito: non lo riprovo ' + pausa(ex[x])).join('. ') + '. Parto con ' + primo + '.');
   connect();
 }
 async function startProva() {
@@ -723,9 +840,22 @@ function ui() {
   goBtn.classList.toggle('on', call); goBtn.textContent = call ? 'Ferma' : 'Parla';
   $('#btnProva').textContent = mode === 'prova' ? 'Ferma la prova' : 'Prova microfono';
   $('#btnProva').classList.toggle('sel', mode === 'prova'); $('#btnProva').disabled = call;
-  const L = {off: ['Spenta', ''], connecting: ['Collegamento…', 'warn'], reconnecting: ['Riconnessione…' + (retries > 1 ? ' (' + retries + ')' : ''), 'warn'], on: ['Collegata a ' + (model === LINK_MODEL ? 'Gemini 3.8 Live Extended Thinking' : model), 'ok'], error: ['Errore: guarda il diario', 'bad']};
+  const L = {off: ['Spenta', ''], connecting: ['Collegamento…', 'warn'], reconnecting: ['Riconnessione…' + (retries > 1 ? ' (' + retries + ')' : ''), 'warn'], on: ['Collegata a Google', 'ok'], error: ['Errore: guarda il diario', 'bad']};
   const l = mode === 'prova' ? ['Spenta (prova senza Google)', ''] : (L[connState] || L.off);
   $('#vLinea').textContent = l[0]; dot('#dLinea', l[1]);
+  let mo;
+  if (call) {
+    const perche = switchWhy === 'quota' ? 'limite superato' : 'non partito';
+    if (switchPrev && !ready) mo = [(switchPrevWhy === 'quota' ? 'Limite superato con ' + switchPrev : switchPrev + ' non è partito') + ': passo a ' + model + '…', 'warn'];
+    else if (switchedFrom) mo = [model + ' (al posto di ' + switchedFrom + ', ' + perche + ')', 'warn'];
+    else mo = [model, ready ? 'ok' : ''];
+  } else {
+    const ex = loadEx(), sc = chosenModel(), pr = chainFor(sc).find(x => !ex[x]);
+    if (!pr) mo = ['Tutti con il limite gratuito superato: guarda il diario', 'bad'];
+    else if (pr !== sc) mo = [sc + ': limite superato, parto con ' + pr, 'warn'];
+    else mo = [sc, ''];
+  }
+  $('#vModello').textContent = mo[0]; dot('#dModello', mo[1]);
   const t = micStream && micStream.getAudioTracks()[0];
   let m = ['Spento', ''];
   if (active()) {
