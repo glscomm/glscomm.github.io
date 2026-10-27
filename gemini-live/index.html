@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="author" content="ByCSD">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23F1F0EE'/%3E%3C/svg%3E">
+<title>Gemini Live diretto</title>
+<style>
+:root{--ground:#000;--card:#161616;--ink:#F1F0EE;--muted:#A3A09A;--rule:#2C2C2C;--ok:#5FD08A;--warn:#E8B04A;--bad:#F07167;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.45 var(--sans)}
+body{padding:calc(env(safe-area-inset-top) + 10px) 14px calc(env(safe-area-inset-bottom) + 40px)}
+.wrap{max-width:560px;margin:0 auto}
+button,input,select{font:inherit;color:inherit}
+header{display:flex;align-items:flex-start;gap:10px;margin:6px 0 14px}
+header .t{flex:1;min-width:0}
+h1{font:600 27px/1.1 var(--serif);margin:0}
+.sub{color:var(--muted);font-size:15px;margin:4px 0 0}
+.firma{font:700 14px/1 var(--sans);letter-spacing:.04em;border:1.5px solid var(--ink);border-radius:999px;padding:7px 10px;white-space:nowrap}
+.card{background:var(--card);border-radius:20px;padding:12px 16px;margin:10px 0}
+.st{display:grid;grid-template-columns:14px 118px minmax(0,1fr);align-items:center;gap:4px 10px;padding:8px 0;border-bottom:1px solid var(--rule)}
+.st:last-child{border-bottom:0}
+.st i{width:12px;height:12px;border-radius:50%;background:#555}
+.st i.ok{background:var(--ok)}.st i.warn{background:var(--warn)}.st i.bad{background:var(--bad)}
+.st b{font-weight:500}
+.st span{color:var(--muted);font-size:16px}
+.meter{grid-column:2/-1;height:8px;border-radius:99px;background:#262626;overflow:hidden;margin:2px 0 2px}
+.meter u{display:block;height:100%;width:0;background:var(--ok);text-decoration:none;transition:width .08s linear}
+.meter.ai u{background:#8FB8FF}
+#go{display:block;width:176px;height:176px;margin:20px auto 8px;border-radius:50%;border:0;background:var(--ink);color:#000;font:600 24px/1.1 var(--sans);cursor:pointer;box-shadow:0 0 0 8px #1d1d1d}
+#go.on{background:var(--bad);color:#fff;box-shadow:0 0 0 8px #3a1714}
+#go:disabled{opacity:.5}
+#hint{text-align:center;color:var(--muted);font-size:16px;min-height:1.5em;margin:6px 4px 10px}
+.row{display:flex;gap:10px;margin:8px 0}
+.row button{flex:1;min-height:52px;border:0;border-radius:999px;background:#242424;font-size:16px;cursor:pointer;padding:8px 12px}
+.row button.sel{background:var(--ink);color:#000}
+h2{font:500 19px/1.2 var(--sans);margin:0 0 6px}
+#tr{max-height:240px;overflow-y:auto;font-size:16px}
+#tr p{margin:0 0 8px}#tr p b{font:600 12px/1 var(--mono);color:var(--muted);margin-right:6px}
+#tr .vuoto{color:var(--muted)}
+details.box{background:var(--card);border-radius:20px;margin:10px 0;padding:0 16px}
+details.box summary{list-style:none;cursor:pointer;padding:15px 0;font:500 18px/1.2 var(--sans);display:flex;justify-content:space-between;align-items:center}
+details.box summary::-webkit-details-marker{display:none}
+details.box summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-right:4px}
+details.box[open] summary::after{transform:rotate(-135deg)}
+details.box>div{padding:0 0 16px}
+label.f{display:block;margin:12px 0 4px;font-weight:500}
+input[type=text],input[type=password],select{width:100%;min-height:50px;border-radius:14px;border:1px solid #3a3a3a;background:#0b0b0b;padding:10px 12px;font-size:16px}
+.keyrow{display:flex;gap:8px}.keyrow input{flex:1;min-width:0}.keyrow button{border:0;border-radius:14px;background:#242424;padding:0 14px;cursor:pointer}
+.note{color:var(--muted);font-size:15px;margin:6px 0 0}
+.note a,.help a{color:var(--ink)}
+.chk{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;margin:14px 0 0;cursor:pointer}
+.chk input{width:24px;height:24px;margin:2px 0 0;accent-color:#F1F0EE}
+.chk small{display:block;color:var(--muted);font-size:14px}
+.seg{display:flex;gap:6px}.seg button{flex:1;min-height:46px;border:0;border-radius:12px;background:#242424;cursor:pointer}.seg button.on{background:var(--ink);color:#000}
+ol.help{padding-left:22px;margin:8px 0 0;font-size:16px}ol.help li{margin:0 0 6px}
+#log{font:13px/1.45 var(--mono);color:var(--muted);max-height:260px;overflow-y:auto;margin:0;padding:0;list-style:none}
+#log li{margin:0 0 5px}#log li b{color:var(--ink);font-weight:400}
+.small{min-height:44px;border:0;border-radius:999px;background:#242424;padding:8px 14px;cursor:pointer;font-size:15px;margin-top:10px}
+footer{text-align:center;color:var(--muted);font-size:14px;margin:24px 0 0}
+footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
+#nero{position:fixed;inset:0;background:#000;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#3c3c3c;font-size:15px;text-align:center;padding:20px;user-select:none}
+#nero.on{display:flex}
+#nero .dot{width:14px;height:14px;border-radius:50%;background:#1f3a29;transition:transform .08s linear,background .2s}
+#nero .dot.ai{background:#1e2c45}
+#nero .dot.warn{background:#4a3a14}
+#nero .firmaN{font-weight:700;letter-spacing:.04em;color:#2a2a2a}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="t">
+    <h1>Gemini Live diretto</h1>
+    <p class="sub">Parli a voce con Gemini in italiano, senza aprire AI Studio</p>
+  </div>
+  <span class="firma">ByCSD</span>
+</header>
+
+<div class="card" id="stato">
+  <div class="st"><i id="dLinea"></i><b>Linea</b><span id="vLinea">Spenta</span></div>
+  <div class="st"><i id="dMic"></i><b>Microfono</b><span id="vMic">Spento</span><div class="meter"><u id="mMic"></u></div></div>
+  <div class="st"><i id="dVoce"></i><b>Voce di Gemini</b><span id="vVoce">In silenzio</span><div class="meter ai"><u id="mVoce"></u></div></div>
+  <div class="st"><i id="dSchermo"></i><b>Schermo</b><span id="vSchermo">—</span></div>
+</div>
+
+<button id="go" type="button">Parla</button>
+<p id="hint">Prima incolla la tua chiave nelle impostazioni qui sotto.</p>
+
+<div class="row">
+  <button id="btnNero" type="button">Schermo nero</button>
+  <button id="btnProva" type="button">Prova microfono</button>
+</div>
+
+<div class="card">
+  <h2>Conversazione</h2>
+  <div id="tr"><p class="vuoto">Qui compare per iscritto quello che dici tu e quello che risponde Gemini. Se le tue parole smettono di comparire, il microfono non arriva più a Google.</p></div>
+</div>
+
+<details class="box" id="impo">
+  <summary>Impostazioni e chiave</summary>
+  <div>
+    <label class="f" for="key">La tua chiave Gemini (API key)</label>
+    <div class="keyrow"><input id="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Incolla qui la chiave"><button id="showKey" type="button">Vedi</button></div>
+    <p class="note" id="keyNote">La chiave resta solo in questo browser, su questo telefono. Non è scritta nella pagina e non va su GitHub.</p>
+    <ol class="help">
+      <li>Apri <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> con lo stesso account Google che usi per AI Studio.</li>
+      <li>Tocca «Create API key» (Crea chiave API). Se te lo chiede, scegli un progetto qualsiasi.</li>
+      <li>Copia la chiave, che comincia con «AIza», e incollala nel riquadro qui sopra.</li>
+    </ol>
+
+    <label class="f" for="model">Modello</label>
+    <select id="model">
+      <option value="gemini-3.8-live-extended-thinking">Gemini 3.8 Live Extended Thinking (quello del tuo link)</option>
+      <option value="gemini-3.8-live">Gemini 3.8 Live (più svelto, ragiona meno)</option>
+      <option value="gemini-3.1-flash-live-preview">Gemini 3.1 Flash Live Preview (versione di prova più vecchia)</option>
+      <option value="altro">Altro: lo scrivo io</option>
+    </select>
+    <input id="modelAltro" type="text" placeholder="Nome del modello, per esempio gemini-3.8-live" autocapitalize="off" spellcheck="false" hidden style="margin-top:8px">
+    <p class="note" id="modelNote"></p>
+
+    <div id="thinkRow">
+      <label class="f">Quanto ragiona prima di rispondere</label>
+      <div class="seg" id="think"><button type="button" data-v="LOW">Poco</button><button type="button" data-v="MEDIUM">Medio</button><button type="button" data-v="HIGH">Molto</button></div>
+    </div>
+
+    <label class="f" for="voice">Voce</label>
+    <select id="voice"></select>
+    <p class="note">Le voci di Google sono le stesse per tutte le lingue: parlano italiano tutte. Charon e Orus sono maschili e pacate.</p>
+
+    <label class="chk"><input type="checkbox" id="optWake"><span>Tieni acceso lo schermo durante la conversazione<small>Lo schermo non si spegne da solo. Con «Schermo nero» resta acceso ma tutto nero, così consuma poco.</small></span></label>
+    <label class="chk"><input type="checkbox" id="optBg"><span>Tieni viva la pagina come una chiamata<small>Fa partire un suono muto e la scheda «in riproduzione» di Android, così il telefono addormenta meno la pagina.</small></span></label>
+    <label class="chk"><input type="checkbox" id="optNero"><span>Schermo nero da solo dopo 30 secondi di conversazione<small>Tocca due volte lo schermo nero per tornare qui.</small></span></label>
+  </div>
+</details>
+
+<details class="box">
+  <summary>Diario della linea</summary>
+  <div>
+    <p class="note" style="margin:0 0 10px">Ogni volta che il telefono ferma il microfono, l'audio o la linea, qui trovi l'ora e cosa ho fatto per rimetterli. Se la voce sparisce ancora, copiami il diario: non contiene la chiave.</p>
+    <ul id="log"></ul>
+    <button class="small" id="copyLog" type="button">Copia il diario</button>
+  </div>
+</details>
+
+<footer><b>ByCSD</b> · Gemini Live diretto 1.0</footer>
+</div>
+
+<div id="nero" aria-label="Schermo nero: tocca due volte per tornare">
+  <div class="dot" id="neroDot"></div>
+  <div id="neroTxt">Linea spenta</div>
+  <div>Tocca due volte per tornare</div>
+  <div class="firmaN">ByCSD</div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const LINK_MODEL = 'gemini-3.8-live-extended-thinking', FAST_MODEL = 'gemini-3.8-live';
+const VOICES = [['Charon','maschile, informativa'],['Orus','maschile, decisa'],['Puck','maschile, vivace'],['Fenrir','maschile, entusiasta'],['Iapetus','maschile, chiara'],['Algenib','maschile, roca'],['Alnilam','maschile, decisa'],['Schedar','maschile, pacata'],['Achird','maschile, amichevole'],['Sadaltager','maschile, competente'],['Umbriel','maschile, tranquilla'],['Enceladus','maschile, sussurrata'],['Kore','femminile, decisa'],['Aoede','femminile, leggera'],['Leda','femminile, giovanile'],['Zephyr','femminile, brillante'],['Sulafat','femminile, calda']];
+const SYS = 'Parla sempre e solo in italiano, con frasi naturali da conversazione telefonica, senza elenchi e senza simboli. ' +
+  'I numeri, le ore, le date, le percentuali e i prezzi dilli sempre a parole italiane, mai in inglese: per esempio «ventitré», «le sedici e trenta», «milleduecento euro». ' +
+  'Parli con un signore italiano che vive in Toscana, vicino a Pisa: dagli del tu, sii chiaro e cordiale, e se non hai capito chiedi di ripetere. ' +
+  'Se ti chiedono notizie o fatti di oggi che non puoi controllare, dillo chiaramente e non inventare.';
+const IN_RATE = 16000, OUT_RATE = 24000, CHUNK = 640; // 40 ms a 16 kHz
+const WS_ROOT = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.';
+const qs = new URLSearchParams(location.search);
+// solo per le prove sul computer: un server finto su localhost al posto di Google
+const TEST_WS = /^ws:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(qs.get('ws') || '') ? qs.get('ws') : '';
+
+/* ---------- impostazioni ---------- */
+const SKEY = 'gld-impostazioni', KKEY = 'gld-chiave', AKEY = 'gld-indirizzo';
+const DEF = {model: LINK_MODEL, altro: '', think: 'MEDIUM', voice: 'Charon', wake: true, bg: true, autoNero: false};
+let S = Object.assign({}, DEF);
+try { Object.assign(S, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) {}
+if (!VOICES.some(v => v[0] === S.voice)) S.voice = DEF.voice;
+if (!['LOW','MEDIUM','HIGH'].includes(S.think)) S.think = 'MEDIUM';
+const save = () => { try { localStorage.setItem(SKEY, JSON.stringify(S)); } catch (e) {} };
+let key = '';
+try { key = localStorage.getItem(KKEY) || ''; } catch (e) {}
+const chosenModel = () => (S.model === 'altro' ? (S.altro || '').trim().replace(/^models\//, '') : S.model) || LINK_MODEL;
+const isThinking = m => /extended-thinking/.test(m);
+
+const voiceSel = $('#voice');
+for (const [n, d] of VOICES) voiceSel.add(new Option(n + ' (' + d + ')', n));
+function fill() {
+  $('#key').value = key;
+  $('#model').value = S.model; $('#modelAltro').value = S.altro; $('#modelAltro').hidden = S.model !== 'altro';
+  voiceSel.value = S.voice;
+  $('#optWake').checked = S.wake; $('#optBg').checked = S.bg; $('#optNero').checked = S.autoNero;
+  document.querySelectorAll('#think button').forEach(b => b.classList.toggle('on', b.dataset.v === S.think));
+  modelUI();
+}
+function modelUI() {
+  const m = chosenModel();
+  $('#thinkRow').hidden = !isThinking(m);
+  let t = 'Nome che la pagina manda a Google: models/' + m + '.';
+  if (m !== FAST_MODEL) t += ' Se Google lo rifiuta, per quella conversazione passo da solo a Gemini 3.8 Live e lo scrivo nel diario.';
+  if (lastWorked) t += ' Ultima conversazione partita con: ' + lastWorked + '.';
+  $('#modelNote').textContent = t;
+}
+let lastWorked = '';
+try { lastWorked = localStorage.getItem('gld-ultimo-modello') || ''; } catch (e) {}
+$('#key').addEventListener('input', () => {
+  key = $('#key').value.trim();
+  try { key ? localStorage.setItem(KKEY, key) : localStorage.removeItem(KKEY); } catch (e) {}
+  keyHint(); idleHint();
+});
+$('#showKey').onclick = () => { const k = $('#key'); k.type = k.type === 'password' ? 'text' : 'password'; $('#showKey').textContent = k.type === 'password' ? 'Vedi' : 'Nascondi'; };
+function keyHint() {
+  const n = $('#keyNote');
+  if (key && !/^AIza[\w-]{20,}$/.test(key)) n.textContent = 'Attenzione: le chiavi di Google di solito cominciano con «AIza». Controlla di averla copiata tutta. Resta solo in questo browser.';
+  else n.textContent = key ? 'Chiave salvata solo in questo browser, su questo telefono. Non è scritta nella pagina e non va su GitHub.' : 'La chiave resta solo in questo browser, su questo telefono. Non è scritta nella pagina e non va su GitHub.';
+}
+$('#model').onchange = () => { S.model = $('#model').value; $('#modelAltro').hidden = S.model !== 'altro'; save(); modelUI(); };
+$('#modelAltro').oninput = () => { S.altro = $('#modelAltro').value; save(); modelUI(); };
+voiceSel.onchange = () => { S.voice = voiceSel.value; save(); if (running()) log('La nuova voce vale dalla prossima conversazione.'); };
+document.querySelectorAll('#think button').forEach(b => b.onclick = () => { S.think = b.dataset.v; save(); fill(); });
+$('#optWake').onchange = () => { S.wake = $('#optWake').checked; save(); if (S.wake && running()) keepAwake(); if (!S.wake) releaseAwake(); ui(); };
+$('#optBg').onchange = () => { S.bg = $('#optBg').checked; save(); if (running()) (S.bg ? bgStart() : bgStop()); };
+$('#optNero').onchange = () => { S.autoNero = $('#optNero').checked; save(); };
+
+/* ---------- diario ---------- */
+const logEl = $('#log');
+const hhmm = () => new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+const logLines = [];
+function log(msg) {
+  const t = hhmm(); logLines.push(t + ' ' + msg); if (logLines.length > 200) logLines.shift();
+  const li = document.createElement('li'); li.innerHTML = '<b></b> '; li.firstChild.textContent = t; li.append(msg);
+  logEl.prepend(li); while (logEl.children.length > 200) logEl.lastChild.remove();
+}
+$('#copyLog').onclick = () => {
+  const txt = 'Diario Gemini Live diretto (ByCSD) - ' + navigator.userAgent + '\n' + logLines.join('\n');
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { $('#copyLog').textContent = 'Copiato'; setTimeout(() => $('#copyLog').textContent = 'Copia il diario', 1500); }).catch(() => { $('#copyLog').textContent = 'Non riesco a copiare'; });
+};
+
+/* ---------- trascrizione ---------- */
+const tr = $('#tr');
+let userLine = null, aiLine = null;
+function line(who, txt) {
+  const v = tr.querySelector('.vuoto'); if (v) v.remove();
+  const p = document.createElement('p'); p.innerHTML = '<b></b><span></span>'; p.firstChild.textContent = who; p.lastChild.textContent = txt;
+  tr.append(p); while (tr.children.length > 40) tr.firstChild.remove();
+  tr.scrollTop = tr.scrollHeight; return p.lastChild;
+}
+
+/* ---------- audio ---------- */
+let ctx = null, outGain = null, outAn = null, micStream = null, micSrc = null, capNode = null, micAn = null, sink = null;
+let sources = [], playHead = 0, pcmBuf = new Int16Array(0), resamplePos = 0;
+let lastFrameAt = 0, zeroSince = 0, lastMicFix = 0, micFixes = 0, lastCtxTime = -1, ctxFrozen = 0, lastAudioIn = 0;
+const WORKLET = 'class C extends AudioWorkletProcessor{process(i){const c=i[0]&&i[0][0];if(c)this.port.postMessage(c.slice(0));return true}}registerProcessor("cap",C)';
+async function ensureCtx() {
+  if (!ctx || ctx.state === 'closed') {
+    ctx = new (window.AudioContext || window.webkitAudioContext)({latencyHint: 'interactive'});
+    outGain = ctx.createGain(); outAn = ctx.createAnalyser(); outAn.fftSize = 512;
+    outGain.connect(outAn); outAn.connect(ctx.destination);
+    ctx.onstatechange = () => {
+      if (!ctx) return;
+      if (ctx.state !== 'running' && active()) { log('Il telefono ha sospeso l\'audio (' + ctx.state + '): lo riattivo.'); ctx.resume().catch(() => {}); }
+      ui();
+    };
+    lastCtxTime = -1; ctxFrozen = 0;
+  }
+  if (ctx.state !== 'running') { try { await ctx.resume(); } catch (e) {} }
+}
+async function startMic() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nosecure');
+  micStream = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1}});
+  const track = micStream.getAudioTracks()[0];
+  if (track) {
+    track.onended = () => { if (active()) { log('Il telefono ha chiuso il microfono.'); fixMicSoon(); } };
+    track.onmute = () => { if (active()) log('Il telefono ha messo in pausa il microfono.'); ui(); };
+    track.onunmute = () => { if (active()) log('Il microfono è tornato.'); ui(); };
+  }
+  micSrc = ctx.createMediaStreamSource(micStream);
+  micAn = ctx.createAnalyser(); micAn.fftSize = 512; micSrc.connect(micAn);
+  try {
+    if (!ctx.__cap) { const url = URL.createObjectURL(new Blob([WORKLET], {type: 'application/javascript'})); await ctx.audioWorklet.addModule(url); ctx.__cap = true; }
+    capNode = new AudioWorkletNode(ctx, 'cap');
+    capNode.port.onmessage = e => onFrame(e.data);
+  } catch (e) {
+    capNode = ctx.createScriptProcessor(2048, 1, 1);
+    capNode.onaudioprocess = e => onFrame(e.inputBuffer.getChannelData(0));
+  }
+  sink = ctx.createGain(); sink.gain.value = 0;
+  micSrc.connect(capNode); capNode.connect(sink); sink.connect(ctx.destination);
+  resamplePos = 0; pcmBuf = new Int16Array(0); lastFrameAt = performance.now(); zeroSince = 0;
+}
+function stopMic() {
+  try { capNode && capNode.disconnect(); } catch (e) {}
+  try { micSrc && micSrc.disconnect(); } catch (e) {}
+  try { sink && sink.disconnect(); } catch (e) {}
+  if (micStream) micStream.getTracks().forEach(t => { t.onended = t.onmute = t.onunmute = null; t.stop(); });
+  micStream = micSrc = capNode = micAn = sink = null;
+}
+function onFrame(f32) {
+  const now = performance.now(); lastFrameAt = now;
+  let mx = 0; for (let i = 0; i < f32.length; i += 4) { const a = Math.abs(f32[i]); if (a > mx) mx = a; }
+  if (mx === 0) { if (!zeroSince) zeroSince = now; } else zeroSince = 0;
+  if (mode !== 'call' || !ready) return;
+  for (const c of toPcm16(f32)) send({realtimeInput: {audio: {data: b64(c.buffer), mimeType: 'audio/pcm;rate=16000'}}});
+}
+function toPcm16(f32) {
+  const ratio = ctx.sampleRate / IN_RATE, out = [];
+  let pos = resamplePos;
+  while (pos < f32.length) { const i = Math.floor(pos), a = f32[i], b = i + 1 < f32.length ? f32[i + 1] : a; out.push(Math.max(-1, Math.min(1, a + (b - a) * (pos - i)))); pos += ratio; }
+  resamplePos = pos - f32.length;
+  const add = new Int16Array(out.length);
+  for (let i = 0; i < out.length; i++) add[i] = out[i] * 0x7fff;
+  const merged = new Int16Array(pcmBuf.length + add.length); merged.set(pcmBuf); merged.set(add, pcmBuf.length);
+  const chunks = []; let o = 0;
+  while (merged.length - o >= CHUNK) { chunks.push(merged.slice(o, o + CHUNK)); o += CHUNK; }
+  pcmBuf = merged.slice(o);
+  return chunks;
+}
+const b64 = buf => { const u = new Uint8Array(buf); let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+function playPcm(base64) {
+  if (!ctx) return;
+  const bin = atob(base64), n = bin.length >> 1;
+  if (!n) return;
+  const buf = ctx.createBuffer(1, n, OUT_RATE), ch = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) { let v = bin.charCodeAt(2 * i) | (bin.charCodeAt(2 * i + 1) << 8); if (v >= 32768) v -= 65536; ch[i] = v / 32768; }
+  const src = ctx.createBufferSource(); src.buffer = buf; src.connect(outGain);
+  const t = Math.max(playHead, ctx.currentTime + 0.05);
+  src.start(t); playHead = t + buf.duration;
+  sources.push(src); src.onended = () => { sources = sources.filter(x => x !== src); };
+  lastAudioIn = performance.now();
+  if (ctx.state !== 'running') ctx.resume().catch(() => {});
+}
+function stopPlayback() { sources.forEach(s => { try { s.stop(); } catch (e) {} }); sources = []; playHead = 0; }
+const speaking = () => !!ctx && playHead > ctx.currentTime;
+function level(an) {
+  if (!an) return 0;
+  const d = new Uint8Array(an.fftSize); an.getByteTimeDomainData(d);
+  let s = 0; for (let i = 0; i < d.length; i++) { const v = (d[i] - 128) / 128; s += v * v; }
+  return Math.min(1, Math.sqrt(s / d.length) * 5);
+}
+function beep() {
+  if (!ctx) return;
+  const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 660; g.gain.value = 0.0001;
+  o.connect(g); g.connect(outGain); const t = ctx.currentTime;
+  g.gain.exponentialRampToValueAtTime(0.25, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+  o.start(t); o.stop(t + 0.5); playHead = Math.max(playHead, t + 0.5);
+}
+// il microfono si è fermato: lo riaccendo (subito se la pagina è visibile, se no appena torna visibile)
+let micFixPending = false;
+function fixMicSoon() { micFixPending = true; if (document.visibilityState === 'visible') fixMic(); }
+let fixingMic = false;
+async function fixMic(why) {
+  if (fixingMic || !active()) return;
+  fixingMic = true; micFixPending = false; lastMicFix = performance.now(); micFixes++;
+  if (why) log(why + ': riaccendo il microfono.');
+  try {
+    stopMic(); await ensureCtx(); await startMic();
+    log('Microfono riacceso.');
+  } catch (e) { log('Non riesco a riaccendere il microfono: ' + micError(e)); micFixPending = true; }
+  finally { fixingMic = false; ui(); }
+}
+// l'audio si è bloccato del tutto: ricreo l'audio da capo
+async function rebuildAudio(why) {
+  log(why + ': ricreo l\'audio da capo.');
+  stopPlayback(); stopMic();
+  try { await ctx.close(); } catch (e) {}
+  ctx = null;
+  try { await ensureCtx(); await startMic(); log('Audio ricreato, microfono riacceso.'); }
+  catch (e) { log('Non riesco a ricreare l\'audio: ' + micError(e)); }
+}
+function micError(e) {
+  if ((e && e.message === 'nosecure') || !window.isSecureContext) return 'Chrome dà il microfono solo alle pagine https: apri la pagina dal suo indirizzo glscomm.github.io.';
+  if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) return 'Il microfono è bloccato per questa pagina. Tocca il lucchetto accanto all\'indirizzo, poi Autorizzazioni, e permetti il microfono.';
+  if (e && e.name === 'NotFoundError') return 'Non trovo nessun microfono.';
+  if (e && e.name === 'NotReadableError') return 'Il microfono è occupato da un\'altra app. Chiudila e riprova.';
+  return 'Non riesco ad accendere il microfono' + (e && e.message ? ' (' + e.message + ').' : '.');
+}
+
+/* ---------- schermo acceso ---------- */
+let wakeLock = null, wakeState = 'off';
+async function keepAwake() {
+  if (!S.wake) { wakeState = 'off'; ui(); return; }
+  if (!('wakeLock' in navigator)) { wakeState = 'unsupported'; ui(); return; }
+  if (wakeLock || document.visibilityState !== 'visible') return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen'); wakeState = 'on';
+    wakeLock.addEventListener('release', () => { wakeLock = null; wakeState = active() ? 'lost' : 'off'; ui(); if (active() && document.visibilityState === 'visible') setTimeout(keepAwake, 500); });
+  } catch (e) { const was = wakeState; wakeState = 'denied'; if (was !== 'denied') log('Il telefono non mi lascia tenere acceso lo schermo' + (e && e.message ? ' (' + e.message + ')' : '') + '.'); }
+  ui();
+}
+function releaseAwake() { try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null; wakeState = 'off'; }
+
+/* ---------- pagina viva come una chiamata ---------- */
+let keepEl = null, keepUrl = '';
+function silentWav() {
+  const rate = 8000, n = rate * 4, b = new ArrayBuffer(44 + n), v = new DataView(b), w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, rate, true); v.setUint32(28, rate, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true);
+  new Uint8Array(b, 44).fill(128);
+  return URL.createObjectURL(new Blob([b], {type: 'audio/wav'}));
+}
+function bgStart() {
+  if (!S.bg) return;
+  try {
+    if (!keepEl) { keepUrl = keepUrl || silentWav(); keepEl = new Audio(keepUrl); keepEl.loop = true; keepEl.setAttribute('playsinline', ''); }
+    const p = keepEl.play(); if (p) p.catch(() => {});
+  } catch (e) {}
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.metadata = new MediaMetadata({title: 'Gemini Live · conversazione in corso', artist: 'Gemini Live diretto · ByCSD'}); } catch (e) {}
+  try { navigator.mediaSession.playbackState = 'playing'; } catch (e) {}
+  const on = (a, f) => { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
+  on('stop', () => stopAll('Fermato dalla notifica.')); on('hangup', () => stopAll('Fermato dalla notifica.'));
+  on('pause', () => {}); on('play', () => {});
+}
+function bgStop() {
+  try { keepEl && keepEl.pause(); } catch (e) {}
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = 'none'; navigator.mediaSession.metadata = null; } catch (e) {}
+  for (const a of ['stop', 'hangup', 'pause', 'play']) { try { navigator.mediaSession.setActionHandler(a, null); } catch (e) {} }
+}
+
+/* ---------- schermo nero ---------- */
+const nero = $('#nero');
+let lastTap = 0, neroTimer = 0;
+function neroOn() {
+  nero.classList.add('on');
+  try { if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen({navigationUI: 'hide'}).catch(() => {}); } catch (e) {}
+  if (active()) keepAwake();
+}
+function neroOff() {
+  nero.classList.remove('on');
+  try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {}); } catch (e) {}
+}
+nero.addEventListener('pointerup', () => { const t = Date.now(); if (t - lastTap < 450) { neroOff(); lastTap = 0; } else lastTap = t; });
+$('#btnNero').onclick = neroOn;
+
+/* ---------- collegamento a Gemini Live ---------- */
+let mode = 'idle'; // idle | call | prova
+let ws = null, ready = false, everReady = false, handle = null, model = '', api = 'v1beta', triedOtherApi = false;
+let retries = 0, reconnectTimer = 0, connState = 'off', connAt = 0, fatal = false;
+const running = () => mode === 'call';
+function active() { return mode !== 'idle'; }
+Object.defineProperty(window, '__gld', {value: () => ({mode, connState, ready, handle, model, api, retries, micFixes, wakeState, ctx: ctx && ctx.state, ws: ws && ws.readyState})});
+function preferredApi() { try { return localStorage.getItem(AKEY) || 'v1beta'; } catch (e) { return 'v1beta'; } }
+function wsUrl() {
+  if (TEST_WS) return TEST_WS + (TEST_WS.includes('?') ? '&' : '?') + 'api=' + api + '&model=' + encodeURIComponent(model);
+  return WS_ROOT + api + '.GenerativeService.BidiGenerateContent?key=' + encodeURIComponent(key);
+}
+function setupMsg() {
+  const gen = {responseModalities: ['AUDIO'], speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: S.voice}}}};
+  if (isThinking(model)) gen.thinkingConfig = {thinkingLevel: S.think};
+  const oggi = ' Oggi è ' + new Date().toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}) + '.';
+  return {setup: {
+    model: 'models/' + model,
+    generationConfig: gen,
+    systemInstruction: {parts: [{text: SYS + oggi}]},
+    inputAudioTranscription: {}, outputAudioTranscription: {},
+    contextWindowCompression: {slidingWindow: {}},
+    sessionResumption: handle ? {handle} : {}
+  }};
+}
+function send(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
+function connect() {
+  clearTimeout(reconnectTimer); reconnectTimer = 0;
+  if (!running()) return;
+  const old = ws;
+  ready = false; connState = retries || everReady ? 'reconnecting' : 'connecting'; connAt = Date.now(); ui();
+  let me;
+  try { me = new WebSocket(wsUrl()); } catch (e) { stopAll('Indirizzo di collegamento non valido.'); return; }
+  ws = me;
+  // la linea vecchia (avviso di chiusura di Google) la chiudo solo quando la nuova è pronta
+  me.__old = old && old.readyState <= 1 ? old : null;
+  me.onopen = () => { if (me === ws) send(setupMsg()); };
+  me.onmessage = async ev => {
+    let txt = ev.data;
+    if (txt instanceof Blob) txt = await txt.text(); else if (txt instanceof ArrayBuffer) txt = new TextDecoder().decode(txt);
+    let m; try { m = JSON.parse(txt); } catch (e) { return; }
+    if (me === ws) onServer(m, me); else if (m.serverContent && me.__draining) onContent(m.serverContent);
+  };
+  me.onclose = ev => { if (me === ws) onClosed(ev, me); };
+  me.onerror = () => {};
+}
+function onServer(m, me) {
+  if (m.setupComplete) {
+    const wasResume = everReady;
+    ready = true; everReady = true; retries = 0; connState = 'on';
+    try { localStorage.setItem(AKEY, api); localStorage.setItem('gld-ultimo-modello', model); } catch (e) {}
+    lastWorked = model; modelUI();
+    if (me.__old) { const o = me.__old; me.__old = null; o.__draining = false; try { o.close(1000); } catch (e) {} }
+    log(wasResume ? (handle ? 'Linea ripresa: la conversazione continua.' : 'Linea di nuovo collegata.') : 'Collegato a Google con ' + model + (isThinking(model) ? ' (ragionamento ' + ({LOW: 'poco', MEDIUM: 'medio', HIGH: 'molto'})[S.think] + ')' : '') + '. Parla pure.');
+    setHint('Parla pure. Puoi interromperlo quando vuoi.');
+    if (!wasResume) send({realtimeInput: {text: 'La conversazione è appena iniziata. Saluta in una frase breve e chiedi di cosa vuole parlare.'}});
+    if (S.autoNero && !wasResume) { clearTimeout(neroTimer); neroTimer = setTimeout(() => { if (running()) neroOn(); }, 30000); }
+    ui(); return;
+  }
+  if (m.sessionResumptionUpdate && m.sessionResumptionUpdate.resumable && m.sessionResumptionUpdate.newHandle) handle = m.sessionResumptionUpdate.newHandle;
+  if (m.goAway) {
+    log('Google avvisa che chiude la linea tra poco' + (m.goAway.timeLeft ? ' (' + m.goAway.timeLeft + ')' : '') + ': apro subito la linea nuova.');
+    me.__draining = true; connect(); return;
+  }
+  if (m.serverContent) onContent(m.serverContent);
+}
+function onContent(sc) {
+  if (sc.interrupted) { stopPlayback(); aiLine = null; }
+  if (sc.modelTurn && sc.modelTurn.parts) for (const p of sc.modelTurn.parts) if (p.inlineData && p.inlineData.data) playPcm(p.inlineData.data);
+  if (sc.inputTranscription && sc.inputTranscription.text) { if (!userLine) userLine = line('TU', ''); userLine.textContent += sc.inputTranscription.text; aiLine = null; tr.scrollTop = tr.scrollHeight; }
+  if (sc.outputTranscription && sc.outputTranscription.text) { if (!aiLine) aiLine = line('GEMINI', ''); aiLine.textContent += sc.outputTranscription.text; userLine = null; tr.scrollTop = tr.scrollHeight; }
+  if (sc.turnComplete) { aiLine = null; userLine = null; }
+}
+function classify(r) {
+  if (/api key not valid|api_key_invalid|invalid api key|api key expired|api_key_expired|unauthenticated|permission denied|permission_denied/i.test(r)) return 'auth';
+  if (/resource[_ ]?exhausted|quota|rate[ _-]?limit|too many requests|\b429\b/i.test(r)) return 'quota';
+  if (/not found|not_found|is not supported|unsupported|not enabled|not available|invalid argument|invalid_argument|unknown name|thinking/i.test(r)) return 'model';
+  return 'other';
+}
+const said = ev => ev.reason ? ': «' + ev.reason.trim() + '»' : (ev.code && ev.code !== 1005 && ev.code !== 1006 ? ' (codice ' + ev.code + ')' : '');
+function onClosed(ev, me) {
+  ws = null; ready = false;
+  if (!running()) return;
+  const reason = (ev.reason || '').trim(), kind = classify(reason);
+  log('La linea si è chiusa' + (said(ev) || ' senza motivo') + '.');
+  if (kind === 'auth') { stopAll('Google dice che la chiave non va bene. Controllala nelle impostazioni.' + (reason ? ' Messaggio di Google: «' + reason + '».' : ''), true); $('#impo').open = true; return; }
+  if (kind === 'quota') { stopAll('Google dice che la tua chiave ha superato un limite d\'uso. Riprova più tardi.' + (reason ? ' Messaggio di Google: «' + reason + '».' : ''), true); return; }
+  if (!everReady && navigator.onLine) {
+    // non è mai partita: provo l'altro indirizzo di Google, poi Gemini 3.8 Live
+    if (!triedOtherApi) { triedOtherApi = true; api = api === 'v1beta' ? 'v1alpha' : 'v1beta'; log('Riprovo con l\'indirizzo ' + api + ' di Google.'); retryNow(300); return; }
+    if (model !== FAST_MODEL && (kind === 'model' || kind === 'other')) {
+      log(model + ' non è partito: per questa conversazione passo a ' + FAST_MODEL + '.');
+      model = FAST_MODEL; api = 'v1beta'; triedOtherApi = false; handle = null; retryNow(300); return;
+    }
+    stopAll('Non riesco a collegarmi a Google' + (reason ? ': «' + reason + '».' : '.'), true); return;
+  }
+  // era già partita: la riprendo, con la stessa conversazione se Google me lo permette
+  if (handle && kind === 'model' && retries >= 1) { log('Google non accetta di riprendere la conversazione di prima: riparto da capo, non ricorderà cosa vi siete detti.'); handle = null; }
+  scheduleReconnect();
+}
+function retryNow(ms) { clearTimeout(reconnectTimer); connState = 'reconnecting'; ui(); reconnectTimer = setTimeout(connect, ms); }
+function scheduleReconnect() {
+  if (!running() || reconnectTimer) return;
+  retries++;
+  const wait = Math.min(10000, 500 * Math.pow(2, Math.min(retries - 1, 5)));
+  if (retries > 1 && handle && retries % 4 === 0) { log('La conversazione di prima non riparte: riprovo da capo.'); handle = null; }
+  connState = 'reconnecting'; ui();
+  setHint(navigator.onLine ? 'La linea è caduta: la riprendo da solo (tentativo ' + retries + ').' : 'Manca internet: appena torna riprendo la linea.');
+  reconnectTimer = setTimeout(() => { reconnectTimer = 0; if (navigator.onLine) connect(); else scheduleReconnect(); }, wait);
+}
+addEventListener('online', () => { if (running() && !ready) { log('Internet è tornato: riprendo la linea.'); retryNow(200); } });
+addEventListener('offline', () => { if (running()) log('Il telefono dice che manca internet.'); });
+
+/* ---------- avvio e stop ---------- */
+const goBtn = $('#go');
+async function startCall() {
+  if (!key && !TEST_WS) { $('#impo').open = true; $('#key').focus(); setHint('Prima incolla la tua chiave qui sotto, poi tocca «Parla».'); return; }
+  if (mode === 'prova') stopAll('', true);
+  mode = 'call'; fatal = false; everReady = false; handle = null; retries = 0; micFixes = 0;
+  model = chosenModel(); api = preferredApi(); triedOtherApi = false;
+  userLine = aiLine = null; ui();
+  setHint('Mi collego a Gemini…');
+  try { await ensureCtx(); await startMic(); }
+  catch (e) { stopAll(micError(e), true); return; }
+  keepAwake(); bgStart();
+  log('Conversazione avviata. Modello scelto: ' + model + '. Voce: ' + S.voice + '.');
+  connect();
+}
+async function startProva() {
+  if (mode === 'prova') { stopAll('Prova finita.'); return; }
+  if (mode === 'call') return;
+  mode = 'prova'; ui();
+  try { await ensureCtx(); await startMic(); }
+  catch (e) { stopAll(micError(e), true); return; }
+  keepAwake(); beep();
+  log('Prova senza Google: microfono acceso e suono di prova. Parla e guarda la barra verde.');
+  setHint('Hai sentito un «bip»? Parla: la barra verde del microfono deve muoversi.');
+}
+function stopAll(msg, isError) {
+  const was = mode;
+  mode = 'idle'; ready = false; connState = isError ? 'error' : 'off'; fatal = !!isError;
+  clearTimeout(reconnectTimer); reconnectTimer = 0; clearTimeout(neroTimer);
+  const old = ws; ws = null; try { old && old.close(1000); } catch (e) {}
+  stopMic(); stopPlayback(); releaseAwake(); bgStop();
+  if (msg) { log(msg); setHint(msg); } else idleHint();
+  if (was === 'call' && !isError && !msg) log('Conversazione chiusa.');
+  ui();
+}
+goBtn.onclick = () => { if (mode === 'call') stopAll('Conversazione chiusa.'); else startCall(); };
+$('#btnProva').onclick = startProva;
+
+/* ---------- la pagina torna visibile o il telefono la sveglia ---------- */
+document.addEventListener('visibilitychange', async () => {
+  if (!active()) return;
+  if (document.visibilityState !== 'visible') { log('Pagina nascosta o schermo spento: il telefono potrebbe fermare il microfono.'); return; }
+  log('Pagina di nuovo visibile: controllo audio, microfono e linea.');
+  await ensureCtx().catch(() => {});
+  keepAwake();
+  if (S.bg && keepEl && keepEl.paused && running()) keepEl.play().catch(() => {});
+  const t = micStream && micStream.getAudioTracks()[0];
+  if (micFixPending || !t || t.readyState === 'ended' || performance.now() - lastFrameAt > 2000) fixMic('Il microfono si era fermato');
+  if (running() && !ws && !reconnectTimer) retryNow(100);
+});
+document.addEventListener('pointerdown', () => { if (active() && ctx && ctx.state !== 'running') ctx.resume().catch(() => {}); }, true);
+
+/* ---------- sorveglianza: ogni secondo controllo che tutto giri ---------- */
+let mutedFor = 0;
+setInterval(() => {
+  if (!active()) return;
+  const vis = document.visibilityState === 'visible', now = performance.now();
+  if (ctx && ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume().catch(() => {});
+  // l'orologio dell'audio è fermo anche se dice di girare
+  if (ctx && ctx.state === 'running' && vis) {
+    if (ctx.currentTime === lastCtxTime) ctxFrozen++; else ctxFrozen = 0;
+    lastCtxTime = ctx.currentTime;
+    if (ctxFrozen >= 4) { ctxFrozen = 0; rebuildAudio('L\'audio del telefono si era bloccato'); return; }
+  }
+  const t = micStream && micStream.getAudioTracks()[0];
+  if (t && t.muted) mutedFor++; else mutedFor = 0;
+  if (vis && !fixingMic && now - lastMicFix > 4000) {
+    if (!t || t.readyState === 'ended') fixMic('Il telefono aveva chiuso il microfono');
+    else if (mutedFor >= 4) { mutedFor = 0; fixMic('Il microfono era in pausa da qualche secondo'); }
+    else if (now - lastFrameAt > 3000) fixMic('Dal microfono non arrivava più niente');
+    else if (zeroSince && now - zeroSince > 8000 && now - lastMicFix > 30000) { zeroSince = 0; fixMic('Dal microfono arrivava silenzio assoluto'); }
+  }
+  if (running() && !ws && !reconnectTimer && !fatal) scheduleReconnect();
+  // un collegamento che non risponde da 20 secondi lo rifaccio
+  if (running() && ws && !ready && Date.now() - connAt > 20000) { log('Google non risponde: riprovo.'); const o = ws; ws = null; try { o.close(); } catch (e) {} scheduleReconnect(); }
+  if (S.wake && !wakeLock && vis && (wakeState === 'lost' || wakeState === 'off')) keepAwake();
+  if (running() && S.bg && keepEl && keepEl.paused) keepEl.play().catch(() => {});
+  ui();
+}, 1000);
+
+/* ---------- interfaccia ---------- */
+const hintEl = $('#hint');
+function setHint(t) { hintEl.textContent = t; }
+function idleHint() { setHint(key || TEST_WS ? 'Tocca «Parla» e comincia a parlare.' : 'Prima incolla la tua chiave nelle impostazioni qui sotto.'); }
+function dot(id, cls) { $(id).className = cls || ''; }
+function ui() {
+  const call = mode === 'call';
+  goBtn.classList.toggle('on', call); goBtn.textContent = call ? 'Ferma' : 'Parla';
+  $('#btnProva').textContent = mode === 'prova' ? 'Ferma la prova' : 'Prova microfono';
+  $('#btnProva').classList.toggle('sel', mode === 'prova'); $('#btnProva').disabled = call;
+  const L = {off: ['Spenta', ''], connecting: ['Collegamento…', 'warn'], reconnecting: ['Riconnessione…' + (retries > 1 ? ' (' + retries + ')' : ''), 'warn'], on: ['Collegata a ' + (model === LINK_MODEL ? 'Gemini 3.8 Live Extended Thinking' : model), 'ok'], error: ['Errore: guarda il diario', 'bad']};
+  const l = mode === 'prova' ? ['Spenta (prova senza Google)', ''] : (L[connState] || L.off);
+  $('#vLinea').textContent = l[0]; dot('#dLinea', l[1]);
+  const t = micStream && micStream.getAudioTracks()[0];
+  let m = ['Spento', ''];
+  if (active()) {
+    if (fixingMic) m = ['Lo sto riaccendendo…', 'warn'];
+    else if (!t || t.readyState === 'ended') m = ['Fermo: lo riaccendo', 'bad'];
+    else if (t.muted) m = ['In pausa dal telefono', 'warn'];
+    else if (performance.now() - lastFrameAt > 2000) m = ['Non arriva suono', 'warn'];
+    else m = [call && !ready ? 'Acceso, in attesa della linea' : 'Attivo', 'ok'];
+  }
+  $('#vMic').textContent = m[0]; dot('#dMic', m[1]);
+  let v = ['In silenzio', ''];
+  if (active() && ctx) {
+    if (ctx.state !== 'running') v = ['Audio sospeso: lo riattivo', 'warn'];
+    else if (speaking()) v = ['Sta parlando', 'ok'];
+    else v = [call ? (ready ? 'In ascolto' : 'In attesa') : 'Pronta', 'ok'];
+  }
+  $('#vVoce').textContent = v[0]; dot('#dVoce', active() ? v[1] : '');
+  const W = {on: ['Resta acceso', 'ok'], off: [S.wake ? 'Si accende con «Parla»' : 'Si spegne da solo (opzione tolta)', ''], unsupported: ['Questo browser non lo tiene acceso', 'warn'], denied: ['Il telefono non lo tiene acceso', 'warn'], lost: ['Lo riaccendo…', 'warn']};
+  const w = W[active() ? wakeState : 'off'] || W.off;
+  $('#vSchermo').textContent = w[0]; dot('#dSchermo', w[1]);
+  $('#neroTxt').textContent = 'Linea: ' + l[0].toLowerCase() + ' · microfono: ' + m[0].toLowerCase();
+  $('#neroDot').className = 'dot' + (m[1] === 'warn' || m[1] === 'bad' || l[1] === 'warn' ? ' warn' : speaking() ? ' ai' : '');
+}
+(function meters() {
+  const a = active();
+  const lm = a ? level(micAn) : 0, la = a ? level(outAn) : 0;
+  $('#mMic').style.width = Math.round(lm * 100) + '%';
+  $('#mVoce').style.width = Math.round(la * 100) + '%';
+  if (nero.classList.contains('on')) $('#neroDot').style.transform = 'scale(' + (1 + Math.max(lm, la) * 1.6).toFixed(2) + ')';
+  requestAnimationFrame(meters);
+})();
+
+fill(); keyHint(); idleHint(); ui();
+if (!key && !TEST_WS) $('#impo').open = true;
+if (!window.isSecureContext) setHint('Apri la pagina dal suo indirizzo https, se no Chrome non dà il microfono.');
+})();
+</script>
+</body>
+</html>
