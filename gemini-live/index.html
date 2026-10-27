@@ -45,6 +45,9 @@ h2{font:500 19px/1.2 var(--sans);margin:0 0 6px}
 #tr{max-height:240px;overflow-y:auto;font-size:16px}
 #tr p{margin:0 0 8px}#tr p b{font:600 12px/1 var(--mono);color:var(--muted);margin-right:6px}
 #tr .vuoto{color:var(--muted)}
+#tr p.cerca{font-size:15px;color:var(--muted);border-left:2px solid #3a3a3a;padding-left:10px}
+#tr p.cerca span{display:block}#tr p.cerca a{color:var(--ink)}
+#tr iframe.gsug{display:block;width:100%;height:60px;border:0;border-radius:12px;margin:6px 0 0;background:transparent}
 details.box{background:var(--card);border-radius:20px;margin:10px 0;padding:0 16px}
 details.box summary{list-style:none;cursor:pointer;padding:15px 0;font:500 18px/1.2 var(--sans);display:flex;justify-content:space-between;align-items:center}
 details.box summary::-webkit-details-marker{display:none}
@@ -89,6 +92,7 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
   <div class="st"><i id="dMic"></i><b>Microfono</b><span id="vMic">Spento</span><div class="meter"><u id="mMic"></u></div></div>
   <div class="st"><i id="dVoce"></i><b>Voce di Gemini</b><span id="vVoce">In silenzio</span><div class="meter ai"><u id="mVoce"></u></div></div>
   <div class="st"><i id="dSchermo"></i><b>Schermo</b><span id="vSchermo">—</span></div>
+  <div class="st"><i id="dRic"></i><b>Ricerca Google</b><span id="vRic">—</span></div>
 </div>
 
 <button id="go" type="button">Parla</button>
@@ -135,6 +139,8 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
     <select id="voice"></select>
     <p class="note">Le voci di Google sono le stesse per tutte le lingue: parlano italiano tutte. Charon e Orus sono maschili e pacate.</p>
 
+    <label class="chk"><input type="checkbox" id="optSearch"><span>Ricerca Google in tempo reale<small>Gemini cerca da solo su Google quando gli chiedi notizie, meteo, l'ora, prezzi o risultati sportivi. Nella conversazione scritta vedi cosa ha cercato e le fonti. Se la cambi mentre parli, vale dalla conversazione dopo.</small></span></label>
+
     <label class="chk"><input type="checkbox" id="optWake"><span>Tieni acceso lo schermo durante la conversazione<small>Lo schermo non si spegne da solo. Con «Schermo nero» resta acceso ma tutto nero, così consuma poco.</small></span></label>
     <label class="chk"><input type="checkbox" id="optBg"><span>Tieni viva la pagina come una chiamata<small>Fa partire un suono muto e la scheda «in riproduzione» di Android, così il telefono addormenta meno la pagina.</small></span></label>
     <label class="chk"><input type="checkbox" id="optNero"><span>Schermo nero da solo dopo 30 secondi di conversazione<small>Tocca due volte lo schermo nero per tornare qui.</small></span></label>
@@ -150,7 +156,7 @@ footer b{color:var(--ink);font-weight:700;letter-spacing:.04em}
   </div>
 </details>
 
-<footer><b>ByCSD</b> · Gemini Live diretto 1.0</footer>
+<footer><b>ByCSD</b> · Gemini Live diretto 1.1</footer>
 </div>
 
 <div id="nero" aria-label="Schermo nero: tocca due volte per tornare">
@@ -169,7 +175,11 @@ const VOICES = [['Charon','maschile, informativa'],['Orus','maschile, decisa'],[
 const SYS = 'Parla sempre e solo in italiano, con frasi naturali da conversazione telefonica, senza elenchi e senza simboli. ' +
   'I numeri, le ore, le date, le percentuali e i prezzi dilli sempre a parole italiane, mai in inglese: per esempio «ventitré», «le sedici e trenta», «milleduecento euro». ' +
   'Parli con un signore italiano che vive in Toscana, vicino a Pisa: dagli del tu, sii chiaro e cordiale, e se non hai capito chiedi di ripetere. ' +
-  'Se ti chiedono notizie o fatti di oggi che non puoi controllare, dillo chiaramente e non inventare.';
+  'Vive tra Selvatelle, Terricciola, Peccioli e Capannoli, in provincia di Pisa, e il suo orario è quello italiano (fuso Europe/Rome). ';
+const SYS_CERCA = 'Hai la Ricerca Google in tempo reale: usala da solo, senza chiedere il permesso, ogni volta che la domanda riguarda fatti attuali o che cambiano, come notizie, meteo, data e ora di adesso in Italia, prezzi e carburanti, borsa, risultati e classifiche sportive, orari, aperture e farmacie di turno, eventi, scioperi e traffico. Su queste cose non rispondere a memoria. ' +
+  'Se una domanda locale non dice il posto, intendi la sua zona vicino a Pisa; se chiede l\'ora o la data, dai quella italiana. ' +
+  'Racconta a voce quello che trovi, in modo naturale e breve, con i numeri a parole italiane. Puoi dire il nome della fonte, per esempio «secondo l\'ANSA», ma non leggere mai indirizzi web, link, sigle tecniche o simboli. Se la ricerca non trova niente di sicuro, dillo e non inventare.';
+const SYS_NO = 'La ricerca su internet è spenta: se ti chiedono notizie o fatti di oggi che non puoi controllare, dillo chiaramente e non inventare.';
 const IN_RATE = 16000, OUT_RATE = 24000, CHUNK = 640; // 40 ms a 16 kHz
 const WS_ROOT = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.';
 const qs = new URLSearchParams(location.search);
@@ -178,11 +188,12 @@ const TEST_WS = /^ws:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(qs.get('ws') ||
 
 /* ---------- impostazioni ---------- */
 const SKEY = 'gld-impostazioni', KKEY = 'gld-chiave', AKEY = 'gld-indirizzo';
-const DEF = {model: LINK_MODEL, altro: '', think: 'MEDIUM', voice: 'Charon', wake: true, bg: true, autoNero: false};
+const DEF = {model: LINK_MODEL, altro: '', think: 'MEDIUM', voice: 'Charon', wake: true, bg: true, autoNero: false, search: true};
 let S = Object.assign({}, DEF);
 try { Object.assign(S, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch (e) {}
 if (!VOICES.some(v => v[0] === S.voice)) S.voice = DEF.voice;
 if (!['LOW','MEDIUM','HIGH'].includes(S.think)) S.think = 'MEDIUM';
+if (typeof S.search !== 'boolean') S.search = true;
 const save = () => { try { localStorage.setItem(SKEY, JSON.stringify(S)); } catch (e) {} };
 let key = '';
 try { key = localStorage.getItem(KKEY) || ''; } catch (e) {}
@@ -195,7 +206,7 @@ function fill() {
   $('#key').value = key;
   $('#model').value = S.model; $('#modelAltro').value = S.altro; $('#modelAltro').hidden = S.model !== 'altro';
   voiceSel.value = S.voice;
-  $('#optWake').checked = S.wake; $('#optBg').checked = S.bg; $('#optNero').checked = S.autoNero;
+  $('#optWake').checked = S.wake; $('#optBg').checked = S.bg; $('#optNero').checked = S.autoNero; $('#optSearch').checked = S.search;
   document.querySelectorAll('#think button').forEach(b => b.classList.toggle('on', b.dataset.v === S.think));
   modelUI();
 }
@@ -227,6 +238,7 @@ document.querySelectorAll('#think button').forEach(b => b.onclick = () => { S.th
 $('#optWake').onchange = () => { S.wake = $('#optWake').checked; save(); if (S.wake && running()) keepAwake(); if (!S.wake) releaseAwake(); ui(); };
 $('#optBg').onchange = () => { S.bg = $('#optBg').checked; save(); if (running()) (S.bg ? bgStart() : bgStop()); };
 $('#optNero').onchange = () => { S.autoNero = $('#optNero').checked; save(); };
+$('#optSearch').onchange = () => { S.search = $('#optSearch').checked; save(); if (running()) log('Ricerca Google ' + (S.search ? 'accesa' : 'spenta') + ': vale dalla prossima conversazione. Questa resta ' + (sessSearch ? 'con la ricerca.' : 'senza ricerca.')); ui(); };
 
 /* ---------- diario ---------- */
 const logEl = $('#log');
@@ -443,9 +455,11 @@ $('#btnNero').onclick = neroOn;
 let mode = 'idle'; // idle | call | prova
 let ws = null, ready = false, everReady = false, handle = null, model = '', api = 'v1beta', triedOtherApi = false;
 let retries = 0, reconnectTimer = 0, connState = 'off', connAt = 0, fatal = false;
+// la ricerca si decide all'avvio e resta uguale per tutta la conversazione: riconnessioni, ripresa e cambio di modello
+let sessSearch = true, searchRefused = false, searchCount = 0, lastSearch = '';
 const running = () => mode === 'call';
 function active() { return mode !== 'idle'; }
-Object.defineProperty(window, '__gld', {value: () => ({mode, connState, ready, handle, model, api, retries, micFixes, wakeState, ctx: ctx && ctx.state, ws: ws && ws.readyState})});
+Object.defineProperty(window, '__gld', {value: () => ({mode, connState, ready, handle, model, api, retries, micFixes, wakeState, ctx: ctx && ctx.state, ws: ws && ws.readyState, search: sessSearch, searchRefused, searchCount})});
 function preferredApi() { try { return localStorage.getItem(AKEY) || 'v1beta'; } catch (e) { return 'v1beta'; } }
 function wsUrl() {
   if (TEST_WS) return TEST_WS + (TEST_WS.includes('?') ? '&' : '?') + 'api=' + api + '&model=' + encodeURIComponent(model);
@@ -454,15 +468,18 @@ function wsUrl() {
 function setupMsg() {
   const gen = {responseModalities: ['AUDIO'], speechConfig: {voiceConfig: {prebuiltVoiceConfig: {voiceName: S.voice}}}};
   if (isThinking(model)) gen.thinkingConfig = {thinkingLevel: S.think};
-  const oggi = ' Oggi è ' + new Date().toLocaleDateString('it-IT', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}) + '.';
-  return {setup: {
+  const d = new Date(), tz = {timeZone: 'Europe/Rome'};
+  const oggi = ' Quando si è aperta questa linea in Italia era ' + d.toLocaleDateString('it-IT', Object.assign({weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}, tz)) + ', ore ' + d.toLocaleTimeString('it-IT', Object.assign({hour: '2-digit', minute: '2-digit'}, tz)) + (sessSearch ? '; per l\'ora esatta di adesso, cercala.' : '.');
+  const setup = {
     model: 'models/' + model,
     generationConfig: gen,
-    systemInstruction: {parts: [{text: SYS + oggi}]},
+    systemInstruction: {parts: [{text: SYS + (sessSearch ? SYS_CERCA : SYS_NO) + oggi}]},
     inputAudioTranscription: {}, outputAudioTranscription: {},
     contextWindowCompression: {slidingWindow: {}},
     sessionResumption: handle ? {handle} : {}
-  }};
+  };
+  if (sessSearch) setup.tools = [{googleSearch: {}}];
+  return {setup};
 }
 function send(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
 function connect() {
@@ -503,12 +520,70 @@ function onServer(m, me) {
     log('Google avvisa che chiude la linea tra poco' + (m.goAway.timeLeft ? ' (' + m.goAway.timeLeft + ')' : '') + ': apro subito la linea nuova.');
     me.__draining = true; connect(); return;
   }
+  if (m.toolCall && m.toolCall.functionCalls) log('Google ha chiesto una funzione che la pagina non ha: la ignoro.');
   if (m.serverContent) onContent(m.serverContent);
+}
+/* ---------- ricerca Google: cosa ha cercato e le fonti, solo per iscritto ---------- */
+let searchBox = null, searchAt = 0;
+function searchLine() {
+  if (searchBox && document.contains(searchBox.p) && Date.now() - searchAt < 90000) return searchBox;
+  const v = tr.querySelector('.vuoto'); if (v) v.remove();
+  const p = document.createElement('p'); p.className = 'cerca';
+  p.innerHTML = '<b>RICERCA</b><span class="q"></span><span class="f"></span>';
+  tr.append(p); while (tr.children.length > 40) tr.firstChild.remove();
+  searchBox = {p, q: p.querySelector('.q'), f: p.querySelector('.f'), queries: [], uris: [], sug: false};
+  return searchBox;
+}
+function safeUrl(u) { try { const x = new URL(u); return x.protocol === 'https:' || x.protocol === 'http:' ? x.href : ''; } catch (e) { return ''; } }
+function showSearch(queries, chunks, rendered) {
+  queries = (queries || []).map(q => String(q || '').trim()).filter(Boolean);
+  chunks = (chunks || []).map(c => c && c.web).filter(w => w && safeUrl(w.uri));
+  if (!queries.length && !chunks.length && !rendered) return;
+  const b = searchLine(); searchAt = Date.now();
+  let nuove = 0;
+  for (const q of queries) if (!b.queries.includes(q)) { b.queries.push(q); nuove++; }
+  if (nuove) {
+    b.q.textContent = 'Ho cercato: ';
+    b.queries.forEach((q, i) => { if (i) b.q.append(', '); const a = document.createElement('a'); a.href = 'https://www.google.com/search?q=' + encodeURIComponent(q); a.target = '_blank'; a.rel = 'noopener'; a.textContent = '«' + q + '»'; b.q.append(a); });
+    searchCount++; lastSearch = b.queries[b.queries.length - 1];
+    log('Gemini ha cercato su Google: ' + queries.map(q => '«' + q + '»').join(', ') + '.');
+  }
+  let nuoveF = 0;
+  for (const w of chunks) {
+    const u = safeUrl(w.uri); if (b.uris.includes(u) || b.uris.length >= 6) continue;
+    if (!b.uris.length) b.f.textContent = 'Fonti: '; else b.f.append(' · ');
+    b.uris.push(u); nuoveF++;
+    const a = document.createElement('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    let t = (w.title || '').trim(); if (!t) { try { t = new URL(u).hostname.replace(/^www\./, ''); } catch (e) { t = 'fonte'; } }
+    a.textContent = t.length > 40 ? t.slice(0, 38) + '…' : t; b.f.append(a);
+  }
+  // i suggerimenti di ricerca di Google, mostrati come li manda Google
+  if (rendered && !b.sug) {
+    b.sug = true;
+    const f = document.createElement('iframe'); f.className = 'gsug'; f.title = 'Suggerimenti di Google';
+    f.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
+    f.srcdoc = '<!doctype html><meta charset="utf-8"><base target="_blank"><style>html,body{margin:0;background:transparent;color-scheme:dark}</style>' + rendered;
+    b.p.append(f);
+  }
+  tr.scrollTop = tr.scrollHeight; ui();
+}
+function onGrounding(gm) {
+  if (!gm) return;
+  showSearch(gm.webSearchQueries, gm.groundingChunks, gm.searchEntryPoint && gm.searchEntryPoint.renderedContent);
+}
+// alcuni modelli scrivono la ricerca come codice: google_search.search(queries=["..."])
+function searchFromCode(code) {
+  if (!/google_search|googleSearch/.test(code || '')) return;
+  const q = []; const re = /["']([^"'\n]{2,160})["']/g; let x;
+  const inside = (code.match(/queries\s*=\s*\[([^\]]*)\]/) || code.match(/search\(([^)]*)\)/) || [, ''])[1];
+  while ((x = re.exec(inside))) q.push(x[1]);
+  showSearch(q, [], '');
 }
 function onContent(sc) {
   if (sc.interrupted) { stopPlayback(); aiLine = null; }
-  if (sc.modelTurn && sc.modelTurn.parts) for (const p of sc.modelTurn.parts) if (p.inlineData && p.inlineData.data) playPcm(p.inlineData.data);
-  if (sc.inputTranscription && sc.inputTranscription.text) { if (!userLine) userLine = line('TU', ''); userLine.textContent += sc.inputTranscription.text; aiLine = null; tr.scrollTop = tr.scrollHeight; }
+  if (sc.modelTurn && sc.modelTurn.parts) for (const p of sc.modelTurn.parts) { if (p.inlineData && p.inlineData.data) playPcm(p.inlineData.data); else if (p.executableCode && p.executableCode.code) searchFromCode(p.executableCode.code); }
+  if (sc.groundingMetadata) onGrounding(sc.groundingMetadata);
+  if (sc.inputTranscription && sc.inputTranscription.text) { if (!userLine) { userLine = line('TU', ''); searchBox = null; } userLine.textContent += sc.inputTranscription.text; aiLine = null; tr.scrollTop = tr.scrollHeight; }
   if (sc.outputTranscription && sc.outputTranscription.text) { if (!aiLine) aiLine = line('GEMINI', ''); aiLine.textContent += sc.outputTranscription.text; userLine = null; tr.scrollTop = tr.scrollHeight; }
   if (sc.turnComplete) { aiLine = null; userLine = null; }
 }
@@ -530,8 +605,13 @@ function onClosed(ev, me) {
     // non è mai partita: provo l'altro indirizzo di Google, poi Gemini 3.8 Live
     if (!triedOtherApi) { triedOtherApi = true; api = api === 'v1beta' ? 'v1alpha' : 'v1beta'; log('Riprovo con l\'indirizzo ' + api + ' di Google.'); retryNow(300); return; }
     if (model !== FAST_MODEL && (kind === 'model' || kind === 'other')) {
-      log(model + ' non è partito: per questa conversazione passo a ' + FAST_MODEL + '.');
+      log(model + ' non è partito: per questa conversazione passo a ' + FAST_MODEL + (sessSearch ? ', sempre con la ricerca Google' : '') + '.');
       model = FAST_MODEL; api = 'v1beta'; triedOtherApi = false; handle = null; retryNow(300); return;
+    }
+    // ultima possibilità: Google rifiuta proprio la ricerca. Meglio parlare senza che non parlare.
+    if (sessSearch && /google_?search|googlesearch|grounding|\btools?\b|search/i.test(reason)) {
+      log('Google non accetta la ricerca con ' + model + ': per questa conversazione continuo senza ricerca.');
+      sessSearch = false; searchRefused = true; api = 'v1beta'; triedOtherApi = false; handle = null; retryNow(300); return;
     }
     stopAll('Non riesco a collegarmi a Google' + (reason ? ': «' + reason + '».' : '.'), true); return;
   }
@@ -558,13 +638,14 @@ async function startCall() {
   if (!key && !TEST_WS) { $('#impo').open = true; $('#key').focus(); setHint('Prima incolla la tua chiave qui sotto, poi tocca «Parla».'); return; }
   if (mode === 'prova') stopAll('', true);
   mode = 'call'; fatal = false; everReady = false; handle = null; retries = 0; micFixes = 0;
+  sessSearch = !!S.search; searchRefused = false; searchCount = 0; lastSearch = ''; searchBox = null;
   model = chosenModel(); api = preferredApi(); triedOtherApi = false;
   userLine = aiLine = null; ui();
   setHint('Mi collego a Gemini…');
   try { await ensureCtx(); await startMic(); }
   catch (e) { stopAll(micError(e), true); return; }
   keepAwake(); bgStart();
-  log('Conversazione avviata. Modello scelto: ' + model + '. Voce: ' + S.voice + '.');
+  log('Conversazione avviata. Modello scelto: ' + model + '. Voce: ' + S.voice + '. Ricerca Google: ' + (sessSearch ? 'accesa' : 'spenta') + '.');
   connect();
 }
 async function startProva() {
@@ -665,6 +746,13 @@ function ui() {
   const W = {on: ['Resta acceso', 'ok'], off: [S.wake ? 'Si accende con «Parla»' : 'Si spegne da solo (opzione tolta)', ''], unsupported: ['Questo browser non lo tiene acceso', 'warn'], denied: ['Il telefono non lo tiene acceso', 'warn'], lost: ['Lo riaccendo…', 'warn']};
   const w = W[active() ? wakeState : 'off'] || W.off;
   $('#vSchermo').textContent = w[0]; dot('#dSchermo', w[1]);
+  let r;
+  if (!call) r = S.search ? ['Accesa: Gemini cerca da solo', ''] : ['Spenta nelle impostazioni', ''];
+  else if (searchRefused) r = ['Google non la accetta con questo modello', 'warn'];
+  else if (!sessSearch) r = ['Spenta per questa conversazione', ''];
+  else if (searchCount) r = ['Ultima: «' + (lastSearch.length > 28 ? lastSearch.slice(0, 26) + '…' : lastSearch) + '»', 'ok'];
+  else r = ['Accesa: cerca quando serve', 'ok'];
+  $('#vRic').textContent = r[0]; dot('#dRic', r[1]);
   $('#neroTxt').textContent = 'Linea: ' + l[0].toLowerCase() + ' · microfono: ' + m[0].toLowerCase();
   $('#neroDot').className = 'dot' + (m[1] === 'warn' || m[1] === 'bad' || l[1] === 'warn' ? ' warn' : speaking() ? ' ai' : '');
 }
