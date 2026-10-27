@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Studio Live</title>
+<meta name="description" content="Apre subito AI Studio Live di Google con Gemini 3.8 Live Extended Thinking. ByCSD">
+<meta property="og:title" content="Gemini Live su AI Studio">
+<meta property="og:description" content="Apre subito AI Studio Live di Google. ByCSD">
+<meta property="og:image" content="https://glscomm.github.io/aistudio-live/icona-512.png">
+<meta name="theme-color" content="#12141a">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-title" content="AI Studio Live">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icona-192.png">
+<link rel="apple-touch-icon" href="icona-180.png">
+<noscript><meta http-equiv="refresh" content="0;url=https://aistudio.google.com/live?model=gemini-3.8-live-extended-thinking"></noscript>
+<script>
+/* AI Studio Live diretto, ByCSD.
+   Appena si apre, porta ad AI Studio Live nella stessa scheda.
+   Non porta se: c'e' ?impostazioni nell'indirizzo, si torna qui con Indietro,
+   oppure l'apertura automatica e' spenta nelle impostazioni. */
+(function(){
+  var DEF='gemini-3.8-live-extended-thinking';
+  var OK=['gemini-3.8-live-extended-thinking','gemini-3.8-live','gemini-3.1-flash-live-preview','gemini-2.5-flash-native-audio-preview-12-2025'];
+  var m=DEF, auto=true;
+  try{var s=localStorage.getItem('aistudio-live-modello');if(s&&OK.indexOf(s)>=0)m=s;if(localStorage.getItem('aistudio-live-auto')==='no')auto=false;}catch(e){}
+  var url='https://aistudio.google.com/live?model='+encodeURIComponent(m);
+  var tipo='';
+  try{var n=performance.getEntriesByType('navigation')[0];if(n)tipo=n.type;}catch(e){}
+  var resta=/[?&#]impostazioni\b/.test(location.search+location.hash);
+  var vai=auto&&!resta&&tipo!=='back_forward';
+  window.AISL={DEF:DEF,OK:OK,modello:m,auto:auto,url:url,vai:vai,resta:resta,tipo:tipo};
+  /* dopo il caricamento: cosi' con Indietro da AI Studio si torna qui, senza ripartire da capo */
+  if(vai){addEventListener('load',function(){setTimeout(function(){location.assign(url);},30);});}
+})();
+</script>
+<style>
+:root{--fondo:#12141a;--card:#1c1f27;--ink:#eef0f4;--muted:#a3a9b6;--rule:#2c303b;--blu:#4285f4;--viola:#9b72cb;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,"DejaVu Sans Mono",monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fondo);color:var(--ink);font:17px/1.5 var(--sans)}
+.wrap{max-width:560px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px))}
+.testa{display:flex;align-items:center;gap:14px;margin:4px 0 18px}
+.testa img{width:56px;height:56px;border-radius:14px;flex:none}
+h1{font-size:24px;line-height:1.2;margin:0}
+.sotto{color:var(--muted);font-size:14px;margin:2px 0 0}
+#stato{margin:0 0 14px;color:var(--ink)}
+.apri{display:block;width:100%;text-align:center;text-decoration:none;color:#fff;font-weight:700;font-size:22px;padding:22px 16px;border-radius:18px;background:linear-gradient(135deg,var(--blu),var(--viola));box-shadow:0 6px 18px rgba(66,133,244,.25)}
+.apri:active{transform:translateY(1px);filter:brightness(.95)}
+.mod{color:var(--muted);font-size:14px;text-align:center;margin:10px 0 22px;word-break:break-all}
+.riquadro{background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:14px 16px;margin:0 0 14px}
+.riquadro p{margin:0 0 6px}.riquadro p:last-child{margin:0}
+.riquadro b{color:var(--ink)}
+.muted{color:var(--muted);font-size:15px}
+details.riquadro summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.riquadro summary::-webkit-details-marker{display:none}
+details.riquadro summary::after{content:"\25BE";color:var(--muted)}
+details[open].riquadro summary::after{content:"\25B4"}
+label{display:block;font-size:15px;color:var(--muted);margin:14px 0 6px}
+select{width:100%;font:16px var(--sans);color:var(--ink);background:var(--fondo);border:1px solid var(--rule);border-radius:12px;padding:12px}
+.spunta{display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-size:16px;margin-top:16px}
+.spunta input{width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:var(--blu)}
+.salvato{color:#7fd18b;font-size:14px;min-height:20px;margin:8px 0 0}
+.firma{margin-top:26px;text-align:center;font:600 15px/1 var(--mono);color:var(--muted);letter-spacing:.04em}
+</style>
+</head>
+<body><div class="wrap">
+<div class="testa">
+  <img src="icona-192.png" alt="">
+  <div><h1>Gemini Live su AI Studio</h1><p class="sotto">Apre subito AI Studio Live di Google</p></div>
+</div>
+
+<p id="stato">Sto aprendo AI Studio Live…</p>
+<a id="apri" class="apri" href="https://aistudio.google.com/live?model=gemini-3.8-live-extended-thinking">Apri Gemini Live</a>
+<p class="mod">Modello: <span id="nomeModello">gemini-3.8-live-extended-thinking</span></p>
+
+<div class="riquadro">
+  <p><b>Per metterla sulla Home:</b> in Chrome tocca i tre puntini ⋮ in alto a destra, poi «Aggiungi a schermata Home» e «Aggiungi».</p>
+</div>
+
+<div class="riquadro">
+  <p class="muted">Questa pagina apre AI Studio e basta: da lì in poi comanda AI Studio, con il tuo account Google. Se la voce smette di rispondere, dipende da AI Studio e non da questa pagina.</p>
+</div>
+
+<details class="riquadro" id="impostazioni">
+  <summary>Impostazioni (facoltative)</summary>
+  <label for="modello">Modello da aprire</label>
+  <select id="modello">
+    <option value="gemini-3.8-live-extended-thinking">Gemini 3.8 Live Extended Thinking (quello del tuo link)</option>
+    <option value="gemini-3.8-live">Gemini 3.8 Live</option>
+    <option value="gemini-3.1-flash-live-preview">Gemini 3.1 Flash Live Preview</option>
+    <option value="gemini-2.5-flash-native-audio-preview-12-2025">Gemini 2.5 Flash Native Audio</option>
+  </select>
+  <label class="spunta"><input type="checkbox" id="auto" checked> <span>Apri subito AI Studio quando apro questa pagina</span></label>
+  <p class="salvato" id="salvato" aria-live="polite"></p>
+  <p class="muted">Le scelte restano salvate nel browser di questo telefono. Per tornare qui da AI Studio tocca Indietro: la pagina non riparte da sola. Oppure apri glscomm.github.io/aistudio-live/?impostazioni</p>
+</details>
+
+<p class="firma">ByCSD</p>
+</div>
+<script>
+(function(){
+  var A=window.AISL||{DEF:'gemini-3.8-live-extended-thinking',modello:'gemini-3.8-live-extended-thinking',auto:true,vai:false,resta:false};
+  var sel=document.getElementById('modello'),chk=document.getElementById('auto'),btn=document.getElementById('apri'),
+      nome=document.getElementById('nomeModello'),stato=document.getElementById('stato'),ok=document.getElementById('salvato'),imp=document.getElementById('impostazioni');
+  function link(m){return 'https://aistudio.google.com/live?model='+encodeURIComponent(m);}
+  function mostra(m){btn.href=link(m);nome.textContent=m;}
+  function salva(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+  sel.value=A.modello;chk.checked=A.auto;mostra(A.modello);
+  function fermo(){stato.textContent='Tocca il pulsante per aprire AI Studio Live.';}
+  if(A.resta){fermo();imp.open=true;}
+  else if(!A.vai){fermo();}
+  addEventListener('pageshow',function(e){if(e.persisted)fermo();});
+  sel.addEventListener('change',function(){mostra(sel.value);ok.textContent=salva('aistudio-live-modello',sel.value)?'Salvato: '+sel.value:'Non riesco a salvare la scelta in questo browser.';});
+  chk.addEventListener('change',function(){ok.textContent=salva('aistudio-live-auto',chk.checked?'si':'no')?(chk.checked?'Salvato: apre subito AI Studio.':'Salvato: resta su questa pagina finché non tocchi il pulsante.'):'Non riesco a salvare la scelta in questo browser.';});
+})();
+</script>
+</body>
+</html>
