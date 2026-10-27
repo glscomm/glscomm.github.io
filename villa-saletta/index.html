@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Villa Saletta, la storia</title>
+<style>
+  :root {
+    --carta: #f3e9d2;
+    --carta-scura: #e8dabb;
+    --inchiostro: #2b2118;
+    --seppia: #6b4f2e;
+    --rosso: #8a2d1c;
+    --bordo: #cbb68f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--carta);
+    color: var(--inchiostro);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding-bottom: 9rem;
+  }
+  main { max-width: 42rem; margin: 0 auto; padding: 0 1rem; }
+  header.testata { text-align: center; padding: 1.5rem 0 0.5rem; }
+  .sopratitolo { font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--seppia); margin: 0; }
+  h1 { font-size: 2.3rem; line-height: 1.15; margin: 0.3rem 0 0.4rem; color: var(--rosso); }
+  .sottotitolo { margin: 0 0 0.3rem; font-style: italic; }
+  .data { font-size: 0.95rem; color: var(--seppia); margin: 0; }
+  figure { margin: 1rem 0 1.2rem; }
+  figure img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--bordo); border-radius: 6px;
+    background: var(--carta-scura);
+  }
+  figure img.verticale { aspect-ratio: 4 / 5; object-fit: cover; }
+  figcaption { font-size: 0.95rem; color: var(--seppia); margin-top: 0.35rem; line-height: 1.4; }
+  figcaption a { color: var(--seppia); }
+  section.capitolo {
+    border-top: 2px solid var(--bordo);
+    padding: 1.2rem 0 0.4rem;
+    margin-top: 1rem;
+    scroll-margin-top: 1rem;
+  }
+  section.capitolo.in-lettura { background: var(--carta-scura); border-radius: 8px; padding-left: 0.6rem; padding-right: 0.6rem; }
+  .numero { font-size: 1rem; color: var(--seppia); letter-spacing: 0.06em; text-transform: uppercase; margin: 0; }
+  h2 { font-size: 1.65rem; line-height: 1.25; margin: 0.2rem 0 0.7rem; color: var(--rosso); }
+  p { margin: 0 0 0.9rem; }
+  a { color: var(--rosso); }
+  .fonte { font-size: 0.95rem; color: var(--seppia); }
+  ul.tempo { list-style: none; padding: 0; margin: 0.5rem 0 1rem; }
+  ul.tempo li { padding: 0.45rem 0 0.45rem 0.9rem; border-left: 3px solid var(--rosso); margin-bottom: 0.3rem; }
+  ul.tempo b { color: var(--rosso); }
+  ul.semplice { padding-left: 1.3rem; margin: 0 0 1rem; }
+  ul.semplice li { margin-bottom: 0.5rem; }
+  button, select {
+    font: inherit; font-size: 1.1rem;
+    border: 2px solid var(--seppia); border-radius: 10px;
+    background: #fffaf0; color: var(--inchiostro);
+    padding: 0.55rem 0.9rem; min-height: 3rem;
+  }
+  button.ascolta-cap { margin: 0 0 0.9rem; background: var(--carta-scura); }
+  button:active { background: var(--bordo); }
+  .grande-link {
+    display: block; text-align: center; text-decoration: none;
+    border: 2px solid var(--rosso); border-radius: 10px;
+    padding: 0.7rem 1rem; margin: 0.6rem 0; font-weight: bold;
+    background: #fffaf0;
+  }
+  .indice { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0 0.4rem; }
+  .indice a { font-size: 1rem; text-decoration: none; border: 1px solid var(--bordo); border-radius: 999px; padding: 0.3rem 0.8rem; background: #fffaf0; }
+  .barra {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: #efe2c4; border-top: 2px solid var(--seppia);
+    padding: 0.6rem 0.7rem calc(0.6rem + env(safe-area-inset-bottom));
+    z-index: 10;
+  }
+  .barra-dentro { max-width: 42rem; margin: 0 auto; }
+  .tasti { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 0.5rem; }
+  .tasti button { width: 100%; padding: 0.5rem 0.3rem; }
+  #tasto-play { background: var(--rosso); color: #fffaf0; border-color: var(--rosso); font-weight: bold; }
+  .riga2 { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.45rem; font-size: 1rem; }
+  .riga2 select { min-height: 2.6rem; padding: 0.3rem 0.5rem; font-size: 1rem; }
+  #stato { color: var(--seppia); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  footer { font-size: 1rem; border-top: 2px solid var(--bordo); margin-top: 1.5rem; padding-top: 1rem; }
+  footer li { margin-bottom: 0.45rem; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="testata">
+  <p class="sopratitolo">Palaia, provincia di Pisa</p>
+  <h1>Villa Saletta</h1>
+  <p class="sottotitolo">Mille anni di storia di un borgo-fattoria toscano</p>
+  <p class="data">Aggiornato il 27 ottobre 2026</p>
+</header>
+
+<figure>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Villa_saletta%2C_veduta_01.JPG/960px-Villa_saletta%2C_veduta_01.JPG" width="960" height="640" alt="Veduta del borgo di Villa Saletta sulla collina">
+  <figcaption>Il borgo visto dalla campagna. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_veduta_01.JPG">Wikimedia Commons</a>, licenza CC BY 3.0.</figcaption>
+</figure>
+
+<p>Tocca il tasto rosso <b>Ascolta tutto</b> in basso per sentire la storia dall'inizio, oppure il tasto <b>Ascolta questo capitolo</b> sotto ogni titolo. Puoi anche cambiare la velocità.</p>
+
+<nav class="indice" aria-label="Capitoli">
+  <a href="#c1">Origini</a>
+  <a href="#c2">I signori</a>
+  <a href="#c3">Il borgo</a>
+  <a href="#c4">Guerra e abbandono</a>
+  <a href="#c5">Il cinema</a>
+  <a href="#c6">La rinascita</a>
+  <a href="#c7">Come visitarla</a>
+</nav>
+
+<section class="capitolo" id="c0" data-titolo="Linea del tempo">
+  <p class="numero">In breve</p>
+  <h2 class="leggi">La linea del tempo</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <ul class="tempo leggi-lista">
+    <li><b>Anno 980.</b> Il 27 giugno un documento dell'archivio arcivescovile di Lucca nomina per la prima volta Saletto.</li>
+    <li><b>Fino al 1260.</b> La parrocchia è dedicata ai santi Pietro e Michele, nella diocesi di Lucca.</li>
+    <li><b>Trecento.</b> Secondo la tenuta, i Gambacorta riuniscono le terre intorno al borgo.</li>
+    <li><b>Dalla seconda metà del Quattrocento.</b> Il borgo è della famiglia fiorentina dei Riccardi.</li>
+    <li><b>1833.</b> La parrocchia conta 438 abitanti.</li>
+    <li><b>Seconda guerra mondiale.</b> Il borgo è occupato dall'esercito tedesco e da quello italiano.</li>
+    <li><b>1982, 1993, 2006.</b> Il borgo fa da set per film dei fratelli Taviani e di Paolo Virzì.</li>
+    <li><b>2000.</b> La famiglia inglese Hands compra la tenuta e comincia a restaurarla.</li>
+  </ul>
+</section>
+
+<section class="capitolo" id="c1" data-titolo="Capitolo 1, il nome e le origini">
+  <p class="numero">Capitolo 1</p>
+  <h2 class="leggi">Il nome e le origini</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Villa Saletta è una frazione del comune di Palaia. Il borgo sta su una collina circa quattro chilometri a sud-ovest di Palaia, tra il torrente Roglio e il suo affluente Tosola.</p>
+  <p class="leggi">Il nome viene dai Longobardi. Per loro una "sala" era un insediamento di campagna con una casa signorile. Fino al decimo secolo il luogo si chiamava Saletto.</p>
+  <p class="leggi">La prima notizia scritta è del 27 giugno dell'anno 980: un documento dell'archivio arcivescovile di Lucca, citato dallo storico Emanuele Repetti. Fino al 1260 la parrocchia era dedicata ai santi Pietro e Michele, al centro di una grande tenuta con lo stesso nome.</p>
+  <p class="fonte">Fonte: <a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia, Villa Saletta</a>.</p>
+</section>
+
+<section class="capitolo" id="c2" data-titolo="Capitolo 2, i signori della tenuta">
+  <p class="numero">Capitolo 2</p>
+  <h2 class="leggi">I signori della tenuta</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Secondo la storia raccontata dalla tenuta stessa, nel Trecento la famiglia Gambacorta mise insieme le terre intorno al borgo.</p>
+  <p class="leggi">Dalla seconda metà del Quattrocento il borgo appartenne ai Riccardi, una ricca famiglia di Firenze, banchieri dei Medici. Tra il Cinquecento e il Seicento i Riccardi ne fecero una vera azienda agricola: una villa-fattoria che bastava a se stessa.</p>
+  <p class="leggi">Il loro stemma, uno scudo con una chiave, si vede ancora dipinto accanto alla torre dell'orologio. Dopo i Riccardi la tenuta passò alla famiglia Castelli.</p>
+  <figure>
+    <img class="verticale" loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Villa_saletta%2C_ingresso%2C_stemma_riccardi_01.JPG/960px-Villa_saletta%2C_ingresso%2C_stemma_riccardi_01.JPG" width="960" height="1200" alt="Lo stemma dei Riccardi all'ingresso del borgo">
+    <figcaption>Lo stemma dei Riccardi all'ingresso. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_ingresso,_stemma_riccardi_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <p class="fonte">Fonti: <a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia</a>, <a href="https://villasaletta.com/our-estate/">sito della tenuta Villa Saletta</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<section class="capitolo" id="c3" data-titolo="Capitolo 3, il borgo">
+  <p class="numero">Capitolo 3</p>
+  <h2 class="leggi">Il borgo: villa, torre e due chiese</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Gran parte del borgo è il complesso della villa Riccardi. Sulla piazza principale c'è la villa padronale, con un impianto del Seicento, e accanto la torre con l'orologio.</p>
+  <figure>
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Villa_saletta%2C_villa_padronale_01.JPG/960px-Villa_saletta%2C_villa_padronale_01.JPG" width="960" height="640" alt="La villa padronale di Villa Saletta">
+    <figcaption>La villa padronale. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_villa_padronale_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <figure>
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Villa_saletta%2C_torre_dell%27orologio_01.JPG/960px-Villa_saletta%2C_torre_dell%27orologio_01.JPG" width="960" height="594" alt="La torre dell'orologio">
+    <figcaption>La torre dell'orologio. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_torre_dell%27orologio_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <p class="leggi">Intorno ci sono le grandi case dei contadini, le stalle, i magazzini e gli altri edifici di servizio della fattoria. Il borgo ha anche due chiese: la chiesa parrocchiale e una seconda chiesa più piccola.</p>
+  <figure>
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Villa_saletta%2C_chiesa_parrocchiale_01.JPG/960px-Villa_saletta%2C_chiesa_parrocchiale_01.JPG" width="960" height="640" alt="La chiesa parrocchiale">
+    <figcaption>La chiesa parrocchiale. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_chiesa_parrocchiale_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <figure>
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Villa_saletta%2C_seconda_chiesa_01.JPG/960px-Villa_saletta%2C_seconda_chiesa_01.JPG" width="960" height="612" alt="La seconda chiesa del borgo">
+    <figcaption>La seconda chiesa. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_seconda_chiesa_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <p class="leggi">Nel 1833 la parrocchia dei santi Pietro e Michele a Saletta contava 438 abitanti.</p>
+  <p class="fonte">Fonti: <a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<section class="capitolo" id="c4" data-titolo="Capitolo 4, la guerra e l'abbandono">
+  <p class="numero">Capitolo 4</p>
+  <h2 class="leggi">La guerra e l'abbandono</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Durante la seconda guerra mondiale Villa Saletta fu occupata sia dall'esercito tedesco sia da quello italiano, e subì anche un'incursione delle SS.</p>
+  <p class="leggi">Nel Novecento il borgo si svuotò. Le fonti che ho consultato non danno una data precisa né una causa ufficiale. Si sa però che, quando la famiglia Hands comprò la tenuta, era quasi tutta in rovina. Per questo oggi Villa Saletta è chiamata un "paese fantasma".</p>
+  <figure>
+    <img class="verticale" loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Villa_saletta%2C_edifici_di_servizio_01.JPG/960px-Villa_saletta%2C_edifici_di_servizio_01.JPG" width="960" height="1200" alt="Edifici di servizio della fattoria">
+    <figcaption>Gli edifici di servizio della fattoria. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_edifici_di_servizio_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <p class="fonte">Fonti: <a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia</a>, <a href="https://villasaletta.com/our-estate/">sito della tenuta</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<section class="capitolo" id="c5" data-titolo="Capitolo 5, il cinema">
+  <p class="numero">Capitolo 5</p>
+  <h2 class="leggi">Il borgo nel cinema</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Le strade vuote e la piazza con la torre ne hanno fatto un set molto amato. A Villa Saletta sono state girate scene di tre film:</p>
+  <ul class="semplice leggi-lista">
+    <li>La notte di San Lorenzo, dei fratelli Paolo e Vittorio Taviani, del 1982.</li>
+    <li>Fiorile, sempre dei fratelli Taviani, del 1993.</li>
+    <li>N, Io e Napoleone, di Paolo Virzì, del 2006.</li>
+  </ul>
+  <p class="fonte">Fonti: <a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<section class="capitolo" id="c6" data-titolo="Capitolo 6, la rinascita">
+  <p class="numero">Capitolo 6</p>
+  <h2 class="leggi">La rinascita</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Nel 2000 la tenuta è stata comprata dalla famiglia inglese Hands, quella del finanziere Guy Hands. Oggi è grande circa 3.400 acri, cioè quasi 1.400 ettari.</p>
+  <p class="leggi">Il primo lavoro è stato il vino: vigne vecchie rinnovate e vigne nuove piantate. La tenuta produce circa centomila bottiglie l'anno, oltre a olio e altri prodotti della campagna. C'è poi un progetto per restaurare il borgo medievale e trasformarlo in un luogo di accoglienza per gli ospiti.</p>
+  <p class="leggi">Una curiosità raccontata dalla tenuta: qui si va a caccia di fagiani "all'inglese" da quasi due secoli, e una volta fu ospite anche la regina Vittoria.</p>
+  <p class="leggi">D'estate il borgo disabitato si anima con un festival di teatro popolare, con spettacoli di artisti toscani.</p>
+  <p class="fonte">Fonti: <a href="https://www.terrafirma.com/portfolio/villa-saletta/">Terra Firma, Villa Saletta</a>, <a href="https://villasaletta.com/our-estate/">sito della tenuta</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<section class="capitolo" id="c7" data-titolo="Capitolo 7, come visitarla">
+  <p class="numero">Capitolo 7</p>
+  <h2 class="leggi">Come visitarla</h2>
+  <button class="ascolta-cap" type="button">Ascolta questo capitolo</button>
+  <p class="leggi">Il borgo è privato e fa parte della tenuta. La tenuta accoglie i visitatori per degustazioni di vino, visite alla cantina e visite guidate al borgo, da prenotare.</p>
+  <p class="leggi">Il negozio dei vini è aperto dal lunedì al venerdì dalle 9 alle 18. Il sabato e la domenica apre su richiesta.</p>
+  <p class="leggi">Lì vicino c'è lo storico bar Da Giannini, che risale al 1880, dove si può fare merenda con salumi toscani e vino della zona.</p>
+  <figure>
+    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Villa_saletta%2C_ingresso_01.JPG/960px-Villa_saletta%2C_ingresso_01.JPG" width="960" height="640" alt="L'ingresso del borgo di Villa Saletta">
+    <figcaption>L'ingresso del borgo. Foto di Sailko, <a href="https://commons.wikimedia.org/wiki/File:Villa_saletta,_ingresso_01.JPG">Wikimedia Commons</a>, CC BY 3.0.</figcaption>
+  </figure>
+  <a class="grande-link" href="https://www.google.com/maps/search/?api=1&amp;query=43.595833,10.734444">Apri Villa Saletta sulla mappa</a>
+  <a class="grande-link" href="https://villasaletta.com/visit-the-winery/">Prenota una visita (sito della tenuta, in inglese)</a>
+  <a class="grande-link" href="https://www.youtube.com/watch?v=7D2KgNOr7sA">Guarda il video su YouTube</a>
+  <p class="fonte">Il video è "Villa Saletta è un piccolo ma affascinante borgo", del canale Francovky Russosvky. Fonti: <a href="https://villasaletta.com/visit-the-winery/">sito della tenuta</a>, <a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa</a>.</p>
+</section>
+
+<footer>
+  <p><b>Fonti</b></p>
+  <ul>
+    <li><a href="https://it.wikipedia.org/wiki/Villa_Saletta">Wikipedia in italiano, voce Villa Saletta</a></li>
+    <li><a href="https://villasaletta.com/our-estate/">Villa Saletta, la storia della tenuta</a></li>
+    <li><a href="https://villasaletta.com/visit-the-winery/">Villa Saletta, visite e orari</a></li>
+    <li><a href="https://www.terrafirma.com/portfolio/villa-saletta/">Terra Firma, scheda Villa Saletta</a></li>
+    <li><a href="https://www.terredipisa.it/attrazione/palaia-toiano-borgo-fantasma/">Terre di Pisa, Villa Saletta e Toiano, borghi fantasma</a></li>
+    <li><a href="https://commons.wikimedia.org/wiki/Category:Villa_Saletta">Wikimedia Commons, foto di Villa Saletta</a></li>
+  </ul>
+  <p>Tutte le foto sono di Sailko su Wikimedia Commons, con licenza CC BY 3.0.</p>
+</footer>
+
+</main>
+
+<div class="barra" role="region" aria-label="Lettura ad alta voce">
+  <div class="barra-dentro">
+    <div class="tasti">
+      <button id="tasto-play" type="button">Ascolta tutto</button>
+      <button id="tasto-pausa" type="button" disabled>Pausa</button>
+      <button id="tasto-stop" type="button" disabled>Stop</button>
+    </div>
+    <div class="riga2">
+      <span id="stato">Pronto</span>
+      <label>Velocità
+        <select id="velocita">
+          <option value="0.75">lenta</option>
+          <option value="1" selected>normale</option>
+          <option value="1.25">veloce</option>
+          <option value="1.5">molto veloce</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var synth = window.speechSynthesis;
+  var tPlay = document.getElementById('tasto-play');
+  var tPausa = document.getElementById('tasto-pausa');
+  var tStop = document.getElementById('tasto-stop');
+  var selVel = document.getElementById('velocita');
+  var stato = document.getElementById('stato');
+  var capitoli = Array.prototype.slice.call(document.querySelectorAll('section.capitolo'));
+
+  if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
+    stato.textContent = 'Questo browser non legge ad alta voce';
+    tPlay.disabled = true;
+    document.querySelectorAll('.ascolta-cap').forEach(function (b) { b.disabled = true; });
+    return;
+  }
+
+  var voceIt = null;
+  function scegliVoce() {
+    var voci = synth.getVoices();
+    voceIt = voci.find(function (v) { return v.lang === 'it-IT'; }) ||
+             voci.find(function (v) { return v.lang && v.lang.toLowerCase().indexOf('it') === 0; }) || null;
+  }
+  scegliVoce();
+  if (typeof synth.onvoiceschanged !== 'undefined') synth.onvoiceschanged = scegliVoce;
+
+  // Coda di frasi: [{testo, cap}]
+  var coda = [];
+  var indice = 0;
+  var inLettura = false;
+  var inPausa = false;
+  var generazione = 0;
+
+  function frasiDi(sezione) {
+    var pezzi = [];
+    sezione.querySelectorAll('.leggi, .leggi-lista li').forEach(function (el) {
+      var t = el.textContent.replace(/\s+/g, ' ').trim();
+      if (!t) return;
+      var frasi = t.match(/[^.!?]+[.!?]*/g) || [t];
+      frasi.forEach(function (f) { f = f.trim(); if (f) pezzi.push({ testo: f, cap: sezione }); });
+    });
+    return pezzi;
+  }
+
+  function evidenzia(sez) {
+    capitoli.forEach(function (c) { c.classList.toggle('in-lettura', c === sez); });
+  }
+
+  function aggiornaTasti() {
+    tPausa.disabled = !inLettura;
+    tStop.disabled = !inLettura;
+    tPausa.textContent = inPausa ? 'Riprendi' : 'Pausa';
+  }
+
+  function parla() {
+    if (indice >= coda.length) { fine('Lettura finita'); return; }
+    var pezzo = coda[indice];
+    var mia = generazione;
+    if (!pezzo.cap.classList.contains('in-lettura')) {
+      evidenzia(pezzo.cap);
+      pezzo.cap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    stato.textContent = 'Sto leggendo: ' + (pezzo.cap.getAttribute('data-titolo') || '');
+    var u = new SpeechSynthesisUtterance(pezzo.testo);
+    u.lang = 'it-IT';
+    if (voceIt) u.voice = voceIt;
+    u.rate = parseFloat(selVel.value) || 1;
+    u.onend = function () {
+      if (mia !== generazione || inPausa) return;
+      indice++;
+      parla();
+    };
+    u.onerror = function () {
+      if (mia !== generazione || inPausa) return;
+      indice++;
+      parla();
+    };
+    synth.speak(u);
+  }
+
+  function avvia(sezioni) {
+    generazione++;
+    synth.cancel();
+    coda = [];
+    sezioni.forEach(function (s) { coda = coda.concat(frasiDi(s)); });
+    indice = 0;
+    inLettura = true;
+    inPausa = false;
+    aggiornaTasti();
+    setTimeout(parla, 150);
+  }
+
+  function fine(msg) {
+    generazione++;
+    synth.cancel();
+    inLettura = false;
+    inPausa = false;
+    evidenzia(null);
+    stato.textContent = msg || 'Pronto';
+    aggiornaTasti();
+  }
+
+  tPlay.addEventListener('click', function () { avvia(capitoli); });
+
+  document.querySelectorAll('.ascolta-cap').forEach(function (b) {
+    b.addEventListener('click', function () { avvia([b.closest('section.capitolo')]); });
+  });
+
+  // La pausa ferma la frase e la riprende da capo: funziona anche su Android.
+  tPausa.addEventListener('click', function () {
+    if (!inLettura) return;
+    if (!inPausa) {
+      inPausa = true;
+      generazione++;
+      synth.cancel();
+      stato.textContent = 'In pausa';
+    } else {
+      inPausa = false;
+      generazione++;
+      synth.cancel();
+      setTimeout(parla, 150);
+    }
+    aggiornaTasti();
+  });
+
+  tStop.addEventListener('click', function () { fine('Lettura fermata'); });
+
+  selVel.addEventListener('change', function () {
+    if (inLettura && !inPausa) {
+      generazione++;
+      synth.cancel();
+      setTimeout(parla, 150);
+    }
+  });
+
+  window.addEventListener('pagehide', function () { synth.cancel(); });
+})();
+</script>
+</body>
+</html>
