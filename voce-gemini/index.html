@@ -320,6 +320,8 @@ function daServer(m,sock){
   if(!speaking)cambia();else goTimer=setTimeout(cambia,Math.max(0,tl*1000-1500));}
  if(m.toolCall&&m.toolCall.functionCalls&&sock.readyState===1){ /* nessuna funzione mia: rispondo vuoto per non bloccare */
   sock.send(JSON.stringify({toolResponse:{functionResponses:m.toolCall.functionCalls.map(f=>({id:f.id,name:f.name,response:{result:'non disponibile'}}))}}));}
+ const ist=m.interactionStatus||(m.serverContent&&m.serverContent.interactionStatus);
+ if(ist==='IDLE'&&!speaking&&/ragionando/.test($('stato').textContent))stato(muted?'Microfono muto':'Ti ascolto','ok');
  const sc=m.serverContent;if(!sc)return;
  if(sc.interrupted){svuota();curAi=null;speaking=false;}
  if(sc.modelTurn&&sc.modelTurn.parts){for(const p of sc.modelTurn.parts){
@@ -328,7 +330,7 @@ function daServer(m,sock){
  if(sc.outputTranscription&&sc.outputTranscription.text){curTu=null;if(!curAi)curAi=bolla('ai','');curAi.textContent+=sc.outputTranscription.text;giu();}
  if(sc.groundingMetadata)fonti(sc.groundingMetadata);
  if(sc.turnComplete){curAi=null;curTu=null;speaking=false;
-  if(sc.interactionStatus==='IN_PROGRESS')stato('Sta ancora ragionando o cercando…','warn');else stato(muted?'Microfono muto':'Ti ascolto','ok');
+  if(ist==='IN_PROGRESS')stato('Sta ancora ragionando o cercando…','warn');else stato(muted?'Microfono muto':'Ti ascolto','ok');
   if(goingAway)cambia();}
 }
 function fonti(g){
