@@ -41,6 +41,12 @@ button{font:inherit;cursor:pointer}
 #parla:disabled{opacity:.6}
 #stato{min-height:22px;font-size:16px;text-align:center}
 #stato.ok{color:var(--ok)}#stato.warn{color:var(--warn)}#stato.err{color:var(--err)}
+#errBox{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;width:100%}
+#errBox[hidden],#errTesto[hidden]{display:none}
+#copiaErr{background:#3a1d1d;color:#fff;border:1px solid var(--err);border-radius:10px;padding:8px 14px;font-size:15px}
+#copiaEsito{font-size:13px;color:var(--mut);text-align:center}
+#copiaEsito.ok{color:var(--ok)}#copiaEsito.err{color:var(--warn)}
+#errTesto{width:100%;min-height:150px;background:var(--card2);color:var(--ink);border:1px solid var(--err);border-radius:10px;padding:8px;font:12px/1.35 ui-monospace,Menlo,Consolas,monospace}
 .vu{width:100%;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
 .vu span{width:52px}
 .vu b{flex:1;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
@@ -99,6 +105,8 @@ form#scrivi button{background:var(--card2);color:var(--ink);border:1px solid var
 <div id="centro">
 <button id="parla" type="button">Parla</button>
 <div id="stato">Pronto</div>
+<div id="errBox" hidden><button id="copiaErr" type="button">Copia errore</button><span id="copiaEsito" aria-live="polite"></span></div>
+<textarea id="errTesto" readonly hidden></textarea>
 <div class="vu"><span>Tu</span><b id="vuIn"><i></i></b></div>
 <div class="vu"><span>Gemini</span><b id="vuOut"><i></i></b></div>
 <div class="tasti">
@@ -166,10 +174,13 @@ let ctx=null,playNode=null,micStream=null,micSrc=null,micNode=null,micSink=null,
 let ws=null,ready=false,running=false,muted=false,handle=null,retries=0,goingAway=false,goTimer=0,wakeLock=null;
 let lastTick=0,lastMic=0,queued=0,rxSec=0,reconnects=0,t0=0,stall=0,micStall=0,speaking=false,everReady=false,cerche=0;
 let curTu=null,curAi=null;
+const VERSIONE='Voce Gemini 1.1';
+let errInfo=null,ultimoErroreServer=null;const storico=[];
 
 /* ---------- interfaccia ---------- */
 const chat=$('chat');
-function stato(t,c){const s=$('stato');s.textContent=t;s.className=c||'';}
+function stato(t,c){const s=$('stato');s.textContent=t;s.className=c||'';
+ if(c==='err'){if(!errInfo||Date.now()-errInfo.t>2000)registraErrore({messaggio:t});else{if(!errInfo.messaggio)errInfo.messaggio=t;$('errBox').hidden=false;}}}
 function giu(){chat.scrollTop=chat.scrollHeight;}
 function bolla(cls,t){const d=document.createElement('div');d.className='msg '+cls;d.textContent=t||'';chat.appendChild(d);giu();return d;}
 function sys(t,err){bolla('sys'+(err?' err':''),t);}
@@ -283,7 +294,7 @@ function collega(){
  try{sock=new WebSocket(WS_URL+'?key='+encodeURIComponent(k));}catch(e){ferma('Non riesco ad aprire la connessione: '+e.message,true);return;}
  ws=sock;stato(handle?'Riprendo la conversazione…':'Mi collego a Google…');
  sock.onopen=()=>{if(ws===sock)sock.send(JSON.stringify({setup:setup()}));};
- sock.onmessage=async ev=>{if(ws!==sock)return;let t=ev.data;if(typeof t!=='string')t=await new Response(t).text();let m;try{m=JSON.parse(t);}catch(e){return;}if(ws===sock)daServer(m,sock);};
+ sock.onmessage=async ev=>{if(ws!==sock)return;let t=ev.data;if(typeof t!=='string')t=await new Response(t).text();let m;try{m=JSON.parse(t);}catch(e){if(t&&/error|errore|quota|denied|invalid/i.test(t))ultimoErroreServer=t;return;}if(m&&m.error)ultimoErroreServer=m.error;if(ws===sock)daServer(m,sock);};
  sock.onclose=ev=>{if(ws===sock)chiuso(ev);};
 }
 function cambia(){ /* Google sta per chiudere: riapro con la stessa conversazione */
@@ -306,11 +317,14 @@ function chiuso(ev){
  if(!running)return;
  const w=spiega(ev.code,ev.reason);
  const grezzo='Codice '+ev.code+(ev.reason?': '+ev.reason:'');
- if(goingAway||(!w.fatal&&everReady&&retries<4)){
+ const riprova=goingAway||(!w.fatal&&everReady&&retries<4);
+ storico.push({t:Date.now(),codice:ev.code,motivo:ev.reason,pulito:ev.wasClean,collegato:everReady,esito:riprova?'l\'app ha riprovato':'conversazione fermata'});if(storico.length>8)storico.shift();
+ if(riprova){
   retries++;reconnects++;goingAway=false;
   stato('Collegamento interrotto: riprovo…','warn');sys(w.t+' Riprovo ('+grezzo+')');
   setTimeout(()=>{if(running&&!ws)collega();},Math.min(600*retries,3000));return;
  }
+ registraErrore({messaggio:w.t,codice:ev.code,motivo:ev.reason||'',pulito:ev.wasClean,collegato:everReady,erroreServer:ultimoErroreServer});
  ferma(w.t,true);sys(grezzo,true);
 }
 function daServer(m,sock){
@@ -345,6 +359,7 @@ function fonti(g){
 
 /* ---------- avvio e stop ---------- */
 async function avvia(){
+ nascondiErrore();
  if(!$('chiave').value.trim()){$('imp').open=true;$('chiave').focus();stato('Prima incolla la chiave API','err');return;}
  if(!window.isSecureContext||!navigator.mediaDevices){stato('Serve la pagina aperta in https','err');return;}
  $('parla').disabled=true;stato('Preparo audio e microfono…');
@@ -385,6 +400,52 @@ $('scrivi').onsubmit=e=>{
  ws.send(JSON.stringify({realtimeInput:{text:t}}));curTu=null;curAi=null;bolla('tu',t);$('testo').value='';
 };
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running){tieniAcceso();if(ctx&&ctx.state!=='running')ctx.resume().catch(()=>{});}});
+
+/* ---------- Copia errore: tutti i dettagli, senza la chiave ---------- */
+const NOMI_CODICI={1000:'chiusura normale',1001:'uscita',1002:'errore di protocollo',1003:'dati non accettati',1005:'nessun codice',1006:'chiusura anomala, senza motivo',1007:'dati non validi',1008:'richiesta rifiutata',1009:'messaggio troppo grande',1011:'errore dal lato di Google',1012:'servizio in riavvio',1013:'riprova più tardi',1014:'errore del gateway',1015:'errore di sicurezza della connessione'};
+function registraErrore(o){
+ errInfo=Object.assign({t:Date.now(),impostazioni:Object.assign({},pref),chiave:!!$('chiave').value.trim()},o);
+ $('errBox').hidden=false;$('copiaEsito').textContent='';$('copiaEsito').className='';$('errTesto').hidden=true;$('copiaErr').textContent='Copia errore';
+}
+function nascondiErrore(){errInfo=null;ultimoErroreServer=null;$('errBox').hidden=true;$('errTesto').hidden=true;$('copiaEsito').textContent='';}
+function pulisci(s){
+ s=String(s==null?'':s);const k=$('chiave').value.trim();
+ if(k.length>=8)s=s.split(k).join('[chiave nascosta]');
+ return s.replace(/AIza[0-9A-Za-z_\-]{20,}/g,'[chiave nascosta]').replace(/([?&](?:key|access_token)=)[^&\s"']+/gi,'$1[nascosta]');
+}
+const oraIt=d=>new Date(d).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const byte=s=>new TextEncoder().encode(s||'').length;
+function testoErrore(){
+ const e=errInfo||{t:Date.now(),messaggio:$('stato').textContent,impostazioni:pref,chiave:!!$('chiave').value.trim()};const p=e.impostazioni||pref;
+ const L=[VERSIONE+' - dettagli errore','Data e ora: '+oraIt(e.t),'Messaggio: '+(e.messaggio||'(nessuno)')];
+ if(e.codice!=null)L.push('Codice di chiusura: '+e.codice+(NOMI_CODICI[e.codice]?' ('+NOMI_CODICI[e.codice]+')':''));
+ if('motivo' in e){L.push('Motivo inviato da Google: '+(e.motivo?e.motivo:'(nessuno)'));
+  if(e.motivo){const n=byte(e.motivo);L.push('Lunghezza del motivo: '+n+' byte'+(n>=118?' (Google ne può mandare al massimo 123 in chiusura: se la frase finisce a metà, l\'ha tagliata Google, non l\'app)':''));}}
+ if(e.pulito!=null)L.push('Chiusura regolare: '+(e.pulito?'sì':'no'));
+ if(e.collegato!=null)L.push('Collegamento riuscito prima dell\'errore: '+(e.collegato?'sì':'no'));
+ if(e.erroreServer!=null)L.push('Errore mandato da Google durante la conversazione: '+(typeof e.erroreServer==='string'?e.erroreServer:JSON.stringify(e.erroreServer)));
+ if(e.dettaglio)L.push('Dettaglio tecnico: '+e.dettaglio);
+ L.push('Modello: models/'+p.model);
+ if(p.model.indexOf('thinking')>0)L.push('Ragionamento: '+LIV[p.level]+' ('+p.level+')');
+ L.push('Ricerca Google: '+(p.search?'attiva':'spenta'),'Voce: '+p.voice,'Chiave inserita: '+(e.chiave?'sì (non copiata)':'no'));
+ L.push('Riconnessioni: '+reconnects,'Audio: '+(ctx?ctx.state+' '+ctx.sampleRate+' Hz':'non avviato'),'Internet secondo il telefono: '+(navigator.onLine?'collegato':'scollegato'));
+ L.push('Pagina: '+location.origin+location.pathname,'Browser: '+navigator.userAgent);
+ if(storico.length){L.push('Ultime chiusure del collegamento:');storico.forEach(s=>L.push('- '+oraIt(s.t)+', codice '+s.codice+', motivo: '+(s.motivo||'(nessuno)')+', regolare: '+(s.pulito?'sì':'no')+', collegato prima: '+(s.collegato?'sì':'no')+', '+s.esito));}
+ return pulisci(L.join('\n'));
+}
+function copiaVecchia(t){
+ const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.top='0';a.style.left='-9999px';a.style.opacity='0';
+ document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);let ok=false;try{ok=document.execCommand('copy');}catch(e){ok=false;}a.remove();return ok;
+}
+let copiaTimer=0;
+$('copiaErr').onclick=async()=>{
+ const t=testoErrore();let ok=false;
+ try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){await navigator.clipboard.writeText(t);ok=true;}}catch(e){ok=false;}
+ if(!ok)ok=copiaVecchia(t);
+ const es=$('copiaEsito'),ta=$('errTesto');clearTimeout(copiaTimer);
+ if(ok){ta.hidden=true;es.className='ok';es.textContent='Copiato: ora incollalo nella chat';$('copiaErr').textContent='Copiato \u2713';copiaTimer=setTimeout(()=>{$('copiaErr').textContent='Copia errore';},2500);}
+ else{ta.value=t;ta.hidden=false;ta.focus();ta.select();es.className='err';es.textContent='Copia automatica non riuscita: tieni premuto sul testo qui sotto, scegli «Seleziona tutto» e poi «Copia»';}
+};
 
 /* ---------- controllo continuo: audio fermo, microfono fermo ---------- */
 function mostraDiag(){
