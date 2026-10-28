@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f12">
+<meta name="referrer" content="no-referrer">
+<title>Voce Gemini</title>
+<style>
+:root{--bg:#0d0f12;--card:#171a20;--card2:#1f232b;--ink:#ececec;--mut:#9aa0a8;--rule:#2b3038;--or:#ff9a2e;--ok:#3ecf74;--err:#ff5d5d;--warn:#ffc94a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body{min-height:100dvh}
+#app{max-width:560px;margin:0 auto;padding:calc(10px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;min-height:100dvh}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+h1{margin:0;font-size:24px;font-weight:700;letter-spacing:.2px}
+#sub{margin:0;color:var(--mut);font-size:13px;text-align:right}
+#avviso{background:#3a1d1d;border:1px solid var(--err);border-radius:12px;padding:10px 12px;font-size:14px}
+details#imp{background:var(--card);border:1px solid var(--rule);border-radius:14px}
+details#imp>summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+details#imp>summary::-webkit-details-marker{display:none}
+details#imp>summary::after{content:"\25BE";color:var(--mut)}
+details#imp[open]>summary::after{content:"\25B4"}
+fieldset{border:0;margin:0;padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
+fieldset:disabled{opacity:.55}
+label.campo,div.campo{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--mut)}
+input[type=password],input[type=text],select{width:100%;background:var(--card2);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:11px 12px;font-size:16px}
+label.riga{display:flex;align-items:center;gap:10px;font-size:15px}
+label.riga input{width:22px;height:22px;accent-color:var(--or)}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;background:var(--card2);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:9px 6px;font-size:15px;line-height:1.2}
+.seg button small{color:var(--mut);font-size:12px}
+.seg button[aria-pressed=true]{border-color:var(--or);box-shadow:inset 0 0 0 1px var(--or)}
+.seg button[aria-pressed=true] small{color:var(--or)}
+.nota{margin:0;color:var(--mut);font-size:13px}
+button{font:inherit;cursor:pointer}
+.piccolo{align-self:flex-start;background:none;border:1px solid var(--rule);color:var(--mut);border-radius:9px;padding:6px 10px;font-size:13px}
+#centro{display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 0 2px}
+#parla{width:148px;height:148px;border-radius:50%;border:0;background:var(--or);color:#1a1006;font-size:24px;font-weight:700;box-shadow:0 0 0 6px rgba(255,154,46,.15)}
+#parla.attivo{background:var(--err);color:#fff;box-shadow:0 0 0 6px rgba(255,93,93,.18)}
+#parla:disabled{opacity:.6}
+#stato{min-height:22px;font-size:16px;text-align:center}
+#stato.ok{color:var(--ok)}#stato.warn{color:var(--warn)}#stato.err{color:var(--err)}
+.vu{width:100%;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.vu span{width:52px}
+.vu b{flex:1;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+.vu b i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s linear}
+#vuOut i{background:var(--or)}
+.tasti{display:flex;gap:8px;width:100%}
+.tasti button{flex:1;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:11px;padding:11px 6px;font-size:15px}
+.tasti button[aria-pressed=true]{border-color:var(--warn);color:var(--warn)}
+.tasti button:disabled{opacity:.45}
+#chat{flex:1;min-height:160px;max-height:46dvh;overflow-y:auto;background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px}
+#chat:empty::before{content:"Qui compare il testo di quello che dici tu e di quello che risponde Gemini.";color:var(--mut);font-size:14px}
+.msg{max-width:88%;padding:8px 11px;border-radius:12px;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
+.msg.tu{align-self:flex-end;background:#26303d}
+.msg.ai{align-self:flex-start;background:var(--card2);border-left:3px solid var(--or)}
+.msg.sys{align-self:center;background:none;color:var(--mut);font-size:13px;text-align:center;padding:2px 6px}
+.msg.sys.err{color:var(--err)}
+.fonti{align-self:flex-start;max-width:92%;font-size:13px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 8px}
+.fonti a{color:#8fc2ff;text-decoration:none;border:1px solid var(--rule);border-radius:8px;padding:2px 7px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fonti iframe{width:100%;height:64px;border:0;border-radius:8px;background:#fff}
+form#scrivi{display:flex;gap:8px}
+form#scrivi input{flex:1}
+form#scrivi button{background:var(--card2);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0 16px}
+#diag{margin:0;color:var(--mut);font:12px/1.35 ui-monospace,Menlo,Consolas,monospace;min-height:16px}
+#firma{margin:0;align-self:flex-end;color:var(--or);font-style:italic;font-size:13px}
+</style>
+</head>
+<body>
+<div id="app">
+<header><h1>Voce Gemini</h1><p id="sub"></p></header>
+<div id="avviso" hidden></div>
+
+<details id="imp">
+<summary>Impostazioni</summary>
+<fieldset id="fs">
+<label class="campo">Chiave API di Google AI Studio
+<input id="chiave" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Incolla qui la tua chiave"></label>
+<label class="riga"><input type="checkbox" id="ricorda"> Ricorda la chiave su questo telefono</label>
+<button type="button" id="dimentica" class="piccolo">Dimentica la chiave</button>
+<div class="campo">Modello
+<div class="seg" id="modello">
+<button type="button" data-v="gemini-3.8-live-extended-thinking">3.8 Live<br><small>Extended Thinking</small></button>
+<button type="button" data-v="gemini-3.8-live">3.8 Live<br><small>normale, più rapido</small></button>
+</div></div>
+<div class="campo" id="campoLivello">Ragionamento
+<div class="seg" id="livello">
+<button type="button" data-v="LOW">Basso</button>
+<button type="button" data-v="MEDIUM">Medio</button>
+<button type="button" data-v="HIGH">Alto</button>
+</div></div>
+<label class="campo">Voce <select id="voce"></select></label>
+<label class="riga"><input type="checkbox" id="ricerca"> Ricerca Google durante la conversazione</label>
+<p class="nota">La chiave va solo a Google, direttamente da questo telefono. Se non spunti «Ricorda», sparisce quando chiudi la pagina.</p>
+</fieldset>
+</details>
+
+<div id="centro">
+<button id="parla" type="button">Parla</button>
+<div id="stato">Pronto</div>
+<div class="vu"><span>Tu</span><b id="vuIn"><i></i></b></div>
+<div class="vu"><span>Gemini</span><b id="vuOut"><i></i></b></div>
+<div class="tasti">
+<button id="muto" type="button" aria-pressed="false" disabled>Microfono muto</button>
+<button id="riattiva" type="button" disabled>Riattiva audio</button>
+</div>
+</div>
+
+<div id="chat" aria-live="polite"></div>
+<form id="scrivi" autocomplete="off"><input id="testo" type="text" placeholder="Oppure scrivi qui…"><button type="submit">Invia</button></form>
+<p id="diag"></p>
+<p id="firma">ByCSD</p>
+</div>
+
+<script>
+'use strict';
+(function(){
+const $=id=>document.getElementById(id);
+const WS_URL='wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
+const NOMI={'gemini-3.8-live-extended-thinking':'3.8 Live Extended Thinking','gemini-3.8-live':'3.8 Live'};
+const LIV={LOW:'basso',MEDIUM:'medio',HIGH:'alto'};
+const VOCI=[['Kore','ferma'],['Aoede','ariosa'],['Puck','allegra'],['Charon','informativa'],['Fenrir','vivace'],['Leda','giovanile'],['Orus','ferma'],['Zephyr','brillante'],['Callirrhoe','rilassata'],['Autonoe','brillante'],['Enceladus','sussurrata'],['Iapetus','chiara'],['Umbriel','rilassata'],['Algieba','morbida'],['Despina','morbida'],['Erinome','chiara'],['Algenib','roca'],['Rasalgethi','informativa'],['Laomedeia','allegra'],['Achernar','dolce'],['Alnilam','ferma'],['Schedar','uniforme'],['Gacrux','matura'],['Pulcherrima','diretta'],['Achird','amichevole'],['Zubenelgenubi','informale'],['Vindemiatrix','gentile'],['Sadachbia','vivace'],['Sadaltager','competente'],['Sulafat','calda']];
+
+/* Elaborazione audio fuori dal thread principale: microfono a 16 kHz, riproduzione a coda */
+const WORKLET=`
+class Mic extends AudioWorkletProcessor{
+ constructor(){super();this.r=sampleRate/16000;this.t=0;this.s=0;this.c=0;this.b=new Int16Array(640);this.n=0;this.p=0;this.k=0;}
+ process(inp,out){const ch=inp[0]&&inp[0][0];if(!ch)return true;
+  for(let j=0;j<ch.length;j++){const x=ch[j];this.s+=x;this.c++;this.p+=x*x;this.k++;this.t+=1;
+   if(this.t>=this.r){this.t-=this.r;let v=this.s/this.c;this.s=0;this.c=0;v=v<-1?-1:v>1?1:v;this.b[this.n++]=v<0?v*32768:v*32767;
+    if(this.n===this.b.length){const lv=Math.sqrt(this.p/this.k);this.p=0;this.k=0;this.port.postMessage({pcm:this.b.buffer,lv:lv},[this.b.buffer]);this.b=new Int16Array(640);this.n=0;}}}
+  return true;}}
+registerProcessor('gv-mic',Mic);
+class Player extends AudioWorkletProcessor{
+ constructor(){super();this.q=[];this.cur=null;this.i=0;this.left=0;this.f=0;this.pk=0;
+  this.port.onmessage=e=>{const d=e.data;if(d==='clear'){this.q=[];this.cur=null;this.i=0;this.left=0;}else{this.q.push(d);this.left+=d.length;}};}
+ process(inp,o){const out=o[0][0];let k=0;
+  while(k<out.length){if(!this.cur){this.cur=this.q.shift()||null;this.i=0;if(!this.cur)break;}
+   const n=Math.min(out.length-k,this.cur.length-this.i);out.set(this.cur.subarray(this.i,this.i+n),k);
+   for(let m=k;m<k+n;m++){const a=out[m]<0?-out[m]:out[m];if(a>this.pk)this.pk=a;}
+   k+=n;this.i+=n;this.left-=n;if(this.i>=this.cur.length)this.cur=null;}
+  if(k<out.length)out.fill(0,k);
+  if(++this.f>=16){this.f=0;this.port.postMessage({left:this.left,pk:this.pk});this.pk=0;}
+  return true;}}
+registerProcessor('gv-play',Player);
+`;
+
+class Resampler{
+ constructor(a,b){this.set(a,b);}
+ set(a,b){this.inR=a;this.outR=b;this.step=a/b;this.pos=0;this.last=0;}
+ reset(){this.pos=0;this.last=0;}
+ process(f){const N=f.length;if(!N)return new Float32Array(0);
+  if(this.step===1){this.last=f[N-1];return f;}
+  const out=new Float32Array(Math.ceil((N-this.pos)/this.step)+1);let p=this.pos,k=0;
+  while(p<N){const i=Math.floor(p),fr=p-i;const a=i===0?this.last:f[i-1];out[k++]=a+(f[i]-a)*fr;p+=this.step;}
+  this.pos=p-N;this.last=f[N-1];return out.subarray(0,k).slice();}
+}
+
+/* ---------- stato ---------- */
+let pref={};try{pref=JSON.parse(localStorage.getItem('gv_pref')||'{}')||{};}catch(e){pref={};}
+pref={model:NOMI[pref.model]?pref.model:'gemini-3.8-live-extended-thinking',level:LIV[pref.level]?pref.level:'MEDIUM',voice:pref.voice||'Kore',search:pref.search!==false};
+const savePref=()=>{try{localStorage.setItem('gv_pref',JSON.stringify(pref));}catch(e){}};
+
+let ctx=null,playNode=null,micStream=null,micSrc=null,micNode=null,micSink=null,res=null;
+let ws=null,ready=false,running=false,muted=false,handle=null,retries=0,goingAway=false,goTimer=0,wakeLock=null;
+let lastTick=0,lastMic=0,queued=0,rxSec=0,reconnects=0,t0=0,stall=0,micStall=0,speaking=false,everReady=false,cerche=0;
+let curTu=null,curAi=null;
+
+/* ---------- interfaccia ---------- */
+const chat=$('chat');
+function stato(t,c){const s=$('stato');s.textContent=t;s.className=c||'';}
+function giu(){chat.scrollTop=chat.scrollHeight;}
+function bolla(cls,t){const d=document.createElement('div');d.className='msg '+cls;d.textContent=t||'';chat.appendChild(d);giu();return d;}
+function sys(t,err){bolla('sys'+(err?' err':''),t);}
+function setVu(id,v){const i=$(id).firstChild;i.style.width=Math.min(100,Math.round(v*100))+'%';}
+function sottotitolo(){$('sub').textContent=NOMI[pref.model]+(pref.model.indexOf('thinking')>0?', ragionamento '+LIV[pref.level]:'')+(pref.search?' · ricerca attiva':'');}
+function mostraPref(){
+ document.querySelectorAll('#modello button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===pref.model));
+ document.querySelectorAll('#livello button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===pref.level));
+ $('campoLivello').hidden=pref.model.indexOf('thinking')<0;
+ $('voce').value=pref.voice;$('ricerca').checked=pref.search;sottotitolo();
+}
+VOCI.forEach(v=>{const o=document.createElement('option');o.value=v[0];o.textContent=v[0]+' ('+v[1]+')';$('voce').appendChild(o);});
+if(!VOCI.some(v=>v[0]===pref.voice))pref.voice='Kore';
+$('modello').onclick=e=>{const b=e.target.closest('button');if(!b)return;pref.model=b.dataset.v;savePref();mostraPref();};
+$('livello').onclick=e=>{const b=e.target.closest('button');if(!b)return;pref.level=b.dataset.v;savePref();mostraPref();};
+$('voce').onchange=()=>{pref.voice=$('voce').value;savePref();sottotitolo();};
+$('ricerca').onchange=()=>{pref.search=$('ricerca').checked;savePref();sottotitolo();};
+mostraPref();
+
+/* chiave: solo in memoria, salvo «Ricorda» */
+const K='gv_chiave';
+try{const s=localStorage.getItem(K);if(s){$('chiave').value=s;$('ricorda').checked=true;}}catch(e){}
+if(!$('chiave').value)$('imp').open=true;
+$('ricorda').onchange=()=>{try{if($('ricorda').checked&&$('chiave').value.trim())localStorage.setItem(K,$('chiave').value.trim());else localStorage.removeItem(K);}catch(e){}};
+$('chiave').oninput=()=>{if($('ricorda').checked){try{localStorage.setItem(K,$('chiave').value.trim());}catch(e){}}};
+$('dimentica').onclick=()=>{try{localStorage.removeItem(K);}catch(e){}$('chiave').value='';$('ricorda').checked=false;stato('Chiave cancellata da questo telefono');};
+
+if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.AudioWorkletNode){
+ const a=$('avviso');a.hidden=false;
+ a.textContent=!window.isSecureContext?'Questa pagina non è aperta in modo sicuro (https), quindi Chrome non le dà il microfono. Aprila dal suo indirizzo https.':'Questo browser non ha il microfono o l\'audio necessari. Usa Chrome aggiornato.';
+}
+
+/* ---------- audio ---------- */
+async function preparaAudio(nuovo){
+ if(nuovo&&ctx){const old=ctx;ctx=null;playNode=null;micNode=null;micSrc=null;micSink=null;try{await old.close();}catch(e){}}
+ if(!ctx||ctx.state==='closed'){
+  ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+  ctx.resume().catch(()=>{});
+  const url=URL.createObjectURL(new Blob([WORKLET],{type:'text/javascript'}));
+  try{await ctx.audioWorklet.addModule(url);}finally{URL.revokeObjectURL(url);}
+  playNode=new AudioWorkletNode(ctx,'gv-play',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[1]});
+  playNode.connect(ctx.destination);
+  playNode.port.onmessage=e=>{lastTick=performance.now();queued=e.data.left/ctx.sampleRate;setVu('vuOut',e.data.pk);};
+  res=new Resampler(24000,ctx.sampleRate);
+  ctx.onstatechange=()=>{if(running&&ctx&&ctx.state!=='running'&&ctx.state!=='closed')ctx.resume().catch(()=>{});mostraDiag();};
+ }
+ if(ctx.state!=='running')await ctx.resume().catch(()=>{});
+ lastTick=performance.now();
+ if(micStream)collegaMic();
+}
+async function apriMic(){
+ if(micStream)micStream.getTracks().forEach(t=>t.stop());
+ micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true,channelCount:1}});
+ const tr=micStream.getAudioTracks()[0];
+ tr.onended=()=>{if(running){stato('Il microfono si è chiuso: lo riapro…','warn');riapriMic();}};
+}
+function collegaMic(){
+ try{micSrc&&micSrc.disconnect();}catch(e){}try{micNode&&micNode.disconnect();}catch(e){}try{micSink&&micSink.disconnect();}catch(e){}
+ micSrc=ctx.createMediaStreamSource(micStream);
+ micNode=new AudioWorkletNode(ctx,'gv-mic',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[1]});
+ micSink=ctx.createGain();micSink.gain.value=0;
+ micNode.port.onmessage=suMic;
+ micSrc.connect(micNode);micNode.connect(micSink);micSink.connect(ctx.destination);
+ lastMic=performance.now();
+}
+async function riapriMic(){try{await apriMic();collegaMic();stato('Microfono di nuovo attivo','ok');}catch(e){ferma('Non riesco a riaprire il microfono: '+e.name,true);}}
+function b64(buf){const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s);}
+function suMic(e){
+ lastMic=performance.now();
+ setVu('vuIn',muted?0:Math.min(1,e.data.lv*5));
+ if(!ready||muted||!ws||ws.readyState!==1)return;
+ ws.send(JSON.stringify({realtimeInput:{audio:{data:b64(e.data.pcm),mimeType:'audio/pcm;rate=16000'}}}));
+}
+function suona(b,mime){
+ const m=/rate=(\d+)/.exec(mime||'');const rate=m?+m[1]:24000;
+ if(res.inR!==rate)res.set(rate,ctx.sampleRate);
+ const bin=atob(b);const n=bin.length>>1;const f=new Float32Array(n);
+ for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;f[i]=v/32768;}
+ rxSec+=n/rate;
+ const out=res.process(f);playNode.port.postMessage(out,[out.buffer]);
+}
+function svuota(){if(playNode)playNode.port.postMessage('clear');if(res)res.reset();queued=0;}
+async function riattiva(auto){
+ if(!running)return;
+ try{svuota();await preparaAudio(true);if(!micStream||micStream.getAudioTracks()[0].readyState!=='live'){await apriMic();collegaMic();}
+  stall=0;stato(auto?'Audio bloccato: l\'ho riattivato da solo':'Audio riattivato','ok');sys(auto?'Audio riattivato in automatico':'Audio riattivato');}
+ catch(e){stato('Non riesco a riattivare l\'audio: '+(e.message||e.name),'err');}
+}
+
+/* ---------- collegamento a Gemini ---------- */
+function istruzioni(){
+ const d=new Date();
+ const data=d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const ora=d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+ let s='Parli con l\'utente a voce, in italiano naturale e scorrevole. Rispondi in modo diretto e preciso, con frasi brevi, e approfondisci solo se te lo chiede. Oggi è '+data+', sono le '+ora+' sull\'orologio dell\'utente.';
+ s+=pref.search?' Per tutto quello che può essere cambiato o che non sai con certezza (notizie, risultati sportivi, meteo, prezzi, orari, eventi, persone, versioni di prodotti) usa la ricerca Google prima di rispondere. Non inventare: se non trovi l\'informazione, dillo.':' In questa conversazione non hai accesso a Internet: se ti chiedono fatti recenti, dillo invece di inventare.';
+ return s;
+}
+function setup(){
+ const g={responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:pref.voice}}}};
+ if(pref.model.indexOf('thinking')>0)g.thinkingConfig={thinkingLevel:pref.level};
+ const s={model:'models/'+pref.model,generationConfig:g,systemInstruction:{parts:[{text:istruzioni()}]},
+  inputAudioTranscription:{},outputAudioTranscription:{},contextWindowCompression:{slidingWindow:{}},
+  sessionResumption:handle?{handle:handle}:{}};
+ if(pref.search)s.tools=[{googleSearch:{}}];
+ return s;
+}
+function collega(){
+ ready=false;
+ const k=$('chiave').value.trim();let sock;
+ try{sock=new WebSocket(WS_URL+'?key='+encodeURIComponent(k));}catch(e){ferma('Non riesco ad aprire la connessione: '+e.message,true);return;}
+ ws=sock;stato(handle?'Riprendo la conversazione…':'Mi collego a Google…');
+ sock.onopen=()=>{if(ws===sock)sock.send(JSON.stringify({setup:setup()}));};
+ sock.onmessage=async ev=>{if(ws!==sock)return;let t=ev.data;if(typeof t!=='string')t=await new Response(t).text();let m;try{m=JSON.parse(t);}catch(e){return;}if(ws===sock)daServer(m,sock);};
+ sock.onclose=ev=>{if(ws===sock)chiuso(ev);};
+}
+function cambia(){ /* Google sta per chiudere: riapro con la stessa conversazione */
+ clearTimeout(goTimer);if(!goingAway||!ws)return;
+ const old=ws;ws=null;ready=false;try{old.close(1000,'rinnovo');}catch(e){}
+ goingAway=false;reconnects++;collega();
+}
+function spiega(code,reason){
+ const r=(reason||'').toLowerCase();
+ if(/api key|api_key|unauthenticated|permission|credential|invalid.*key|key.*invalid/.test(r))return{fatal:true,t:'Chiave API non valida, scaduta o senza permessi per questo servizio.'};
+ if(/quota|exhaust|rate limit|too many|429/.test(r))return{fatal:true,t:'Limite raggiunto: la quota del piano gratuito è finita o ci sono troppe richieste. Riprova più tardi.'};
+ if(/location|region|country|not available in your/.test(r))return{fatal:true,t:'Google non offre questo servizio nel paese da cui ti colleghi, con questa chiave.'};
+ if(/not found|not supported|unsupported|is not available|invalid argument|unknown name|cannot find field/.test(r))return{fatal:true,t:'Google non ha accettato il modello o un\'impostazione. Prova l\'altro modello, o togli la ricerca.'};
+ if(code===1006&&!everReady)return{fatal:true,t:'Collegamento rifiutato: controlla la chiave e la connessione Internet.'};
+ if(code===1007||code===1008)return{fatal:true,t:'Google ha rifiutato la richiesta.'};
+ return{fatal:false,t:'Connessione con Google interrotta.'};
+}
+function chiuso(ev){
+ ready=false;ws=null;speaking=false;
+ if(!running)return;
+ const w=spiega(ev.code,ev.reason);
+ const grezzo='Codice '+ev.code+(ev.reason?': '+ev.reason:'');
+ if(goingAway||(!w.fatal&&everReady&&retries<4)){
+  retries++;reconnects++;goingAway=false;
+  stato('Collegamento interrotto: riprovo…','warn');sys(w.t+' Riprovo ('+grezzo+')');
+  setTimeout(()=>{if(running&&!ws)collega();},Math.min(600*retries,3000));return;
+ }
+ ferma(w.t,true);sys(grezzo,true);
+}
+function daServer(m,sock){
+ if(m.setupComplete){ready=true;everReady=true;retries=0;stato(muted?'Microfono muto':'Ti ascolto','ok');return;}
+ if(m.sessionResumptionUpdate){const u=m.sessionResumptionUpdate;if(u.resumable&&u.newHandle)handle=u.newHandle;}
+ if(m.goAway){goingAway=true;const tl=parseFloat(String(m.goAway.timeLeft||'10'))||10;
+  if(!speaking)cambia();else goTimer=setTimeout(cambia,Math.max(0,tl*1000-1500));}
+ if(m.toolCall&&m.toolCall.functionCalls&&sock.readyState===1){ /* nessuna funzione mia: rispondo vuoto per non bloccare */
+  sock.send(JSON.stringify({toolResponse:{functionResponses:m.toolCall.functionCalls.map(f=>({id:f.id,name:f.name,response:{result:'non disponibile'}}))}}));}
+ const sc=m.serverContent;if(!sc)return;
+ if(sc.interrupted){svuota();curAi=null;speaking=false;}
+ if(sc.modelTurn&&sc.modelTurn.parts){for(const p of sc.modelTurn.parts){
+  if(p.inlineData&&p.inlineData.data&&/audio/.test(p.inlineData.mimeType||'audio')){speaking=true;curTu=null;suona(p.inlineData.data,p.inlineData.mimeType);if($('stato').textContent!=='Gemini parla')stato('Gemini parla','ok');}}}
+ if(sc.inputTranscription&&sc.inputTranscription.text){if(!curTu){curTu=bolla('tu','');curAi=null;}curTu.textContent+=sc.inputTranscription.text;giu();}
+ if(sc.outputTranscription&&sc.outputTranscription.text){curTu=null;if(!curAi)curAi=bolla('ai','');curAi.textContent+=sc.outputTranscription.text;giu();}
+ if(sc.groundingMetadata)fonti(sc.groundingMetadata);
+ if(sc.turnComplete){curAi=null;curTu=null;speaking=false;
+  if(sc.interactionStatus==='IN_PROGRESS')stato('Sta ancora ragionando o cercando…','warn');else stato(muted?'Microfono muto':'Ti ascolto','ok');
+  if(goingAway)cambia();}
+}
+function fonti(g){
+ const q=g.webSearchQueries||[];const ch=(g.groundingChunks||[]).filter(c=>c.web&&c.web.uri);
+ if(!q.length&&!ch.length)return;
+ cerche++;const d=document.createElement('div');d.className='fonti';
+ const s=document.createElement('span');s.textContent='Ricerca Google'+(q.length?': '+q.join(' · '):'');d.appendChild(s);
+ ch.slice(0,5).forEach(c=>{const a=document.createElement('a');a.href=c.web.uri;a.target='_blank';a.rel='noopener noreferrer';a.textContent=c.web.title||c.web.domain||'fonte';d.appendChild(a);});
+ if(g.searchEntryPoint&&g.searchEntryPoint.renderedContent){const f=document.createElement('iframe');f.setAttribute('sandbox','allow-popups allow-popups-to-escape-sandbox');f.srcdoc=g.searchEntryPoint.renderedContent;d.appendChild(f);}
+ chat.appendChild(d);giu();
+}
+
+/* ---------- avvio e stop ---------- */
+async function avvia(){
+ if(!$('chiave').value.trim()){$('imp').open=true;$('chiave').focus();stato('Prima incolla la chiave API','err');return;}
+ if(!window.isSecureContext||!navigator.mediaDevices){stato('Serve la pagina aperta in https','err');return;}
+ $('parla').disabled=true;stato('Preparo audio e microfono…');
+ try{await preparaAudio(false);}catch(e){$('parla').disabled=false;stato('Audio non disponibile: '+(e.message||e.name),'err');return;}
+ try{await apriMic();collegaMic();}
+ catch(e){$('parla').disabled=false;stato(e.name==='NotAllowedError'?'Permesso del microfono negato: consentilo dal lucchetto vicino all\'indirizzo':'Microfono non disponibile: '+e.name,'err');return;}
+ running=true;handle=null;retries=0;reconnects=0;rxSec=0;cerche=0;everReady=false;goingAway=false;t0=Date.now();stall=0;micStall=0;
+ $('fs').disabled=true;$('imp').open=false;$('muto').disabled=false;$('riattiva').disabled=false;
+ $('parla').disabled=false;$('parla').textContent='Stop';$('parla').classList.add('attivo');
+ sys('Conversazione con '+NOMI[pref.model]+(pref.model.indexOf('thinking')>0?', ragionamento '+LIV[pref.level]:'')+(pref.search?', con ricerca Google':', senza ricerca'));
+ tieniAcceso();collega();
+}
+function ferma(motivo,errore){
+ running=false;ready=false;goingAway=false;clearTimeout(goTimer);
+ if(ws){const s=ws;ws=null;try{s.close(1000,'stop');}catch(e){}}
+ if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+ try{micSrc&&micSrc.disconnect();}catch(e){}try{micNode&&micNode.disconnect();}catch(e){}micSrc=null;micNode=null;
+ svuota();if(ctx&&ctx.state==='running')ctx.suspend().catch(()=>{});
+ if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
+ muted=false;$('muto').setAttribute('aria-pressed','false');$('muto').textContent='Microfono muto';
+ $('fs').disabled=false;$('muto').disabled=true;$('riattiva').disabled=true;
+ $('parla').disabled=false;$('parla').textContent='Parla';$('parla').classList.remove('attivo');
+ setVu('vuIn',0);setVu('vuOut',0);
+ stato(motivo||'Conversazione chiusa',errore?'err':'');if(errore&&motivo)sys(motivo,true);mostraDiag();
+}
+async function tieniAcceso(){try{if('wakeLock' in navigator&&document.visibilityState==='visible')wakeLock=await navigator.wakeLock.request('screen');}catch(e){}}
+
+$('parla').onclick=()=>{if(running)ferma('Conversazione chiusa');else avvia();};
+$('muto').onclick=()=>{
+ muted=!muted;$('muto').setAttribute('aria-pressed',String(muted));$('muto').textContent=muted?'Riattiva microfono':'Microfono muto';
+ if(muted&&ready&&ws&&ws.readyState===1)ws.send(JSON.stringify({realtimeInput:{audioStreamEnd:true}}));
+ stato(muted?'Microfono muto':(ready?'Ti ascolto':'…'),muted?'warn':'ok');
+};
+$('riattiva').onclick=()=>riattiva(false);
+$('scrivi').onsubmit=e=>{
+ e.preventDefault();const t=$('testo').value.trim();if(!t)return;
+ if(!ready||!ws||ws.readyState!==1){stato('Prima premi Parla per collegarti','warn');return;}
+ ws.send(JSON.stringify({realtimeInput:{text:t}}));curTu=null;curAi=null;bolla('tu',t);$('testo').value='';
+};
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running){tieniAcceso();if(ctx&&ctx.state!=='running')ctx.resume().catch(()=>{});}});
+
+/* ---------- controllo continuo: audio fermo, microfono fermo ---------- */
+function mostraDiag(){
+ if(!ctx){$('diag').textContent='';return;}
+ const sec=running?Math.floor((Date.now()-t0)/1000):0;
+ $('diag').textContent='audio '+ctx.state+' '+ctx.sampleRate+' Hz · voce ricevuta '+Math.round(rxSec)+' s · in coda '+queued.toFixed(1)+' s · ricerche '+cerche+' · riconnessioni '+reconnects+(running?' · '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0'):'');
+}
+setInterval(()=>{
+ if(running&&ctx){
+  const now=performance.now();
+  if(ctx.state==='suspended'||ctx.state==='interrupted')ctx.resume().catch(()=>{});
+  if(now-lastTick>2000){stall++;if(stall===1)stato('L\'audio si è fermato: provo a farlo ripartire…','warn');if(stall>=3&&document.visibilityState==='visible')riattiva(true);}else stall=0;
+  if(!muted&&now-lastMic>3000&&stall===0){micStall++;if(micStall===2){stato('Il microfono non manda più suono: lo riapro…','warn');riapriMic();}}else micStall=0;
+ }
+ mostraDiag();
+},1000);
+})();
+</script>
+</body>
+</html>
