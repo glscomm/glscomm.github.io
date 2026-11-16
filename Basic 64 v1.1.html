@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#16120f">
+<title>Basic 64</title>
+<style>
+html,body{margin:0;padding:0;height:100%;background:#16120f;color:#e8dcc4;font-family:system-ui,Arial,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#scrBox{position:relative;width:min(100%,calc((100vh - 250px)*1.3333),760px);aspect-ratio:4/3;flex:none;background:#000}
+#scr{width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#scrIn{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;opacity:0;resize:none;font-size:16px;color:transparent;background:transparent;caret-color:transparent;-webkit-user-select:text;user-select:text}
+#bar{display:flex;gap:4px;padding:6px 4px 2px;flex:none;width:min(100%,760px);box-sizing:border-box}
+#bar button{flex:1;min-width:0;height:34px;border:0;border-radius:6px;background:linear-gradient(#d9ccb2,#b4a487);color:#2e241c;font:700 13px Arial,sans-serif;box-shadow:inset 0 1px 0 #f4ead6,0 3px 0 #6b604e;padding:0 2px}
+#bar button:active,#bar button.on{transform:translateY(2px);box-shadow:inset 0 1px 0 #f4ead6,0 1px 0 #6b604e}
+#bar button.hot{background:linear-gradient(#e9c86a,#c7a03c)}
+#msg{font-size:12px;height:17px;line-height:17px;padding:0 8px;color:#d6c39d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:min(100%,760px);box-sizing:border-box;flex:none}
+#kb{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:7px 4px 9px;width:min(100%,760px);box-sizing:border-box;background:linear-gradient(#3b3028,#251d17);border-top:2px solid #5b4b3d;border-radius:8px 8px 0 0;min-height:0}
+.r{flex:1 1 0;display:flex;gap:4px;min-height:0;max-height:78px}
+.k{flex:1 1 0;min-width:0;position:relative;border-radius:5px;background:linear-gradient(#64523f,#3f3229 72%,#33281f);box-shadow:inset 0 1px 0 #8a7462,inset 0 -2px 0 #2a2019,0 3px 0 #140f0c,0 4px 4px #0008;color:#f1e6cf;font:700 clamp(10px,3.3vw,16px)/1.05 Arial,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;cursor:pointer}
+.k.sm{font-size:clamp(7px,2.1vw,11px)}
+.k.xs{font-size:clamp(6px,1.7vw,9px);letter-spacing:-.3px;overflow:visible}
+.k.f{background:linear-gradient(#ddd0b5,#b8a888 72%,#a79677);color:#3a2e24;box-shadow:inset 0 1px 0 #f6eddb,inset 0 -2px 0 #8f8166,0 3px 0 #5f5545,0 4px 4px #0008}
+.k.on{transform:translateY(2px);box-shadow:inset 0 1px 0 #8a7462,0 1px 0 #140f0c}
+.k.lit{box-shadow:inset 0 0 0 2px #e9c25a,0 3px 0 #140f0c}
+.k i{position:absolute;top:2px;left:3px;font-style:normal;font-size:clamp(7px,2vw,10px);opacity:.75}
+.k svg{width:62%;height:62%}
+#start{position:fixed;inset:0;z-index:20;background:rgba(8,6,5,.66);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+#go{width:148px;height:148px;border:0;border-radius:26px;background:linear-gradient(#f2e9d6,#cbbd9f);box-shadow:inset 0 2px 0 #fff,0 7px 0 #7b6e58,0 14px 28px #000d;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#go:active{transform:translateY(4px);box-shadow:inset 0 2px 0 #fff,0 3px 0 #7b6e58,0 8px 18px #000d}
+#go svg{width:104px;height:104px}
+#start p{margin:0;font:700 17px Arial,sans-serif;color:#f1e6cf;text-shadow:0 2px 4px #000;letter-spacing:.5px}
+.pan{position:fixed;inset:0;z-index:15;background:rgba(10,8,6,.8);display:none;align-items:center;justify-content:center;padding:14px}
+.pan.open{display:flex}
+.box{background:#2d241d;border:2px solid #6b5846;border-radius:10px;padding:14px;width:min(100%,460px);max-height:90vh;overflow:auto;box-sizing:border-box}
+.box h3{margin:0 0 8px;font:700 17px Arial,sans-serif;color:#f1e6cf}
+.box p{margin:0 0 10px;font-size:14px;color:#d6c39d}
+.box textarea{width:100%;height:38vh;box-sizing:border-box;background:#352879;color:#a49cf0;border:3px solid #6c5eb5;font:15px monospace;padding:6px;-webkit-user-select:text;user-select:text}
+.box button{border:0;border-radius:6px;background:linear-gradient(#d9ccb2,#b4a487);color:#2e241c;font:700 15px Arial,sans-serif;padding:11px 12px;margin:4px 0;box-shadow:0 3px 0 #6b604e}
+.box .row{display:flex;gap:8px;justify-content:flex-end}
+.ex{display:block;width:100%;text-align:left}
+.ex small{display:block;font-weight:400;font-size:12px;color:#5a4c3c}
+@media (min-aspect-ratio:4/3){
+#app{display:grid;grid-template-columns:auto minmax(0,560px);grid-template-rows:auto auto minmax(0,1fr);justify-content:center;align-items:stretch;column-gap:6px;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box}
+#scrBox{--h:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));grid-column:1;grid-row:1/4;align-self:center;width:min(calc(var(--h)*4/3),calc(100vw - 270px - env(safe-area-inset-left) - env(safe-area-inset-right)),66vw)}
+@supports (height:100dvh){#scrBox{--h:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))}}
+#bar,#msg,#kb{grid-column:2;width:100%;min-width:0}
+#bar{grid-row:1;gap:3px;padding:3px 2px 1px}
+#bar button{flex:1 1 auto;height:27px;font-size:11px;padding:0 3px;border-radius:5px;box-shadow:inset 0 1px 0 #f4ead6,0 2px 0 #6b604e}
+#bar button:active,#bar button.on{transform:translateY(1px);box-shadow:inset 0 1px 0 #f4ead6,0 1px 0 #6b604e}
+#msg{grid-row:2;font-size:10px;height:14px;line-height:14px;padding:0 4px}
+#kb{grid-row:3;container-type:inline-size;gap:4px;padding:5px 3px 7px;border-radius:8px;margin-bottom:2px}
+.r{gap:3px;max-height:58px}
+.k{border-radius:4px;font-size:11px;font-size:clamp(9px,4cqw,15px)}
+.k.sm{font-size:7px;font-size:clamp(6px,2.5cqw,10px)}
+.k.xs{font-size:6px;font-size:clamp(5px,2.05cqw,8px)}
+.k i{top:1px;left:2px;font-size:7px;font-size:clamp(6px,2.3cqw,9px)}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="cbm" viewBox="-55 -58.5 117 117"><path d="M15-50.47A52.65 52.65 0 1 0 15 50.47V25.13A29.27 29.27 0 1 1 15-25.13Z" fill="#0b2bb0"/><path d="M15.9-22.5H59.8L40.6-2.47H15.9Z" fill="#0b2bb0"/><path d="M15.9 22.73H59.8L40.6 2.7H15.9Z" fill="#cd1c33"/></symbol></defs></svg>
+<div id="app">
+ <div id="scrBox"><canvas id="scr" width="384" height="272"></canvas><textarea id="scrIn" inputmode="none" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Schermo: tieni premuto per incollare"></textarea></div>
+ <div id="bar"><button id="bPaste" class="hot">Incolla</button><button id="bRun">RUN</button><button id="bStop">STOP</button><button id="bList">LIST</button><button id="bEx">Esempi</button><button id="bKbd" title="Tastiera del telefono">&#9000;</button><button id="bSpd">&times;1</button></div>
+ <div id="msg">Tocca Incolla, o tieni premuto sullo schermo, poi premi RUN.</div>
+ <div id="kb"></div>
+</div>
+<div id="start"><button id="go" aria-label="Accendi"><svg viewBox="0 0 100 100"><use href="#cbm"/></svg></button><p>Tocca per accendere</p></div>
+<div class="pan" id="pPaste"><div class="box"><h3>Incolla il listato</h3><p>Tieni premuto nel riquadro, scegli Incolla, poi tocca Inserisci.</p><textarea id="pTxt" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea><div class="row"><button id="pNo">Annulla</button><button id="pOk">Inserisci</button></div></div></div>
+<div class="pan" id="pEx"><div class="box"><h3>Esempi</h3><div id="exList"></div><div class="row"><button id="exNo">Chiudi</button></div></div></div>
+<script>
+(()=>{'use strict';
+const $=i=>document.getElementById(i);
+const PAL=[0x000000,0xFFFFFF,0x68372B,0x70A4B2,0x6F3D86,0x588D43,0x352879,0xB8C76F,0x6F4F25,0x433900,0x9A6759,0x444444,0x6C6C6C,0x9AD284,0x6C5EB5,0x959595];
+const PX=PAL.map(c=>(0xFF000000|((c&255)<<16)|(c&0xFF00)|(c>>16))>>>0);
+const FU=('3C666E6E60623C00 183C667E66666600 7C66667C66667C00 3C66606060663C00 786C6666666C7800 7E60607860607E00 7E60607860606000 3C66606E66663C00 '+
+'6666667E66666600 3C18181818183C00 1E0C0C0C0C6C3800 666C7870786C6600 6060606060607E00 63777F6B63636300 66767E7E6E666600 3C66666666663C00 '+
+'7C66667C60606000 3C666666663C0E00 7C66667C786C6600 3C66603C06663C00 7E18181818181800 6666666666663C00 66666666663C1800 6363636B7F776300 '+
+'66663C183C666600 6666663C18181800 7E060C1830607E00 3C30303030303C00 0C12307C3062FC00 3C0C0C0C0C0C3C00 00183C7E18181818 0010307F7F301000 '+
+'0000000000000000 1818181800001800 6666660000000000 6666FF66FF666600 183E603C067C1800 62660C1830664600 3C663C3867663F00 060C180000000000 '+
+'0C18303030180C00 30180C0C0C183000 00663CFF3C660000 0018187E18180000 0000000000181830 0000007E00000000 0000000000181800 0003060C18306000 '+
+'3C666E7666663C00 1818381818187E00 3C66060C30607E00 3C66061C06663C00 060E1E667F060600 7E607C0606663C00 3C66607C66663C00 7E660C1818181800 '+
+'3C66663C66663C00 3C66663E06663C00 0000180000180000 0000180000181830 0E18306030180E00 00007E007E000000 70180C060C187000 3C66060C18001800 '+
+'000000FFFF000000 081C3E7F7F1C3E00 1818181818181818 000000FFFF000000 0000FFFF00000000 00FFFF0000000000 00000000FFFF0000 3030303030303030 '+
+'0C0C0C0C0C0C0C0C 000000E0F0381818 18181C0F07000000 181838F0E0000000 C0C0C0C0C0C0FFFF C0E070381C0E0703 03070E1C3870E0C0 FFFFC0C0C0C0C0C0 '+
+'FFFF030303030303 003C7E7E7E7E3C00 0000000000FFFF00 367F7F7F3E1C0800 6060606060606060 000000070F1C1818 C3E77E3C3C7EE7C3 003C7E66667E3C00 '+
+'1818666618183C00 0606060606060606 081C3E7F3E1C0800 181818FFFF181818 C0C03030C0C03030 1818181818181818 0000033E76363600 FF7F3F1F0F070301 '+
+'0000000000000000 F0F0F0F0F0F0F0F0 00000000FFFFFFFF FF00000000000000 00000000000000FF 8080808080808080 CCCC3333CCCC3333 0101010101010101 '+
+'00000000CCCC3333 FFFEFCF8F0E0C080 0303030303030303 1818181F1F181818 000000000F0F0F0F 1818181F1F000000 000000F8F8181818 000000000000FFFF '+
+'0000001F1F181818 181818FFFF000000 000000FFFF181818 181818F8F8181818 C0C0C0C0C0C0C0C0 E0E0E0E0E0E0E0E0 0707070707070707 FFFF000000000000 '+
+'FFFFFF0000000000 0000000000FFFFFF 0103066C78706000 00000000F0F0F0F0 0F0F0F0F00000000 181818F8F8000000 F0F0F0F000000000 F0F0F0F00F0F0F0F').split(' ');
+const FLW=('00003C063E663E00 0060607C66667C00 00003C6060603C00 0006063E66663E00 00003C667E603C00 000E183E18181800 00003E66663E067C 0060607C66666600 '+
+'0018003818183C00 000600060606063C 0060606C786C6600 0038181818183C00 0000667F7F6B6300 00007C6666666600 00003C6666663C00 00007C66667C6060 '+
+'00003E66663E0606 00007C6660606000 00003E603C067C00 00187E1818180E00 0000666666663E00 00006666663C1800 0000636B7F3E3600 0000663C183C6600 '+
+'00006666663E0C78 00007E0C18307E00').split(' ');
+const gl=h=>{const a=[];for(let i=0;i<8;i++)a.push(parseInt(h.substr(i*2,2),16)||0);return a};
+const FONT_U=FU.map(gl),FONT_L=FONT_U.slice();
+for(let i=0;i<26;i++){FONT_L[1+i]=gl(FLW[i]);FONT_L[65+i]=FONT_U[1+i]}
+/* ---------- schermo ---------- */
+const W=384,H=272,BX=32,BY=36;
+const cv=$('scr'),cx=cv.getContext('2d'),img=cx.createImageData(W,H),px=new Uint32Array(img.data.buffer);
+const scr=new Uint8Array(1000).fill(32),col=new Uint8Array(1000).fill(14),cont=new Uint8Array(25);
+let crow=0,ccol=0,color=14,rvs=false,quote=false,lower=false,border=14,bg=6,inRow=-1,inOff=0;
+const prevS=new Int16Array(1000).fill(-1),prevC=new Int16Array(1000).fill(-1);let lastBorder=-1,lastBg=-1,lastLower=-1,blink=true,blinkT=0;
+function render(){let dirty=false;
+ if(border!==lastBorder){const b=PX[border];for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(y<BY||y>=BY+200||x<BX||x>=BX+320)px[y*W+x]=b;lastBorder=border;dirty=true}
+ const full=bg!==lastBg||lower!==lastLower;lastBg=bg;lastLower=lower;
+ const F=lower?FONT_L:FONT_U,bgc=PX[bg],ci=crow*40+ccol,showC=blink&&(mode==='ready'||mode==='input')&&!pasteQ.length;
+ for(let i=0;i<1000;i++){let s=scr[i];if(showC&&i===ci)s^=128;const c=col[i]&15;
+  if(!full&&s===prevS[i]&&c===prevC[i])continue;prevS[i]=s;prevC[i]=c;dirty=true;
+  const g=F[s&127],fg=PX[c],rv=s&128?255:0,x0=BX+(i%40)*8,y0=BY+((i/40)|0)*8;
+  for(let y=0;y<8;y++){const bits=g[y]^rv;let o=(y0+y)*W+x0;for(let m=128;m;m>>=1)px[o++]=bits&m?fg:bgc}}
+ if(dirty)cx.putImageData(img,0,0)}
+const lineStart=r=>(r>0&&cont[r])?r-1:r;
+const posL=()=>ccol+(cont[crow]?40:0);
+function scrollUp(){scr.copyWithin(0,40);col.copyWithin(0,40);scr.fill(32,960);col.fill(color,960);cont.copyWithin(0,1);cont[24]=0;crow--;if(inRow>=0)inRow--}
+function insertRow(r){scr.copyWithin((r+1)*40,r*40,960);col.copyWithin((r+1)*40,r*40,960);cont.copyWithin(r+1,r,24);scr.fill(32,r*40,r*40+40);col.fill(color,r*40,r*40+40);cont[r]=1}
+function advance(){ccol++;if(ccol<40)return;ccol=0;
+ if(!cont[crow]){if(crow<24&&cont[crow+1]){crow++;return}if(crow===24)scrollUp();else insertRow(crow+1);crow++;cont[crow]=1}
+ else{crow++;if(crow>24)scrollUp();else cont[crow]=0}}
+function newline(){let e=crow;if(!cont[crow]&&crow<24&&cont[crow+1])e=crow+1;crow=e+1;ccol=0;while(crow>24)scrollUp();cont[crow]=0;rvs=false;quote=false}
+function clearScr(){scr.fill(32);col.fill(color);cont.fill(0);crow=0;ccol=0;inRow=-1}
+function lineCells(r0){return(r0<24&&cont[r0+1])?80:40}
+function del(){const r0=lineStart(crow),idx=(crow-r0)*40+ccol;if(idx===0)return;const L=lineCells(r0),b=r0*40;for(let i=idx-1;i<L-1;i++){scr[b+i]=scr[b+i+1];col[b+i]=col[b+i+1]}scr[b+L-1]=32;if(ccol>0)ccol--;else{crow--;ccol=39}}
+function ins(){const r0=lineStart(crow),idx=(crow-r0)*40+ccol,L=lineCells(r0),b=r0*40;if(scr[b+L-1]!==32)return;for(let i=L-1;i>idx;i--){scr[b+i]=scr[b+i-1];col[b+i]=col[b+i-1]}scr[b+idx]=32;col[b+idx]=color}
+const COLC={144:0,5:1,28:2,159:3,156:4,30:5,31:6,158:7,129:8,149:9,150:10,151:11,152:12,153:13,154:14,155:15};
+function pet2sc(c){if(c<64)return c;if(c<96)return c-64;if(c<128)return c-32;if(c<192)return c-64;if(c<255)return c-128;return 94}
+function putc(c){
+ if(quote&&c!==13&&c!==141&&c!==20&&(c<32||(c>=128&&c<160))){const sc=(c<32?c:c-64)|128;const i=crow*40+ccol;scr[i]=sc;col[i]=color;advance();return}
+ switch(c){case 13:case 141:newline();return;case 147:clearScr();return;case 19:crow=0;ccol=0;return;
+  case 17:crow++;if(crow>24)scrollUp();return;case 145:if(crow>0)crow--;return;
+  case 29:ccol++;if(ccol>39){ccol=0;crow++;if(crow>24)scrollUp()}return;
+  case 157:if(ccol>0)ccol--;else if(crow>0){crow--;ccol=39}return;
+  case 18:rvs=true;return;case 146:rvs=false;return;case 20:del();return;case 148:ins();return;case 14:lower=true;return;case 142:lower=false;return}
+ if(COLC[c]!==undefined){color=COLC[c];return}
+ if(c<32||(c>=128&&c<160))return;
+ let sc=pet2sc(c);if(rvs)sc|=128;const i=crow*40+ccol;scr[i]=sc;col[i]=color;if(c===34)quote=!quote;advance()}
+function outStr(s){for(let i=0;i<s.length;i++)putc(s.charCodeAt(i))}
+function sc2pet(b){if(b<32)return b+64;if(b<64)return b;if(b<96)return b+128;return b+64}
+function readLogical(r0){const L=lineCells(r0),o=[];let q=false;for(let i=0;i<L;i++){const sc=scr[r0*40+i],b=sc&127;let c;
+  if((sc&128)&&q){c=b<32?b:(b>=64&&b<96?b+64:sc2pet(b))}else c=sc2pet(b);if(c===34)q=!q;o.push(c)}
+ while(o.length&&o[o.length-1]===32)o.pop();return o}
+/* ---------- tokenizer ---------- */
+const KW=['END','FOR','NEXT','DATA','INPUT#','INPUT','DIM','READ','LET','GOTO','RUN','IF','RESTORE','GOSUB','RETURN','REM','STOP','ON','WAIT','LOAD','SAVE','VERIFY','DEF','POKE','PRINT#','PRINT','CONT','LIST','CLR','CMD','SYS','OPEN','CLOSE','GET','NEW','TAB(','TO','FN','SPC(','THEN','NOT','STEP','+','-','*','/','^','AND','OR','>','=','<','SGN','INT','ABS','USR','FRE','POS','SQR','RND','LOG','EXP','COS','SIN','TAN','ATN','PEEK','LEN','STR$','VAL','ASC','CHR$','LEFT$','RIGHT$','MID$','GO'];
+const KWC=KW.map(s=>[...s].map(c=>c.charCodeAt(0)));
+function tokenize(a){const o=[];let i=0,q=false,data=false;
+ while(i<a.length){const c=a[i];
+  if(c===34){q=!q;o.push(c);i++;continue}
+  if(q||(data&&c!==58)){o.push(c);i++;continue}
+  if(c===58){data=false;o.push(c);i++;continue}
+  if(c===63){o.push(153);i++;continue}
+  let t=-1;if(c<128)for(let k=0;k<KWC.length;k++){const w=KWC[k];let j=0;while(j<w.length&&a[i+j]===w[j])j++;if(j===w.length){t=k;break}}
+  if(t<0){o.push(c);i++;continue}
+  o.push(128+t);i+=KWC[t].length;
+  if(t===15){while(i<a.length)o.push(a[i++])}
+  if(t===3)data=true}
+ return o}
+function detok(b){const o=[];let q=false,raw=false;for(const c of b){if(c===34)q=!q;if(c>=128&&c<=203&&!q&&!raw){for(const x of KWC[c-128])o.push(x);if(c===143)raw=true}else o.push(c)}return o}
+/* ---------- interprete ---------- */
+class BErr{constructor(m,d){this.m=m;this.d=d}}
+const err=(m,d)=>{throw new BErr(m,d)};
+const isL=c=>c>=65&&c<=90,isD=c=>c>=48&&c<=57;
+const NUMRE=/^[+-]?(\d+\.?\d*|\.\d+)(E[+-]?\d+)?$/i;
+let prog=new Map(),order=[],mode='ready',B=[],P=0,curIdx=-1,stmtP=0,jumped=false,yieldNow=false,breakReq=false,fast=false,acc=0;
+let stack=[],vars=new Map(),arrs=new Map(),fns=new Map(),dataList=null,dataPtr=0,contPos=null,contOK=false,inp=null,tiOff=0;
+const kb=[],pasteQ=[],mem=new Uint8Array(65536);
+let seed=(Date.now()^0x5bd1e995)|0;
+function rng(){seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+function clrAll(){vars.clear();arrs.clear();fns.clear();stack=[];dataPtr=0;dataList=null}
+function setLine(n,body){if(body.length)prog.set(n,body);else prog.delete(n);order=[...prog.keys()].sort((a,b)=>a-b);contOK=false;clrAll()}
+function findIdx(n){let lo=0,hi=order.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(order[m]===n)return m;if(order[m]<n)lo=m+1;else hi=m-1}return -1}
+function loadLine(i){curIdx=i;B=prog.get(order[i]);P=0}
+function skipSp(){while(P<B.length&&B[P]===32)P++}
+function peekc(){skipSp();return P<B.length?B[P]:0}
+function expect(c){if(peekc()!==c)err('SYNTAX');P++}
+function stmtEnd(p){let q=false;while(p<B.length){const c=B[p];if(c===34)q=!q;else if(c===58&&!q)break;p++}return p}
+function chk(n){if(!isFinite(n)||Math.abs(n)>1.70141183e38)err('OVERFLOW');return n}
+function toInt(v){if(typeof v==='string')err('TYPE MISMATCH');const n=Math.floor(v);if(n<-32768||n>32767)err('ILLEGAL QUANTITY');return n}
+function evalExpr(){return eOr()}
+function evalNum(){const v=eOr();if(typeof v==='string')err('TYPE MISMATCH');return v}
+function evalStr(){const v=eOr();if(typeof v!=='string')err('TYPE MISMATCH');return v}
+function eOr(){let a=eAnd();while(peekc()===176){P++;const b=eAnd();a=toInt(a)|toInt(b)}return a}
+function eAnd(){let a=eNot();while(peekc()===175){P++;const b=eNot();a=toInt(a)&toInt(b)}return a}
+function eNot(){if(peekc()===168){P++;return ~toInt(eNot())}return eRel()}
+function eRel(){let a=eAdd();for(;;){let c=peekc(),m=0;while(c>=177&&c<=179){m|=c===177?1:c===178?2:4;P++;c=peekc()}if(!m)return a;const b=eAdd();
+  if((typeof a==='string')!==(typeof b==='string'))err('TYPE MISMATCH');const r=a<b?-1:a>b?1:0;a=((r>0&&m&1)||(r===0&&m&2)||(r<0&&m&4))?-1:0}}
+function eAdd(){let a=eMul();for(;;){const c=peekc();if(c!==170&&c!==171)return a;P++;const b=eMul();
+  if(c===170&&typeof a==='string'&&typeof b==='string'){a=a+b;if(a.length>255)err('STRING TOO LONG');continue}
+  if(typeof a==='string'||typeof b==='string')err('TYPE MISMATCH');a=chk(c===170?a+b:a-b)}}
+function eMul(){let a=eUn();for(;;){const c=peekc();if(c!==172&&c!==173)return a;P++;const b=eUn();if(typeof a==='string'||typeof b==='string')err('TYPE MISMATCH');if(c===173&&b===0)err('DIVISION BY ZERO');a=chk(c===172?a*b:a/b)}}
+function eUn(){const c=peekc();if(c===171){P++;const v=eUn();if(typeof v==='string')err('TYPE MISMATCH');return -v}if(c===170){P++;return eUn()}return ePow()}
+function ePow(){let a=atom();while(peekc()===174){P++;let s=1,c=peekc();while(c===171||c===170){if(c===171)s=-s;P++;c=peekc()}const b=atom();if(typeof a==='string'||typeof b==='string')err('TYPE MISMATCH');const e=s*b;
+  if(a===0&&e<0)err('DIVISION BY ZERO');if(a<0&&e!==Math.floor(e))err('ILLEGAL QUANTITY');a=chk(Math.pow(a,e))}return a}
+function parseNum(){let s='';while(P<B.length){const c=B[P];if(isD(c)||c===46){s+=String.fromCharCode(c);P++}else if(c===32)P++;else break}
+ if(P<B.length&&B[P]===69){let q=P+1;while(B[q]===32)q++;let sg='';if(B[q]===171){sg='-';q++}else if(B[q]===170)q++;while(B[q]===32)q++;if(isD(B[q])){let e='';while(q<B.length&&isD(B[q])){e+=String.fromCharCode(B[q]);q++}s+='e'+sg+e;P=q}}
+ if(s===''||s==='.')return 0;return chk(parseFloat(s))}
+function varName(){const c=peekc();if(!isL(c))err('SYNTAX');let n=String.fromCharCode(c);P++;
+ while(P<B.length&&(isL(B[P])||isD(B[P]))){if(n.length<2)n+=String.fromCharCode(B[P]);P++}
+ let t='n';if(B[P]===36){n+='$';t='s';P++}else if(B[P]===37){n+='%';t='i';P++}return{n,t}}
+function readIdx(){P++;const ix=[];for(;;){const v=Math.floor(evalNum());if(v<-32768||v>32767)err('ILLEGAL QUANTITY');ix.push(v);if(peekc()===44){P++;continue}expect(41);return ix}}
+function mkArr(d,t){let s=1;for(const x of d)s*=x+1;if(s>200000)err('OUT OF MEMORY');return{dims:d,d:new Array(s).fill(t==='s'?'':0)}}
+function off(a,ix){if(ix.length!==a.dims.length)err('BAD SUBSCRIPT');let o=0;for(let i=0;i<ix.length;i++){const v=ix[i];if(v<0)err('ILLEGAL QUANTITY');if(v>a.dims[i])err('BAD SUBSCRIPT');o=o*(a.dims[i]+1)+v}return o}
+function arrOf(n,t,k){let a=arrs.get(n+'(');if(!a){a=mkArr(Array(k).fill(10),t);arrs.set(n+'(',a)}return a}
+const jiff=()=>((Math.floor(performance.now()*0.06)+tiOff)%5184000+5184000)%5184000;
+function tiStr(){const s=Math.floor(jiff()/60),p=x=>String(x).padStart(2,'0');return p(Math.floor(s/3600)%24)+p(Math.floor(s/60)%60)+p(s%60)}
+function getVar(n,t){if(n==='TI')return jiff();if(n==='TI$')return tiStr();if(n==='ST')return 0;const v=vars.get(n);return v===undefined?(t==='s'?'':0):v}
+function lvalue(){const v=varName();if(peekc()===40)v.ix=readIdx();return v}
+function assign(lv,v){if(lv.t==='s'){if(typeof v!=='string')err('TYPE MISMATCH')}else{if(typeof v==='string')err('TYPE MISMATCH');if(lv.t==='i'){v=Math.floor(v);if(v<-32768||v>32767)err('ILLEGAL QUANTITY')}}
+ if(lv.ix){const a=arrOf(lv.n,lv.t,lv.ix.length);a.d[off(a,lv.ix)]=v;return}
+ if(lv.n==='TI$'){if(!/^\d{6}$/.test(v))err('ILLEGAL QUANTITY');const j=((+v.slice(0,2))*3600+(+v.slice(2,4))*60+(+v.slice(4)))*60;tiOff=j-Math.floor(performance.now()*0.06);return}
+ if(lv.n==='TI'||lv.n==='ST')err('SYNTAX');vars.set(lv.n,v)}
+function numStr(n){chk(n);if(n===0)return' 0';const neg=n<0,a=Math.abs(n);let r=Number(a.toPrecision(9)),s;
+ if(r>=1e9||r<0.01){let[m,x]=r.toExponential(8).split('e');m=m.replace(/\.?0+$/,'');const xi=parseInt(x,10);s=m+'E'+(xi<0?'-':'+')+String(Math.abs(xi)).padStart(2,'0')}
+ else{s=String(r);if(s.indexOf('e')>=0)s=r.toFixed(10).replace(/0+$/,'').replace(/\.$/,'');if(s.startsWith('0.'))s=s.slice(1)}
+ return(neg?'-':' ')+s}
+function valOf(s){const m=s.replace(/^ +/,'').match(/^[+-]?[\d ]*\.?[\d ]*(E[+-]?\d+)?/i);if(!m)return 0;const x=parseFloat(m[0].replace(/ /g,''));return isFinite(x)?x:0}
+function fre(){let u=0;for(const b of prog.values())u+=b.length+5;u+=vars.size*7;for(const a of arrs.values())u+=a.d.length*5;let x=38911-u;if(x>32767)x-=65536;return x}
+function rnd(x){if(x<0){seed=(Math.floor(Math.abs(x)*1000003)^0x2545F491)|0}return rng()}
+function func(t){
+ if(t===196){expect(40);const v=evalNum();expect(41);return numStr(v)}
+ if(t===199){expect(40);const v=Math.floor(evalNum());expect(41);if(v<0||v>255)err('ILLEGAL QUANTITY');return String.fromCharCode(v)}
+ if(t>=200&&t<=202){expect(40);const s=evalStr();expect(44);const n=Math.floor(evalNum());
+  if(t===202){if(n<1||n>255)err('ILLEGAL QUANTITY');let m=255;if(peekc()===44){P++;m=Math.floor(evalNum());if(m<0||m>255)err('ILLEGAL QUANTITY')}expect(41);return s.substr(n-1,m)}
+  expect(41);if(n<0||n>255)err('ILLEGAL QUANTITY');return t===200?s.slice(0,n):(n===0?'':s.slice(-n))}
+ if(t===195||t===197||t===198){expect(40);const s=evalStr();expect(41);if(t===195)return s.length;if(t===198){if(!s.length)err('ILLEGAL QUANTITY');return s.charCodeAt(0)}return valOf(s)}
+ if(t===184||t===185){expect(40);evalExpr();expect(41);return t===184?fre():posL()}
+ if(t===183)err('UNSUPPORTED','USR');
+ expect(40);const x=evalNum();expect(41);
+ switch(t){case 180:return x>0?1:x<0?-1:0;case 181:return Math.floor(x);case 182:return Math.abs(x);
+  case 186:if(x<0)err('ILLEGAL QUANTITY');return Math.sqrt(x);case 187:return rnd(x);case 188:if(x<=0)err('ILLEGAL QUANTITY');return Math.log(x);
+  case 189:return chk(Math.exp(x));case 190:return Math.cos(x);case 191:return Math.sin(x);case 192:return chk(Math.tan(x));case 193:return Math.atan(x);
+  case 194:{const a=Math.floor(x);if(a<0||a>65535)err('ILLEGAL QUANTITY');return peek(a)}}
+ err('SYNTAX')}
+function atom(){const c=peekc();
+ if(isD(c)||c===46)return parseNum();
+ if(c===34){P++;let s='';while(P<B.length&&B[P]!==34)s+=String.fromCharCode(B[P++]);if(B[P]===34)P++;return s}
+ if(isL(c)){const{n,t}=varName();if(peekc()===40){const ix=readIdx();const a=arrOf(n,t,ix.length);return a.d[off(a,ix)]}return getVar(n,t)}
+ if(c===40){P++;const v=evalExpr();expect(41);return v}
+ if(c===171){P++;const v=atom();if(typeof v==='string')err('TYPE MISMATCH');return -v}
+ if(c===170){P++;return atom()}
+ if(c===168){P++;return ~toInt(eRel())}
+ if(c===255){P++;return Math.PI}
+ if(c===165){P++;const{n}=varName();expect(40);const x=evalNum();expect(41);const f=fns.get(n);if(!f)err("UNDEF'D FUNCTION");
+  const old=vars.get(f.p),sb=B,sp=P;vars.set(f.p,x);B=f.B;P=f.P;let v;try{v=evalExpr()}finally{B=sb;P=sp;if(old===undefined)vars.delete(f.p);else vars.set(f.p,old)}return v}
+ if(c>=180&&c<=202){P++;return func(c)}
+ err('SYNTAX')}
+function lineNum(){skipSp();let n=0,any=false;while(P<B.length&&isD(B[P])){n=n*10+B[P]-48;P++;any=true;if(n>63999)err('SYNTAX');skipSp()}return any?n:-1}
+function gotoLine(n){if(n<0)n=0;const i=findIdx(n);if(i<0)err("UNDEF'D STATEMENT");loadLine(i);jumped=true}
+function pushStack(e){if(stack.length>=120)err('OUT OF MEMORY');stack.push(e)}
+let noted={};function note(k,t){if(!noted[k]){noted[k]=1;setMsg(t)}}
+function peek(a){if(a>=1024&&a<2024)return scr[a-1024];if(a>=55296&&a<56296)return col[a-55296]&15;
+ switch(a){case 53280:return border|240;case 53281:return bg|240;case 646:return color;case 198:return Math.min(kb.length,10);case 197:return 64;case 203:return 64;case 211:return posL();case 214:return crow;
+  case 160:return(jiff()>>16)&255;case 161:return(jiff()>>8)&255;case 162:return jiff()&255;case 53272:return lower?23:21;case 199:return rvs?18:0;case 56320:case 56321:return 255;case 53266:return Math.floor(performance.now()*15.6)%256}
+ return mem[a]}
+function poke(a,v){mem[a]=v;if(a>=1024&&a<2024){scr[a-1024]=v;return}if(a>=55296&&a<56296){col[a-55296]=v&15;return}
+ switch(a){case 53280:border=v&15;return;case 53281:bg=v&15;return;case 646:color=v&15;return;case 198:if(v===0)kb.length=0;return;case 53272:lower=(v&2)!==0;return;case 199:rvs=v!==0;return}
+ if(a>=54272&&a<=54300)note('sid','Nota: il suono (chip SID) non \u00e8 emulato: le POKE al suono non producono audio.');
+ else if(a>=53248&&a<=53294)note('vic','Nota: sprite e grafica avanzata (chip VIC) non sono emulati; funzionano bordo e sfondo.')}
+/* istruzioni */
+function sPrint(){let nl=true;for(;;){const c=peekc();if(c===0||c===58)break;
+  if(c===59){P++;nl=false;continue}
+  if(c===44){P++;nl=false;const p=posL(),t=(Math.floor(p/10)+1)*10;for(let i=p;i<t;i++)putc(29);continue}
+  if(c===163||c===166){P++;const n=Math.floor(evalNum());expect(41);if(n<0||n>255)err('ILLEGAL QUANTITY');if(c===163){for(let i=posL();i<n;i++)putc(29)}else for(let i=0;i<n;i++)putc(29);nl=false;continue}
+  const v=evalExpr();nl=true;if(typeof v==='string')outStr(v);else{outStr(numStr(v));putc(29)}}
+ if(nl)putc(13)}
+function sLet(){const lv=lvalue();expect(178);assign(lv,evalExpr())}
+function sFor(){const{n,t}=varName();if(t!=='n')err('TYPE MISMATCH');expect(178);const s=evalNum();expect(164);const lim=evalNum();let st=1;if(peekc()===169){P++;st=evalNum()}
+ assign({n,t},s);for(let i=stack.length-1;i>=0&&stack[i].ty==='f';i--)if(stack[i].n===n){stack.length=i;break}
+ pushStack({ty:'f',n,lim,st,B,idx:curIdx,P:stmtEnd(P)})}
+function sNext(){for(;;){let n=null;if(isL(peekc()))n=varName().n;let i=stack.length-1;for(;i>=0;i--){const e=stack[i];if(e.ty!=='f'){i=-1;break}if(n===null||e.n===n)break}
+  if(i<0)err('NEXT WITHOUT FOR');stack.length=i+1;const e=stack[i];const v=chk(getVar(e.n,'n')+e.st);vars.set(e.n,v);
+  if(e.st>=0?v<=e.lim:v>=e.lim){B=e.B;curIdx=e.idx;P=e.P;jumped=true;return}
+  stack.length=i;if(peekc()===44){P++;continue}return}}
+function sIf(){const v=evalExpr();const c=peekc();if(c!==167&&c!==137)err('SYNTAX');P++;const ok=typeof v==='string'?v.length>0:v!==0;
+ if(!ok){P=B.length;jumped=true;return}
+ if(c===137||isD(peekc())){gotoLine(lineNum());return}jumped=true}
+function sGosub(){const n=lineNum();pushStack({ty:'g',B,idx:curIdx,P:stmtEnd(P)});gotoLine(n)}
+function sReturn(){let i=stack.length-1;while(i>=0&&stack[i].ty!=='g')i--;if(i<0)err('RETURN WITHOUT GOSUB');const e=stack[i];stack.length=i;B=e.B;curIdx=e.idx;P=e.P;jumped=true}
+function sOn(){const v=Math.floor(evalNum());if(v<0||v>255)err('ILLEGAL QUANTITY');const c=peekc();if(c!==137&&c!==141)err('SYNTAX');P++;
+ const l=[];for(;;){l.push(lineNum());if(peekc()===44){P++;continue}break}if(v<1||v>l.length)return;
+ if(c===141)pushStack({ty:'g',B,idx:curIdx,P:stmtEnd(P)});gotoLine(l[v-1])}
+function sDim(){for(;;){const{n,t}=varName();if(peekc()!==40)err('SYNTAX');const ix=readIdx();if(ix.some(x=>x<0))err('ILLEGAL QUANTITY');if(arrs.has(n+'('))err("REDIM'D ARRAY");arrs.set(n+'(',mkArr(ix,t));if(peekc()===44){P++;continue}break}}
+function buildData(){dataList=[];for(const ln of order){const b=prog.get(ln);let q=false,i=0;
+ while(i<b.length){const c=b[i];if(c===34){q=!q;i++;continue}if(!q&&c===143)break;
+  if(!q&&c===131){i++;for(;;){while(b[i]===32)i++;const s=[];
+    if(b[i]===34){i++;while(i<b.length&&b[i]!==34)s.push(b[i++]);if(b[i]===34)i++;while(i<b.length&&b[i]!==44&&b[i]!==58)i++}
+    else{while(i<b.length&&b[i]!==44&&b[i]!==58)s.push(b[i++]);while(s.length&&s[s.length-1]===32)s.pop()}
+    dataList.push({s:String.fromCharCode(...s),ln});if(b[i]===44){i++;continue}break}continue}
+  i++}}}
+function sRead(){for(;;){const lv=lvalue();if(!dataList)buildData();if(dataPtr>=dataList.length)err('OUT OF DATA');const d=dataList[dataPtr++];
+  if(lv.t==='s')assign(lv,d.s);else{const x=d.s.replace(/ /g,'');if(x==='')assign(lv,0);else if(NUMRE.test(x))assign(lv,parseFloat(x));else{const e=new BErr('SYNTAX');e.ln=d.ln;throw e}}
+  if(peekc()===44){P++;continue}break}}
+function sInput(){if(curIdx<0)err('ILLEGAL DIRECT');if(peekc()===35)err('UNSUPPORTED','INPUT#');let pr='';
+ if(peekc()===34){P++;while(P<B.length&&B[P]!==34)pr+=String.fromCharCode(B[P++]);if(B[P]===34)P++;expect(59)}
+ const lvs=[];for(;;){lvs.push(lvalue());if(peekc()===44){P++;continue}break}
+ skipSp();if(P<B.length&&B[P]!==58)err('SYNTAX');inp={lvs,pr,i:0};outStr(pr);inputPrompt('? ')}
+function inputPrompt(s){outStr(s);mode='input';inRow=lineStart(crow);inOff=posL();yieldNow=true}
+function splitFields(s){const f=[];let i=0;for(;;){while(s[i]===' ')i++;let v='';if(s[i]==='"'){i++;while(i<s.length&&s[i]!=='"')v+=s[i++];if(s[i]==='"')i++;while(i<s.length&&s[i]!==',')i++}else{while(i<s.length&&s[i]!==',')v+=s[i++]}f.push(v);if(s[i]===','){i++;continue}return f}}
+function doInput(codes){const s=String.fromCharCode(...codes);if(s.trim()===''&&inp.i===0){mode='run';inp=null;return}
+ const f=splitFields(s);let k=0;
+ while(k<f.length&&inp.i<inp.lvs.length){const lv=inp.lvs[inp.i],v=f[k];
+  if(lv.t==='s')assign(lv,v);else{const x=v.replace(/ /g,'');if(x==='')assign(lv,0);else if(NUMRE.test(x))assign(lv,parseFloat(x));else{outStr('?REDO FROM START');putc(13);inp.i=0;outStr(inp.pr);inputPrompt('? ');return}}
+  inp.i++;k++}
+ if(inp.i<inp.lvs.length){inputPrompt('?? ');return}
+ if(k<f.length){outStr('?EXTRA IGNORED');putc(13)}mode='run';inp=null}
+function sGet(){if(curIdx<0)err('ILLEGAL DIRECT');if(peekc()===35)err('UNSUPPORTED','GET#');for(;;){const lv=lvalue();const k=kb.length?kb.shift():-1;
+  if(lv.t==='s')assign(lv,k<0?'':String.fromCharCode(k));else{if(k<0)assign(lv,0);else if(isD(k))assign(lv,k-48);else err('SYNTAX')}
+  if(peekc()===44){P++;continue}break}}
+function sPoke(){const a=Math.floor(evalNum());expect(44);const v=Math.floor(evalNum());if(a<0||a>65535||v<0||v>255)err('ILLEGAL QUANTITY');poke(a,v)}
+function sWait(){const a=Math.floor(evalNum());expect(44);const m=Math.floor(evalNum());let x=0;if(peekc()===44){P++;x=Math.floor(evalNum())}if(a<0||a>65535)err('ILLEGAL QUANTITY');
+ if(((peek(a)^x)&m)===0){P=stmtP;jumped=true;yieldNow=true}}
+function sSys(){const a=Math.floor(evalNum());if(a===64738){coldStart();B=[];P=0;curIdx=-1;jumped=true;mode='ready';return}
+ if(a===58732||a===58640){crow=Math.min(24,mem[214]);ccol=Math.min(39,mem[211]);return}
+ err('UNSUPPORTED','SYS '+a)}
+function sRun(){let n=-1;if(isD(peekc()))n=lineNum();clrAll();contOK=false;if(!order.length)return;if(n>=0)gotoLine(n);else{loadLine(0);jumped=true}}
+function sList(){let a=0,b=63999;const c=peekc();if(isD(c)){a=lineNum();b=a;if(peekc()===171){P++;b=isD(peekc())?lineNum():63999}}else if(c===171){P++;b=lineNum()}
+ for(const ln of order){if(ln<a||ln>b)continue;outStr(ln+' ');for(const x of detok(prog.get(ln)))putc(x);putc(13)}
+ if(curIdx>=0){B=[];P=0;curIdx=-1;jumped=true}}
+function sDef(){if(curIdx<0)err('ILLEGAL DIRECT');expect(165);const{n}=varName();expect(40);const pv=varName();if(pv.t!=='n')err('TYPE MISMATCH');expect(41);expect(178);fns.set(n,{p:pv.n,B,P});P=stmtEnd(P)}
+function fname(){if(peekc()!==34)err('MISSING FILE NAME');P++;let s='';while(P<B.length&&B[P]!==34)s+=String.fromCharCode(B[P++]);if(B[P]===34)P++;while(peekc()===44){P++;evalExpr()}if(!s)err('MISSING FILE NAME');return s}
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}},keys(){try{return Object.keys(localStorage)}catch(e){return[]}}};
+const toC=s=>[...s].map(c=>c.charCodeAt(0));
+function sSave(){const n=fname();const data=JSON.stringify(order.map(l=>[l,prog.get(l)]));outStr('SAVING '+n);putc(13);if(!store.set('basic64:'+n,data))err('UNSUPPORTED','SAVE');setMsg('Programma \u00ab'+n+'\u00bb salvato in questo browser. Per riaverlo: LOAD "'+n+'"')}
+function sLoad(){const n=fname();outStr('SEARCHING FOR '+n);putc(13);let lines;
+ if(n==='$'||n==='$0'){const names=store.keys().filter(k=>k.startsWith('basic64:')).map(k=>k.slice(8)).sort();lines=[[0,toC('"BASIC 64 DISCO  " 00 2A')]];names.forEach((x,i)=>lines.push([i+1,toC(('"'+x+'"').padEnd(19)+'PRG')]));lines.push([names.length+1,toC('BLOCKS FREE.')])}
+ else{const d=store.get('basic64:'+n);if(!d)err('FILE NOT FOUND');lines=JSON.parse(d)}
+ outStr('LOADING');putc(13);prog=new Map(lines);order=[...prog.keys()].sort((a,b)=>a-b);dataList=null;contOK=false;
+ if(curIdx>=0){if(order.length){loadLine(0);jumped=true}else{B=[];P=0;curIdx=-1;jumped=true}}}
+function sNew(){prog.clear();order=[];clrAll();contOK=false;if(curIdx>=0){B=[];P=0;curIdx=-1;jumped=true}}
+function stmt(t){switch(t){
+ case 128:if(curIdx>=0){contPos={B,idx:curIdx,P};contOK=true}finish();jumped=true;return;
+ case 129:return sFor();case 130:return sNext();case 131:P=stmtEnd(P);return;case 132:err('UNSUPPORTED','INPUT#');
+ case 133:return sInput();case 134:return sDim();case 135:return sRead();case 136:return sLet();case 137:return gotoLine(lineNum());
+ case 138:return sRun();case 139:return sIf();case 140:dataPtr=0;return;case 141:return sGosub();case 142:return sReturn();case 143:P=B.length;return;
+ case 144:doBreak();jumped=true;return;case 145:return sOn();case 146:return sWait();case 147:return sLoad();case 148:return sSave();
+ case 149:err('UNSUPPORTED','VERIFY');case 150:return sDef();case 151:return sPoke();case 152:err('UNSUPPORTED','PRINT#');case 153:return sPrint();
+ case 154:if(!contOK||!contPos)err("CAN'T CONTINUE");B=contPos.B;curIdx=contPos.idx;P=contPos.P;jumped=true;return;
+ case 155:return sList();case 156:clrAll();return;case 157:err('UNSUPPORTED','CMD');case 158:return sSys();case 159:err('UNSUPPORTED','OPEN');case 160:err('UNSUPPORTED','CLOSE');
+ case 161:return sGet();case 162:return sNew();case 203:expect(164);return gotoLine(lineNum())}
+ err('SYNTAX')}
+function exec1(){skipSp();
+ if(P>=B.length){if(curIdx<0||curIdx+1>=order.length){finish();return}loadLine(curIdx+1);return}
+ const c=B[P];if(c===58){P++;return}
+ stmtP=P;jumped=false;
+ if(isL(c))sLet();else if(c>=128&&c<=203){P++;stmt(c)}else err('SYNTAX');
+ if(!jumped&&mode==='run'){skipSp();if(P<B.length&&B[P]!==58)err('SYNTAX')}}
+function readyMsg(){if(ccol!==0||cont[crow])putc(13);outStr('READY.');putc(13)}
+function finish(){mode='ready';inp=null;readyMsg()}
+function doBreak(){contPos={B,idx:curIdx,P};contOK=curIdx>=0;const ln=curIdx>=0?order[curIdx]:-1;mode='ready';inp=null;quote=false;
+ if(ccol!==0||cont[crow])putc(13);outStr('BREAK'+(ln>=0?' IN '+ln:''));putc(13);readyMsg()}
+const HINT={'SYNTAX':'Errore di sintassi: controlla parole chiave, virgolette e due punti nella riga indicata.',"UNDEF'D STATEMENT":'GOTO, GOSUB o THEN puntano a una riga che non esiste.','TYPE MISMATCH':'Hai mescolato numeri e testo (con $ \u00e8 testo, senza $ \u00e8 un numero).','ILLEGAL QUANTITY':'Un valore \u00e8 fuori dai limiti consentiti.','NEXT WITHOUT FOR':'NEXT senza il FOR corrispondente.','RETURN WITHOUT GOSUB':'RETURN senza un GOSUB prima.','OUT OF DATA':'READ ha finito i valori nelle righe DATA.','DIVISION BY ZERO':'Divisione per zero.','BAD SUBSCRIPT':'Indice oltre la dimensione della tabella (DIM).',"REDIM'D ARRAY":'Tabella dimensionata due volte con DIM.','ILLEGAL DIRECT':'INPUT, GET e DEF funzionano solo dentro un programma con i numeri di riga.',"CAN'T CONTINUE":'CONT non pu\u00f2 riprendere: il programma \u00e8 cambiato o si \u00e8 fermato per un errore.',"UNDEF'D FUNCTION":'Funzione FN non definita con DEF.','FILE NOT FOUND':'Nessun programma salvato con quel nome in questo browser.','MISSING FILE NAME':'Serve il nome tra virgolette, per esempio SAVE "PROVA".','OUT OF MEMORY':'Troppi FOR o GOSUB annidati, oppure tabella troppo grande.','STRING TOO LONG':'Una stringa supera i 255 caratteri.','OVERFLOW':'Numero troppo grande.'};
+function onErr(e){if(!(e instanceof BErr)){console.error(e);e=new BErr('UNSUPPORTED','?')}
+ const ln=e.ln!==undefined?e.ln:(curIdx>=0&&mode!=='ready'?order[curIdx]:-1);mode='ready';inp=null;quote=false;rvs=false;contOK=false;
+ if(ccol!==0||cont[crow])putc(13);outStr('?'+e.m+'  ERROR'+(ln>=0?' IN '+ln:''));putc(13);readyMsg();
+ setMsg(e.m==='UNSUPPORTED'?(e.d+': comando non disponibile in questo emulatore.'):(HINT[e.m]||''))}
+/* ---------- editor ---------- */
+function submit(codes){let i=0;while(codes[i]===32)i++;if(i>=codes.length)return;
+ if(isD(codes[i])){let n=0;while(i<codes.length&&isD(codes[i])){n=n*10+codes[i]-48;i++;if(n>63999){onErr(new BErr('SYNTAX'));return}}while(codes[i]===32)i++;setLine(n,tokenize(codes.slice(i)));return}
+ B=tokenize(codes.slice(i));P=0;curIdx=-1;mode='run';if(acc<4)acc=4}
+function editKey(k){if(k===13||k===141){const r0=lineStart(crow);let codes=readLogical(r0);
+  if(mode==='input'){if(r0===inRow)codes=codes.slice(inOff);putc(13);doInput(codes)}else{putc(13);submit(codes)}return}
+ putc(k)}
+function typeLine(codes){if(ccol!==0)putc(13);const r=crow;scr.fill(32,r*40,r*40+40);if(r<24&&cont[r+1])scr.fill(32,(r+1)*40,(r+1)*40+40);for(const c of codes)putc(c);putc(13);submit(codes)}
+function editorPump(){try{let n=0;while(kb.length&&(mode==='ready'||mode==='input')&&n<40){editKey(kb.shift());n++}
+  let l=0;while(mode==='ready'&&pasteQ.length&&l<6){typeLine(pasteQ.shift());l++}}catch(e){onErr(e)}}
+/* ---------- incolla ---------- */
+const BR={clr:147,'shift-clr':147,'shift clr':147,'clr/home':147,'shift-clr/home':147,'shift clr/home':147,clear:147,home:19,down:17,up:145,right:29,left:157,'crsr down':17,'crsr up':145,'crsr right':29,'crsr left':157,cd:17,cu:145,cr:29,cl:157,'rvs on':18,rvson:18,rvs:18,'rev on':18,'rvs off':146,rvsoff:146,'rev off':146,wht:5,white:5,red:28,grn:30,green:30,blu:31,blue:31,blk:144,black:144,pur:156,purple:156,yel:158,yellow:158,cyn:159,cyan:159,orng:129,orange:129,brn:149,brown:149,lred:150,'light red':150,gry1:151,grey1:151,'dark gray':151,'dark grey':151,gry2:152,grey2:152,gray:152,grey:152,lgrn:153,'light green':153,lblu:154,'light blue':154,gry3:155,grey3:155,'light gray':155,'light grey':155,del:20,inst:148,space:32,pi:255,f1:133,f3:134,f5:135,f7:136,f2:137,f4:138,f6:139,f8:140};
+function uni(ch){const u=ch.charCodeAt(0);
+ if(ch==='\u201C'||ch==='\u201D'||ch==='\u201E'||ch==='\u00AB'||ch==='\u00BB')return 34;if(ch==='\u2018'||ch==='\u2019'||ch==='`')return 39;
+ if(u>=97&&u<=122)return u-32;if(u>=32&&u<=93)return u===92?47:u;
+ if(ch==='\u00A3')return 92;if(ch==='^'||ch==='\u2191')return 94;if(ch==='_'||ch==='\u2190')return 95;if(ch==='\u03C0')return 255;if(ch==='|')return 125;
+ if(ch==='\t'||ch==='\u00A0')return 32;if(ch==='{')return 91;if(ch==='}')return 93;if(ch==='\u2212')return 45;
+ const b=ch.normalize('NFD')[0];if(b&&/[a-z]/i.test(b))return b.toUpperCase().charCodeAt(0);return 63}
+function lineToPet(s){const o=[];let q=false,i=0;while(i<s.length){const ch=s[i];
+  if(q&&ch==='{'){const j=s.indexOf('}',i);if(j>i){let nm=s.slice(i+1,j).toLowerCase().trim(),rep=1;const m=nm.match(/^(\d+)\s*(.*)$/);if(m){rep=+m[1];nm=m[2]}const code=BR[nm];if(code!==undefined){for(let r=0;r<Math.min(rep,80);r++)o.push(code);i=j+1;continue}}}
+  if(q&&ch==='('){const m=s.slice(i).match(/^\((shift[- ]?)?clr\/home\)/i);if(m){o.push(m[1]?147:19);i+=m[0].length;continue}}
+  const c=uni(ch);if(c===34)q=!q;o.push(c);i++}return o}
+function doPaste(text){if(!text)return;text=text.replace(/\r\n?/g,'\n');const hasNL=/\n/.test(text);
+ const lines=text.split('\n').map(l=>l.replace(/\s+$/,'')).filter(l=>l.trim()!=='').map(lineToPet);if(!lines.length)return;
+ if(mode==='run'||mode==='input'){for(const l of lines){for(const c of l)if(kb.length<80)kb.push(c);if(hasNL)kb.push(13)}return}
+ if(!hasNL&&lines.length===1){for(const c of lines[0])kb.push(c);setMsg('Riga inserita: premi RETURN per confermarla.');return}
+ const numbered=lines.filter(l=>{let i=0;while(l[i]===32)i++;return isD(l[i])}).length;
+ const first=String.fromCharCode(...lines[0]).trim();if(numbered>=2&&prog.size&&first!=='NEW'){pasteQ.push([78,69,87]);setMsg('Listato incollato; il programma di prima \u00e8 stato cancellato con NEW. Premi RUN.')}
+ else setMsg(numbered?'Listato incollato. Premi RUN.':'Righe inserite.');
+ for(const l of lines)pasteQ.push(l)}
+/* ---------- reset ---------- */
+function coldStart(){border=14;bg=6;color=14;lower=false;rvs=false;quote=false;clearScr();prog.clear();order=[];clrAll();kb.length=0;pasteQ.length=0;contOK=false;
+ putc(13);outStr('    **** COMMODORE 64 BASIC V2 ****');putc(13);putc(13);outStr(' 64K RAM SYSTEM  38911 BASIC BYTES FREE');putc(13);putc(13);outStr('READY.');putc(13)}
+function warmStart(){mode='ready';inp=null;border=14;bg=6;color=14;lower=false;rvs=false;quote=false;kb.length=0;pasteQ.length=0;clearScr();outStr('READY.');putc(13)}
+/* ---------- ciclo principale ---------- */
+let lastT=0;const SPEED=0.95;
+function step(dt){blinkT+=dt;if(blinkT>=333){blinkT=0;blink=!blink}
+ if(breakReq){breakReq=false;if(mode==='run'||mode==='input')doBreak()}
+ if(mode==='ready'||mode==='input')editorPump();
+ if(mode==='run'){acc=Math.min(acc+dt*SPEED,300);const tEnd=performance.now()+12;let n=0;
+  try{while(mode==='run'){if(yieldNow){yieldNow=false;break}
+    if(fast){if((++n&127)===0&&performance.now()>tEnd)break}else{if(acc<1)break;acc--}
+    exec1()}}catch(e){onErr(e)}
+  yieldNow=false}else acc=0}
+function frame(t){const dt=Math.min(100,t-(lastT||t));lastT=t;step(dt);render();requestAnimationFrame(frame)}
+function setMsg(t){$('msg').textContent=t}
+/* ---------- tastiera C64 ---------- */
+const CBM={A:176,B:191,C:188,D:172,E:177,F:187,G:165,H:180,I:162,J:181,K:161,L:182,M:167,N:170,O:185,P:175,Q:171,R:178,S:174,T:163,U:184,V:190,W:179,X:189,Y:183,Z:173};
+const CTRLD=[146,144,5,28,159,156,30,31,158,18],CBMD=[0,129,149,150,151,152,153,154,155,0],SHD=['',"!",'"','#','$','%','&',"'",'(',')'];
+const K=(l,c,o={})=>Object.assign({l,c},o);
+const letter=x=>K(x,x.charCodeAt(0),{sc:x.charCodeAt(0)+128,cc:CBM[x]});
+const ROWS=[
+ [K('\u2190',95),...'1234567890'.split('').map(d=>K(d,d.charCodeAt(0),{s:SHD[+d],sc:+d?SHD[+d].charCodeAt(0):undefined,cc:CBMD[+d],ct:CTRLD[+d]})),K('+',43,{sc:219,cc:166}),K('\u2212',45,{sc:221,cc:220}),K('\u00A3',92,{sc:169,cc:168}),K('CLR<br>HOME',19,{sc:147,cls:'xs'}),K('INST<br>DEL',20,{sc:148,cls:'xs',rep:1})],
+ [K('CTRL',0,{mod:'ctrl',w:1.5,cls:'sm'}),...'QWERTYUIOP'.split('').map(letter),K('@',64,{sc:186,cc:164}),K('*',42,{sc:192,cc:223}),K('\u2191',94,{sc:255,cc:222}),K('RE-<br>STORE',0,{act:'restore',w:1.5,cls:'sm'})],
+ [K('RUN<br>STOP',0,{act:'stop',w:1.5,cls:'sm'}),...'ASDFGHJKL'.split('').map(letter),K(':',58,{s:'[',sc:91}),K(';',59,{s:']',sc:93}),K('=',61),K('RETURN',13,{sc:141,w:2.5,cls:'sm'})],
+ [K('',0,{mod:'cbm',logo:1}),K('SHIFT',0,{mod:'shift',w:1.5,cls:'sm'}),...'ZXCVBNM'.split('').map(letter),K(',',44,{s:'<',sc:60}),K('.',46,{s:'>',sc:62}),K('/',47,{s:'?',sc:63}),K('SHIFT',0,{mod:'shift',w:1.5,cls:'sm'}),K('CRSR<br>\u2191\u2193',17,{sc:145,cls:'xs',rep:1}),K('CRSR<br>\u2190\u2192',29,{sc:157,cls:'xs',rep:1})],
+ [K('F1',133,{sc:137,f:1,cls:'sm'}),K('F3',134,{sc:138,f:1,cls:'sm'}),K('F5',135,{sc:139,f:1,cls:'sm'}),K('F7',136,{sc:140,f:1,cls:'sm'}),K('',32,{sc:160,w:10.5,rep:1}),K('SHIFT<br>LOCK',0,{mod:'lock',w:1.5,cls:'sm'})]];
+const mods={shift:false,cbm:false,ctrl:false,lock:false},modEls={shift:[],cbm:[],ctrl:[],lock:[]};
+function litMods(){for(const m in modEls)modEls[m].forEach(e=>e.classList.toggle('lit',mods[m]))}
+function sendCode(c){if(!c)return;if(mode==='run'){if(kb.length<10)kb.push(c)}else kb.push(c);blink=true;blinkT=0}
+function keyCode(d){let c=d.c;const sh=mods.shift||mods.lock;if(mods.ctrl&&d.ct!==undefined)c=d.ct;else if(mods.cbm&&d.cc)c=d.cc;else if(sh&&d.sc!==undefined)c=d.sc;return c}
+function clearOne(){if(mods.shift||mods.cbm||mods.ctrl){mods.shift=mods.cbm=mods.ctrl=false;litMods()}}
+function pressKey(d){
+ if(d.mod){if(d.mod==='lock')mods.lock=!mods.lock;else if(d.mod==='cbm'&&(mods.shift||mods.lock)){lower=!lower;mods.shift=false;mods.cbm=false}else mods[d.mod]=!mods[d.mod];litMods();return 0}
+ if(d.act==='stop'){if(mode==='run'||mode==='input')breakReq=true;clearOne();return 0}
+ if(d.act==='restore'){warmStart();setMsg('RESTORE: programma fermato e schermo ripulito. Il listato resta in memoria.');clearOne();return 0}
+ const c=keyCode(d);sendCode(c);clearOne();return c}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function buildKb(){const kbd=$('kb');for(const row of ROWS){const r=document.createElement('div');r.className='r';
+  for(const d of row){const e=document.createElement('div');e.className='k'+(d.f?' f':'')+(d.cls?' '+d.cls:'');e.style.flexGrow=d.w||1;
+   e.innerHTML=d.logo?'<svg viewBox="0 0 100 100"><use href="#cbm"/></svg>':(d.s?'<i>'+esc(d.s)+'</i>':'')+d.l;
+   if(d.mod)modEls[d.mod].push(e);
+   let tm=null;const up=()=>{e.classList.remove('on');clearTimeout(tm);clearInterval(tm);tm=null};
+   e.addEventListener('pointerdown',ev=>{ev.preventDefault();e.classList.add('on');const c=pressKey(d);if(d.rep&&c){tm=setTimeout(()=>{tm=setInterval(()=>sendCode(c),70)},450)}});
+   e.addEventListener('pointerup',up);e.addEventListener('pointercancel',up);e.addEventListener('pointerleave',up);e.addEventListener('contextmenu',ev=>ev.preventDefault());
+   r.appendChild(e)}kbd.appendChild(r)}}
+/* ---------- schermo come campo di testo ---------- */
+const ti=$('scrIn'),SENT='        ';let last=SENT,composing=false,phoneKb=false;ti.value=SENT;
+function resetTi(){ti.value=SENT;last=SENT;try{ti.setSelectionRange(SENT.length,SENT.length)}catch(e){}}
+ti.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text');doPaste(t);resetTi()});
+ti.addEventListener('compositionstart',()=>{composing=true});
+ti.addEventListener('compositionend',()=>{composing=false;setTimeout(()=>{if(!composing)resetTi()},0)});
+ti.addEventListener('input',e=>{const v=ti.value;let p=0;while(p<v.length&&p<last.length&&v[p]===last[p])p++;const dels=last.length-p,ins=v.slice(p);
+ if(e.inputType==='insertFromPaste'||ins.length>40){doPaste(ins);resetTi();return}
+ for(let i=0;i<dels;i++)sendCode(20);for(const ch of ins)sendCode(ch==='\n'?13:uni(ch));last=v;if(!composing)resetTi()});
+ti.addEventListener('keydown',e=>{const m={ArrowUp:145,ArrowDown:17,ArrowLeft:157,ArrowRight:29,Home:19,Escape:-1,Insert:148,F1:133,F3:134,F5:135,F7:136}[e.key];
+ if(m!==undefined){e.preventDefault();if(m<0){if(mode==='run'||mode==='input')breakReq=true}else sendCode(e.key==='Home'&&e.shiftKey?147:m)}});
+let downAt=0,downX=0,downY=0;
+ti.addEventListener('pointerdown',e=>{downAt=performance.now();downX=e.clientX;downY=e.clientY});
+ti.addEventListener('pointerup',e=>{if(performance.now()-downAt>450||Math.abs(e.clientX-downX)>10||Math.abs(e.clientY-downY)>10)return;
+ if(mode!=='ready'&&mode!=='input')return;const r=cv.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)/r.width*W-BX)/8),y=Math.floor(((e.clientY-r.top)/r.height*H-BY)/8);
+ if(x>=0&&x<40&&y>=0&&y<25){crow=y;ccol=x;blink=true;blinkT=0}});
+/* ---------- pulsanti ---------- */
+function typeCmd(s){if(mode==='run'||mode==='input'){setMsg('Il programma \u00e8 in esecuzione: premi prima STOP.');return}pasteQ.push(toC(s))}
+$('bRun').onclick=()=>typeCmd('RUN');
+$('bList').onclick=()=>typeCmd('LIST');
+$('bStop').onclick=()=>{if(mode==='run'||mode==='input')breakReq=true};
+$('bSpd').onclick=()=>{fast=!fast;$('bSpd').textContent=fast?'MAX':'\u00d71';$('bSpd').classList.toggle('on',fast);setMsg(fast?'Velocit\u00e0 massima: i cicli di attesa diventano quasi istantanei.':'Velocit\u00e0 simile al C64 originale.')};
+$('bKbd').onclick=()=>{phoneKb=!phoneKb;ti.setAttribute('inputmode',phoneKb?'text':'none');$('bKbd').classList.toggle('on',phoneKb);ti.blur();if(phoneKb)setTimeout(()=>{ti.focus();resetTi()},50);setMsg(phoneKb?'Tastiera del telefono attiva: Invio fa da RETURN.':'Tastiera del telefono chiusa.')};
+const pp=$('pPaste'),pt=$('pTxt');
+$('bPaste').onclick=async()=>{try{if(navigator.clipboard&&navigator.clipboard.readText){const t=await navigator.clipboard.readText();if(t&&t.trim()){doPaste(t.replace(/\s*$/,'')+(/\n/.test(t.trim())?'\n':''));return}}}catch(e){}pt.value='';pp.classList.add('open');setTimeout(()=>pt.focus(),60)};
+$('pNo').onclick=()=>pp.classList.remove('open');
+$('pOk').onclick=()=>{pp.classList.remove('open');const t=pt.value.replace(/\s*$/,'');doPaste(/\n/.test(t)?t+'\n':t)};
+const EX=[['Contare con FOR\u2026NEXT','Numeri da 1 a 10 e il loro quadrato','10 PRINT CHR$(147)\n20 FOR I=1 TO 10\n30 PRINT I;I*I\n40 NEXT I'],
+ ['IF\u2026THEN con un limite','Ripete finch\u00e9 A arriva a 8','10 A=0\n20 PRINT "VALORE";A\n30 A=A+1\n40 IF A<=8 THEN 20\n50 PRINT "FINE"'],
+ ['FOR con STEP','Conto alla rovescia di due in due','10 FOR N=20 TO 0 STEP -2\n20 PRINT N;\n30 NEXT N\n40 PRINT\n50 PRINT "VIA!"'],
+ ['INPUT: come ti chiami','Chiede il nome e saluta','10 INPUT "COME TI CHIAMI";N$\n20 PRINT "CIAO ";N$\n30 INPUT "QUANTI ANNI HAI";A\n40 PRINT "TRA DIECI ANNI NE AVRAI";A+10'],
+ ['GET: un tasto al volo','Dalla Guida per l\'Utente: scrive i tasti senza RETURN','1 PRINT "(SHIFT-CLR/HOME)"\n10 GET A$: IF A$ = "" THEN 10\n20 PRINT A$;\n30 GOTO 10'],
+ ['Dado con RND','Premi un tasto per tirare il dado','10 PRINT CHR$(147)"PREMI UN TASTO"\n20 GET K$:IF K$="" THEN 20\n30 D=INT(RND(1)*6)+1\n40 PRINT "DADO:";D\n50 GOTO 20'],
+ ['Labirinto in una riga','Il famoso 10 PRINT con le diagonali','10 PRINT CHR$(205.5+RND(1));:GOTO 10'],
+ ['Colori di bordo e sfondo','POKE 53280 e 53281','10 FOR C=0 TO 15\n20 POKE 53280,C:POKE 53281,15-C\n30 FOR T=1 TO 150:NEXT T\n40 NEXT C\n50 POKE 53280,14:POKE 53281,6']];
+EX.forEach(([t,d,src])=>{const b=document.createElement('button');b.className='ex';b.innerHTML=t+'<small>'+esc(d)+'</small>';
+ b.onclick=()=>{$('pEx').classList.remove('open');if(mode==='run'||mode==='input'){mode='ready';inp=null;readyMsg()}const had=prog.size;if(had)pasteQ.push(toC('NEW'));prog.clear();order=[];doPaste(src+'\n');setMsg('Esempio caricato'+(had?' (il programma di prima \u00e8 stato cancellato)':'')+'. Premi RUN.')};$('exList').appendChild(b)});
+$('bEx').onclick=()=>$('pEx').classList.add('open');$('exNo').onclick=()=>$('pEx').classList.remove('open');
+/* ---------- avvio ---------- */
+$('go').onclick=()=>{const d=document.documentElement;try{const f=d.requestFullscreen||d.webkitRequestFullscreen;if(f){const r=f.call(d,{navigationUI:'hide'});if(r&&r.then)r.catch(()=>{})}}catch(e){}$('start').style.display='none'};
+buildKb();coldStart();render();requestAnimationFrame(frame);
+window.basic64={paste:doPaste,key:sendCode,state:()=>mode,step:n=>{for(let i=0;i<n;i++)step(16)},screen:()=>{let s='';for(let r=0;r<25;r++){let l='';for(let c=0;c<40;c++){const b=scr[r*40+c]&127;l+=b<32?String.fromCharCode(b+64):b<64?String.fromCharCode(b):'#'}s+=l.replace(/\s+$/,'')+'\n'}return s},colors:()=>[border,bg],stop:()=>{breakReq=true},speed:f=>{fast=f}};
+})();
+</script>
+</body>
+</html>
