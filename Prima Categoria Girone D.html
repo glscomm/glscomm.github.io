@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prima Cat. girone D</title>
+<style data-sesame-base>
+:root{--ground:#F3F3F3;--card:#FFFFFF;--ink:#141414;--muted:#6E6C68;--rule:#DCDAD5;
+--serif:"William Subhead",Georgia,serif;--sans:"ABC Diatype",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"ABC Diatype Semi-Mono",ui-monospace,Menlo,monospace}
+@font-face{font-family:"ABC Diatype";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeVariable.woff2) format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"William Subhead";src:url(https://www.sesame.com/fonts/william/WilliamSubheadVFRoman.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"ABC Diatype Semi-Mono";src:url(https://www.sesame.com/fonts/diatype/ABCDiatypeSemi-Mono-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@media (prefers-color-scheme:dark){:root{--ground:#0F0F0F;--card:#1B1B1B;--ink:#F1F0EE;--muted:#9C9994;--rule:#2C2C2C;color-scheme:dark}}
+*{box-sizing:border-box}img{background:color-mix(in srgb,var(--ground),var(--ink) 6%)}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:10px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+.masthead{display:flex;align-items:center;justify-content:flex-end;min-height:48px;padding:10px 0}
+h1{font:600 clamp(28px,7vw,32px)/1.05 var(--serif);letter-spacing:-.01em;margin:28px 0 8px}
+h1,h2,h3,p,li{text-wrap:pretty}h2,.lede{text-wrap:balance}
+h2{font:400 26px/1.15 var(--serif);margin:52px 0 14px}
+h3{font:600 17px/1.3 var(--sans);margin:0 0 5px}
+.kicker{font:19px/1.4 var(--sans);color:var(--muted);margin:0 0 2px}h1+.kicker{margin-top:-2px}h2:has(+.kicker){margin-bottom:0}h2+.kicker{margin-bottom:12px}a.route{display:flex;align-items:center;gap:7px;width:fit-content;margin:0 0 22px}a.route::before{content:"";flex:none;width:16px;height:16px;opacity:.6;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.4' stroke-linejoin='round'%3E%3Cpath d='M1.5 3.5 5.5 2l5 1.5 4-1.5v10.5l-4 1.5-5-1.5-4 1.5z'/%3E%3Cpath d='M5.5 2v10.5M10.5 3.5V14'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.4' stroke-linejoin='round'%3E%3Cpath d='M1.5 3.5 5.5 2l5 1.5 4-1.5v10.5l-4 1.5-5-1.5-4 1.5z'/%3E%3Cpath d='M5.5 2v10.5M10.5 3.5V14'/%3E%3C/svg%3E") center/contain no-repeat}h2+.kicker:has(+a.route){margin-bottom:2px}h2:has(+.kicker+a.route){margin-top:76px}nav.jump+h2,nav.jump+h2:has(+.kicker+a.route){margin-top:40px}
+.updated{font:14px/1.4 var(--sans);color:var(--muted);margin:6px 0 14px}
+.lede{font:400 clamp(18px,4.4vw,21px)/1.3 var(--sans);margin:22px 0 26px}.lede:has(+ul){margin-bottom:8px}.lede:not(.lede~.lede){padding-top:16px}.lede+ul{font-size:16px}.lede+ul li::marker{color:color-mix(in srgb,var(--ink) 50%,transparent)}
+html{scroll-behavior:smooth}
+p{margin:0 0 10px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 30%,transparent);transition:text-decoration-color .15s}a:hover{text-decoration-color:currentColor}
+.src{font:11px/1 var(--mono);padding:2px 6px;border:1px solid var(--muted);border-radius:999px;white-space:nowrap;text-decoration:none;margin-left:4px;transition:background-color .15s,color .15s,border-color .15s}@media (hover:hover) and (pointer:fine){.src:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}}
+.card{background:var(--card);border-radius:20px;padding:14px 16px 18px;margin:10px 0;display:grid;gap:4px}.card+.card{margin-top:16px}.card>ul{margin-top:8px}.card h3{font-size:18px;margin-bottom:0}.card h3+.fact{margin-bottom:8px}
+.card.top{padding-top:0;overflow:hidden}
+.card.top img{display:block;width:calc(100% + 32px);max-width:none;margin:0 -16px 10px;aspect-ratio:16/9;object-fit:cover}
+.card .fact{font-size:15px;color:var(--muted)}
+.card .fact b{color:var(--ink);font-weight:500}
+.card .fact .lab{display:inline-block;min-width:4em;margin-right:6px;font:700 15px/1.5 var(--sans);color:color-mix(in srgb,var(--ink) 50%,var(--muted))}
+.grid{display:grid;gap:10px}
+.btn{display:block;text-align:center;background:var(--ink);color:var(--ground);border-radius:999px;padding:16px 18px;font:500 14px/1 var(--sans);text-decoration:none;margin:8px 0 2px}
+.between{display:flex;align-items:center;gap:10px;font:15px/1.4 var(--sans);color:color-mix(in srgb,var(--ink) 75%,var(--ground));padding:6px 0 6px 16px;margin:10px 0}.between::before{content:"";flex:none;width:22px;height:22px;border-radius:50%;background:color-mix(in srgb,var(--ground),var(--ink) 6%) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23141414' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2v8M2.5 6.5 6 10l3.5-3.5'/%3E%3C/svg%3E") center/12px no-repeat}@media (prefers-color-scheme:dark){.between::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23F1F0EE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2v8M2.5 6.5 6 10l3.5-3.5'/%3E%3C/svg%3E")}}
+.card .time{font:12px/1.4 var(--mono);color:var(--muted);margin:0}
+ol.takeaways{counter-reset:k;list-style:none;padding:0;margin:0 0 30px}
+ol.takeaways>li{counter-increment:k;display:grid;grid-template-columns:30px minmax(0,1fr);padding:16px 0;font-size:16px;line-height:1.5;font-weight:400;color:color-mix(in srgb,var(--muted) 70%,var(--ink))}
+ol.takeaways>li::before{content:counter(k);font:400 21px/1.2 var(--sans);color:var(--ink)}
+ol.takeaways b{display:block;font:600 17px/1.35 var(--sans);color:var(--ink);margin-bottom:3px}
+ol.takeaways small{display:block;grid-column:2;margin-top:4px;font:13px/1.4 var(--sans);color:var(--muted)}
+details.more{padding:16px 0;interpolate-size:allow-keywords}details.more::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease-out,content-visibility .25s allow-discrete}details.more[open]::details-content{block-size:auto}details.more[open]>:not(summary){animation:reveal .25s ease-out}details.more summary{border-radius:4px;transition:background-color .15s,box-shadow .15s}@media (hover:hover) and (pointer:fine){details.more summary:hover{background:color-mix(in srgb,var(--ground),var(--ink) 4%);box-shadow:0 0 0 12px color-mix(in srgb,var(--ground),var(--ink) 4%)}}
+details.more summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 16px;column-gap:12px}
+details.more summary b{font:600 18px/1.3 var(--sans)}
+details.more summary span{grid-column:1;margin-top:2px;font-size:15px;line-height:1.45;color:var(--muted)}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"";grid-column:2;grid-row:1/span 2;align-self:center;width:7px;height:7px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg);transition:transform .15s}
+details.more[open] summary::after{transform:rotate(-135deg)}
+details.more ul{margin:10px 0 0;padding-left:19px}
+.card h3 a::after{content:"\2197";font-weight:400;font-size:16px;margin-left:3px;color:color-mix(in srgb,var(--muted) 55%,transparent);text-decoration:none;display:inline-block;transform:translateY(2px)}
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;white-space:nowrap;font:500 13px/1.4 var(--sans);color:var(--ink);padding:6px 10px 6px 0;border-bottom:1px solid var(--ink)}
+td{min-width:7em;padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+ul{padding-left:18px;margin:0 0 10px}li{margin:0 0 6px}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 10px;padding:12px 0}
+ol.steps>li::before{content:counter(s);font:400 21px/1.2 var(--sans);color:var(--ink)}
+ol.steps>li>div{border-bottom:1px solid var(--rule);padding-bottom:12px;min-width:0}ol.steps>li:last-child>div{border-bottom:0}
+ol.steps .fact{font-size:16px;font-weight:400;color:var(--muted);margin:2px 0}
+ol.steps .fact b{color:inherit;font-weight:inherit}
+.sources{margin-top:40px;font-size:13px;color:var(--muted)}.sources>b{display:block;font:500 16px/1.4 var(--sans);color:var(--ink);margin:0 0 6px}
+.sources li{margin:0 0 4px}
+body.note main{font-size:16px;line-height:1.6}
+body.note h1{font:400 32px/1.1 var(--serif);margin:24px 0 6px}
+body.note main p{margin:0 0 16px}
+body.note main h2{font:400 24px/1.2 var(--serif);margin:32px 0 8px}
+body.note main h3{font:600 18px/1.3 var(--sans);margin:22px 0 6px}
+body.note main ul,body.note main ol{padding-left:22px;margin:0 0 16px}
+body.note main li{margin:0 0 8px}
+body.note blockquote{margin:16px 0;padding-left:14px;border-left:2px solid var(--rule);color:var(--muted)}
+.group{font:500 16px/1.4 var(--sans);color:var(--ink);margin:26px 0 2px}
+ul.check{list-style:none;padding:0;margin:0}
+ul.check li{display:flex;align-items:center;margin:0}
+ul.check label{flex:1;display:grid;grid-template-columns:24px minmax(0,1fr);gap:2px 12px;align-items:center;padding:13px 0;cursor:pointer;font-size:17px}
+ul.check input{appearance:none;-webkit-appearance:none;margin:0;width:22px;height:22px;border:1.5px solid var(--muted);border-radius:5px;display:grid;place-content:center}
+ul.check input:checked{background:var(--ink);border-color:var(--ink)}
+ul.check input:checked::after{content:"";width:16px;height:16px;animation:check .25s ease-out;background:var(--ground);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3 5 8.8l4.5-5.6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3 5 8.8l4.5-5.6'/%3E%3C/svg%3E") center/contain no-repeat}
+ul.check label span{justify-self:start;background:linear-gradient(currentColor,currentColor) no-repeat 0 58%/0 1.5px;transition:background-size .25s ease-out,color .25s}ul.check input:checked+span{background-size:100% 1.5px;color:var(--muted)}@keyframes check{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}@media (prefers-reduced-motion:reduce){ul.check label span{transition:none}ul.check input:checked::after{animation:none}}
+ul.check small{grid-column:2;font:14px/1.3 var(--sans);color:var(--muted)}ul.check small:empty{display:none}
+nav.jump{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 26px}nav.jump::before{content:"Jump to:";font:500 14px/1 var(--sans);color:var(--muted);margin-right:2px}
+nav.jump a{display:inline-flex;align-items:center;gap:7px;font:14px/1 var(--sans);text-decoration:none;background:color-mix(in srgb,var(--ground),var(--ink) 6%);border-radius:999px;padding:9px 13px;transition:background-color .15s}@media (hover:hover) and (pointer:fine){nav.jump a:hover{background:color-mix(in srgb,var(--ground),var(--ink) 12%)}}nav.jump a::after{content:"";width:5px;height:5px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+.options{display:grid;gap:12px;margin:22px 0 28px}
+a.opt{position:relative;display:block;min-height:96px;text-decoration:none;background:var(--card);border-radius:20px;overflow:hidden;padding:12px 34px 12px 106px;color:var(--ink)}
+a.opt img{position:absolute;left:0;top:0;bottom:0;width:92px;height:100%;object-fit:cover}a.opt img.logo{object-fit:contain;padding:22px;background:var(--card)}
+a.opt::after{content:"";position:absolute;right:20px;top:50%;width:6px;height:6px;border-right:1.5px solid var(--muted);border-top:1.5px solid var(--muted);transform:translateY(-50%) rotate(45deg)}
+a.opt b{display:block;font:500 16px/1.25 var(--sans)}a.opt .facts{display:block;font-size:15px;line-height:1.35;margin:3px 0 2px;color:var(--muted)}
+a.opt .plus,a.opt .catch{display:block;font-size:15px;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+a.opt .plus{margin-top:7.6px}a.opt .lab{display:inline-block;min-width:2.6em;font:700 15px/1.35 var(--sans);color:color-mix(in srgb,var(--ink) 50%,var(--muted))}
+details.opt{background:var(--card);border-radius:20px;overflow:hidden;interpolate-size:allow-keywords;transition:box-shadow .15s}details.opt::details-content{block-size:0;overflow:hidden;transition:block-size .25s ease-out,content-visibility .25s allow-discrete}details.opt[open]::details-content{block-size:auto}details.opt[open]>:not(summary){animation:reveal .25s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(-6px)}}@media (hover:hover) and (pointer:fine){details.opt:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}}@media (prefers-reduced-motion:reduce){details.opt::details-content,details.more::details-content{transition:none}details.opt[open]>:not(summary),details.more[open]>:not(summary){animation:none}}
+@supports (corner-shape:squircle){.card,a.opt,details.opt{corner-shape:squircle;border-radius:32px}}
+details.opt summary{position:relative;display:block;list-style:none;min-height:96px;padding:12px 34px 12px 106px;cursor:pointer}details.opt summary::-webkit-details-marker{display:none}
+details.opt summary img{position:absolute;left:0;top:0;bottom:0;width:92px;height:100%;object-fit:cover}
+@media (min-width:600px){a.opt img,details.opt summary img{width:144px}a.opt,details.opt summary{padding-left:158px}}
+details.opt summary::after{content:"";position:absolute;right:21px;top:50%;width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .15s}details.opt[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+details.opt summary b{display:block;font:500 16px/1.25 var(--sans)}details.opt .facts{display:block;font-size:15px;line-height:1.35;margin:3px 0 2px;color:var(--muted)}
+details.opt .plus,details.opt .catch{display:block;font-size:15px;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details.opt .plus{margin-top:7.6px}details.opt .lab{display:inline-block;min-width:2.6em;font:700 15px/1.35 var(--sans);color:color-mix(in srgb,var(--ink) 50%,var(--muted))}
+details.opt[open] .plus,details.opt[open] .catch{white-space:normal;overflow:visible;text-overflow:clip}
+details.opt[open] summary{border-bottom:1px solid var(--rule)}details.opt>ul{margin:0;padding:calc(.8rem + 4px) 14px .8rem 30px;font-size:15px;line-height:1.4}details.opt>ul li{margin:0 0 4px}details.opt>.btn{margin:8px 14px 14px}details.opt>.btns{display:flex;gap:8px;margin:8px 14px 14px}details.opt>.btns .btn{flex:1;margin:0}details.opt>.btns .btn+.btn{background:none;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 25%,transparent);color:var(--ink)}.book{display:inline-block;margin-left:8px;padding:4px 9px;border-radius:999px;background:var(--ink);color:var(--ground);font:500 12px/1.2 var(--sans);text-decoration:none;vertical-align:1px}
+a.opt.pick{box-shadow:0 0 0 1px var(--ground),0 0 0 2.5px rgba(0,0,0,.25)}@media (prefers-color-scheme:dark){a.opt.pick{box-shadow:0 0 0 1px var(--ground),0 0 0 2.5px rgba(255,255,255,.25)}}
+.options>.group{margin:10px 0 -6px}.options>.group:first-child{margin-top:0}
+.hero{display:block;width:100%;aspect-ratio:5/2;max-height:220px;object-fit:cover;border-radius:20px;margin:18px 0 0}
+.hero+h1,.hero+.credit+h1{margin-top:18px}
+.credit{display:block;font:11px/1.4 var(--mono);color:var(--muted);margin-top:4px}
+.hero+.credit,.card.top>.credit{position:relative;width:fit-content;padding:30px 12px 8px 56px;color:#fff;background:radial-gradient(farthest-corner at 100% 100%,rgba(0,0,0,.5),rgba(0,0,0,.36) 25%,rgba(0,0,0,.2) 45%,rgba(0,0,0,.075) 62%,transparent 75%);text-shadow:0 0 1px rgba(0,0,0,.15);pointer-events:none}
+.hero+.credit{margin:calc(-38px - 1.4em) 0 0 auto;border-bottom-right-radius:20px}@supports (corner-shape:squircle){.hero{corner-shape:squircle;border-radius:32px}.hero+.credit{corner-shape:squircle;border-bottom-right-radius:32px}}
+.card.top>:first-child,.card.top>.credit{grid-row:1;grid-column:1}.card.top>.credit{align-self:end;justify-self:end;margin:0 -16px 10px 0}
+.voice{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;background:var(--card);border-radius:999px;padding:11px 26px 11px 11px;margin:32px 0}
+.voice .play{width:44px;height:44px;border-radius:50%;border:0;padding:0;background:var(--ink);cursor:pointer;display:grid;place-items:center}
+.voice .play::before{content:"";width:14px;height:16px;background:var(--ground);margin-left:3px;clip-path:path('M1.5 .9Q0 0 0 1.7V14.3Q0 16 1.5 15.1L13 8.9Q14 8 13 7.1Z')}
+.voice.on .play::before{clip-path:none;margin:0;width:13px;height:15px;background:linear-gradient(90deg,var(--ground) 0 4px,transparent 4px 9px,var(--ground) 9px 13px)}
+.voice .vt{display:grid;grid-template-columns:1fr auto;row-gap:9px;font:14px/1 var(--sans)}
+.voice .vt span:first-child{font-size:16px;position:relative;top:-3px}.voice .vt span:nth-child(2){color:var(--muted);font-variant-numeric:tabular-nums}
+.voice .bar{grid-column:1/-1;height:21px;padding:9px 0;margin:-9px 0;background:var(--rule) content-box;position:relative;cursor:pointer;touch-action:none}
+.voice .bar i{position:absolute;left:0;top:9px;height:3px;width:0;background:var(--ink)}.voice .bar i::after{content:"";position:absolute;right:-6px;top:50%;width:12px;height:12px;border-radius:50%;background:var(--ink);transform:translateY(-50%)}
+.voice audio{display:none}
+.copy{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:0;border-radius:999px;background:none;color:var(--muted);cursor:pointer}
+.copy.done::after{content:"Copied";font:11px/1 var(--mono)}
+.x{border:0;background:none;color:var(--muted);font-size:18px;padding:0 4px 0 12px;cursor:pointer}
+form.add{position:relative;display:flex;margin:16px 0 0}form.add input{flex:1;min-width:0;font:15px var(--sans);padding:10px 46px 10px 16px;border:1px solid transparent;border-radius:999px;background:var(--card);color:var(--ink);outline:none;transition:border-color .15s}form.add input:focus{border-color:rgba(0,0,0,.25)}@media (prefers-color-scheme:dark){form.add input:focus{border-color:rgba(255,255,255,.25)}}form.add .send{position:absolute;right:5px;top:50%;width:30px;height:30px;margin-top:-15px;padding:0;border:0;border-radius:50%;background:#0A84FF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 11.5v-9M3 6.5l4-4 4 4'/%3E%3C/svg%3E") center/14px no-repeat;cursor:pointer;transition:opacity .1s ease-out,filter .1s ease-out}form.add input:placeholder-shown+.send{opacity:0;filter:blur(2px);pointer-events:none}.tools{display:flex;gap:8px;margin:10px 0 0}.tbtn{font:14px/1 var(--sans);border:0;background:color-mix(in srgb,var(--ground),var(--ink) 6%);color:var(--ink);border-radius:999px;padding:9px 13px;cursor:pointer;transition:background-color .15s}@media (hover:hover) and (pointer:fine){.tbtn:hover{background:color-mix(in srgb,var(--ground),var(--ink) 12%)}}
+</style>
+<style>
+html,body{overflow-x:hidden;max-width:100%}
+body{font-size:18px;line-height:1.4}
+html body{margin-left:0;margin-right:0}
+html body .wrap{width:100%;max-width:none;margin-left:auto;margin-right:auto;padding-left:max(4px,env(safe-area-inset-left,0px));padding-right:max(4px,env(safe-area-inset-right,0px));box-sizing:border-box}
+#stato{border:2px solid var(--ink,#111);border-radius:10px;padding:10px 12px;margin:12px 0 4px;font-size:17px;color:var(--ink,#111);background:var(--card,#fff)}
+#stato b{display:block;font-size:18px}
+#stato.vecchio{border-style:dashed}
+.btnrow{display:flex;gap:8px;margin:10px 0 6px}
+.btnrow button{flex:1;min-height:48px;font:600 17px var(--sans,system-ui);color:var(--ink,#111);background:var(--card,#fff);border:2px solid var(--ink,#111);border-radius:10px;padding:6px 8px}
+.btnrow button:disabled{opacity:.35}
+#aggiorna{width:100%;min-height:48px;margin:6px 0 0;font:600 17px var(--sans,system-ui);color:var(--card,#fff);background:var(--ink,#111);border:0;border-radius:10px}
+.gtitle{font-size:22px;margin:14px 0 2px}
+.gsub{color:var(--muted,#555);font-size:16px;margin:0 0 8px}
+.match{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;background:var(--card,#fff);border:1px solid var(--rule,#ccc);border-radius:10px;padding:10px 12px;margin:0 0 8px}
+.match .when{grid-column:1/3;font:600 16px var(--mono,monospace);color:var(--muted,#555)}
+.match .team{font-weight:700;font-size:19px;color:var(--ink,#111);overflow-wrap:anywhere}
+.match .gol{font:700 24px var(--mono,monospace);color:var(--ink,#111);text-align:right;min-width:1.4em}
+.match .note{grid-column:1/3;font-size:16px;color:var(--ink,#111);border-top:1px solid var(--rule,#ccc);padding-top:4px;margin-top:2px}
+.match.mine{border:2px solid var(--ink,#111)}
+#classifica{width:100%;table-layout:fixed;border-collapse:collapse;font-size:17px;color:var(--ink,#111)}
+#classifica th{font:700 16px var(--mono,monospace);text-align:center;padding:6px 2px;border-bottom:2px solid var(--ink,#111)}
+#classifica td{text-align:center;padding:9px 2px;border-bottom:1px solid var(--rule,#ccc)}
+#classifica td.sq,#classifica th.sq{text-align:left;overflow-wrap:anywhere;font-weight:700}
+#classifica td.pt{font-weight:800;font-size:19px}
+#classifica col.c-pos{width:2em}#classifica col.c-n{width:2.2em}#classifica col.c-pt{width:2.6em}
+.legenda{font-size:15px;color:var(--muted,#555);margin:6px 0 0}
+.sources{overflow-wrap:anywhere}
+/* Pergamena chiara e accenti bianco e blu della maglia ASD Selvatelle (tonalita' ricavata dalla foto di squadra del 2024 e dalla grafica del club), senza modifiche alla disposizione. */
+html body{--ground:#f3ead8;--card:#fffdf8;--ink:#29343b;--muted:#645f55;--rule:#d9cfbd;--sky:#27438a;--sky-ink:#1f3672;--sky-pale:#e4e9f5;color-scheme:light;color:var(--ink);background-color:var(--ground);background-image:radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.55),transparent 65%),radial-gradient(ellipse at 95% 85%,rgba(181,148,95,.10),transparent 65%);min-height:100vh}
+html body .wrap{background:transparent;color:var(--ink)}
+html body h1,html body h2{color:var(--sky-ink)}
+html body h2{border-bottom:2px solid var(--sky);padding-bottom:6px}
+html body a{color:var(--sky-ink)}
+html body .kicker,html body .updated{color:var(--muted)}
+html body #stato{border-color:#b3bfdc;background:var(--card)}
+html body .btnrow button{border-color:#8e9fcb;background:#fff;color:var(--sky-ink)}
+html body #aggiorna{background:var(--sky);color:#fff;border:1px solid #1f3672}
+html body button:focus-visible,html body a:focus-visible{outline:3px solid var(--sky-ink);outline-offset:2px}
+html body .match.mine{border-color:var(--sky);background:linear-gradient(110deg,var(--sky-pale),#fff 85%)}
+html body .match.mine .team{color:var(--sky-ink)}
+html body #classifica th{background:var(--sky-pale);color:var(--sky-ink);border-bottom-color:var(--sky)}
+html body #classifica tbody tr{background:rgba(255,253,248,.72)}
+html body #classifica tbody tr:nth-child(even){background:rgba(255,255,255,.9)}
+html body #classifica tbody tr.mine{background:var(--sky-pale);color:var(--sky-ink)}
+html body #classifica tbody tr.mine td{border-top:1px solid var(--sky);border-bottom:1px solid var(--sky)}
+/* Sfondo bianco e blu ispirato alla maglia; dati su pergamena opaca. */
+html body{background-color:#fff;background-image:linear-gradient(90deg,var(--sky) 0%,var(--sky-pale) 16%,#fff 36%,#fff 64%,var(--sky-pale) 84%,var(--sky) 100%);background-attachment:fixed}
+html body .match,html body .match.mine{background:var(--card);background-image:radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.55),transparent 65%);}
+html body #classifica{background:var(--ground)}
+html body #classifica tbody tr{background:#fffdf8}
+html body #classifica tbody tr:nth-child(even){background:#f3ead8}
+html body #classifica tbody tr.mine{background:#fffdf8}
+html body .kicker,html body .updated,html body .lede,html body .gtitle,html body .gsub,html body .legenda,html body .sources{background:rgba(255,253,248,.94);border-radius:4px}
+html body h1,html body h2{text-shadow:0 1px 2px #fff,0 0 8px #fff}
+</style>
+</head>
+<body><div class="wrap">
+<h1><span style="font-size:110%">Prima Categoria Toscana, girone D</span></h1>
+<p class="kicker">Calcio dilettanti, stagione 2026/2027</p>
+<p class="updated">Stile aggiornato il 7 nov 2026, 18:12. Dati iniziali letti il 7 nov 2026, 17:35.</p>
+<div id="stato"><b>Aggiornamento in corso…</b>Sto leggendo risultati e classifica da Toscanagol.</div>
+<button id="aggiorna" type="button">Aggiorna adesso</button>
+<p class="lede" id="lede">Partite della giornata, poi la classifica completa del girone.</p>
+
+<h2>Partite</h2>
+<div class="btnrow"><button id="prev" type="button">‹ Giornata prima</button><button id="next" type="button">Giornata dopo ›</button></div>
+<p class="gtitle" id="gtitle"></p>
+<p class="gsub" id="gsub"></p>
+<div id="partite"></div>
+<div id="recuperi"></div>
+
+<h2>Classifica</h2>
+<p class="gsub" id="csub"></p>
+<table id="classifica">
+<colgroup><col class="c-pos"><col><col class="c-pt"><col class="c-n"><col class="c-n"><col class="c-n"><col class="c-n"></colgroup>
+<thead><tr><th>#</th><th class="sq">Squadra</th><th>Pt</th><th>G</th><th>V</th><th>N</th><th>P</th></tr></thead>
+<tbody id="cbody"></tbody>
+</table>
+<p class="legenda">Pt punti, G giocate, V vinte, N pareggiate, P perse.</p>
+
+<div class="sources"><b>Fonti e come si aggiorna</b><ul>
+<li><a href="https://www.toscanagol.it/calendario-campionato/toscana/prima-categoria-girone-d-000041042026/2027/">Toscanagol, calendario e risultati del girone D</a>: letto a ogni apertura, con tutte le date, anche anticipi e recuperi.</li>
+<li><a href="https://www.toscanagol.it/classifica/toscana/prima-categoria-girone-d-000041042026/2027/">Toscanagol, classifica del girone D</a>: letta a ogni apertura. Se non arriva, la classifica si calcola dai risultati.</li>
+<li><a href="https://www.tuttocampo.it/Toscana/PrimaCategoria/GironeD/Risultati">Tuttocampo, risultati del girone D</a>: controllato a mano il 7 nov 2026, uguale a Toscanagol; da qui gli orari delle 14:30 dell'ottava giornata. Non si legge in automatico perché blocca le letture esterne.</li>
+<li>La lettura passa dal servizio gratuito <a href="https://jina.ai/reader/">Jina Reader</a>, perché Toscanagol non permette letture dirette da un'altra pagina.</li>
+</ul></div>
+</div>
+<script>
+(()=>{
+const SNAP={"cal":[{"g":1,"d":"20/09","h":"A.Isola d'Elba","a":"Pomarance","r":"1 - 1","live":false},{"g":1,"d":"20/09","h":"Acciaiolo Cal.","a":"Monterotondo","r":"2 - 0","live":false},{"g":1,"d":"20/09","h":"Capannoli S.B.","a":"Donoratico","r":"0 - 0","live":false},{"g":1,"d":"20/09","h":"Colli Maritt.","a":"P.Terricciola","r":"1 - 1","live":false},{"g":1,"d":"20/09","h":"Pecciolese","a":"S.Vincenzo","r":"0 - 0","live":false},{"g":1,"d":"20/09","h":"Rosignano S.","a":"Atl. Etruria","r":"3 - 1","live":false},{"g":1,"d":"20/09","h":"Selvatelle","a":"Vada","r":"2 - 0","live":false},{"g":1,"d":"20/09","h":"Venturina","a":"Crespina Cal.","r":"1 - 0","live":false},{"g":2,"d":"27/09","h":"Atl. Etruria","a":"Selvatelle","r":"1 - 3","live":false},{"g":2,"d":"27/09","h":"Crespina Cal.","a":"A.Isola d'Elba","r":"1 - 1","live":false},{"g":2,"d":"27/09","h":"Donoratico","a":"Acciaiolo Cal.","r":"0 - 1","live":false},{"g":2,"d":"27/09","h":"Monterotondo","a":"Rosignano S.","r":"0 - 2","live":false},{"g":2,"d":"27/09","h":"P.Terricciola","a":"Capannoli S.B.","r":"0 - 2","live":false},{"g":2,"d":"27/09","h":"Pomarance","a":"Pecciolese","r":"0 - 0","live":false},{"g":2,"d":"27/09","h":"S.Vincenzo","a":"Colli Maritt.","r":"1 - 0","live":false},{"g":2,"d":"27/09","h":"Vada","a":"Venturina","r":"0 - 1","live":false},{"g":3,"d":"04/10","h":"Acciaiolo Cal.","a":"Atl. Etruria","r":"3 - 1","live":false},{"g":3,"d":"04/10","h":"Capannoli S.B.","a":"Monterotondo","r":"4 - 3","live":false},{"g":3,"d":"03/10","h":"Colli Maritt.","a":"Donoratico","r":"3 - 2","live":false},{"g":3,"d":"04/10","h":"Pecciolese","a":"P.Terricciola","r":"2 - 2","live":false},{"g":3,"d":"04/10","h":"Pomarance","a":"S.Vincenzo","r":"1 - 0","live":false},{"g":3,"d":"04/10","h":"Rosignano S.","a":"Vada","r":"1 - 2","live":false},{"g":3,"d":"04/10","h":"Selvatelle","a":"Crespina Cal.","r":"1 - 1","live":false},{"g":3,"d":"04/10","h":"Venturina","a":"A.Isola d'Elba","r":"3 - 3","live":false},{"g":4,"d":"11/10","h":"A.Isola d'Elba","a":"Rosignano S.","r":"1 - 5","live":false},{"g":4,"d":"11/10","h":"Atl. Etruria","a":"Colli Maritt.","r":"3 - 1","live":false},{"g":4,"d":"11/10","h":"Crespina Cal.","a":"Acciaiolo Cal.","r":"0 - 3","live":false},{"g":4,"d":"11/10","h":"Donoratico","a":"S.Vincenzo","r":"1 - 1","live":false},{"g":4,"d":"11/10","h":"Monterotondo","a":"Pecciolese","r":"0 - 4","live":false},{"g":4,"d":"11/10","h":"P.Terricciola","a":"Pomarance","r":"1 - 2","live":false},{"g":4,"d":"11/10","h":"Vada","a":"Capannoli S.B.","r":"1 - 3","live":false},{"g":4,"d":"11/10","h":"Venturina","a":"Selvatelle","r":"0 - 0","live":false},{"g":5,"d":"18/10","h":"Acciaiolo Cal.","a":"Vada","r":"1 - 0","live":false},{"g":5,"d":"18/10","h":"Capannoli S.B.","a":"Atl. Etruria","r":"0 - 1","live":false},{"g":5,"d":"18/10","h":"Colli Maritt.","a":"Monterotondo","r":"3 - 3","live":false},{"g":5,"d":"18/10","h":"Pecciolese","a":"Donoratico","r":"2 - 3","live":false},{"g":5,"d":"18/10","h":"Pomarance","a":"Venturina","r":"2 - 0","live":false},{"g":5,"d":"18/10","h":"Rosignano S.","a":"Crespina Cal.","r":"0 - 1","live":false},{"g":5,"d":"18/10","h":"S.Vincenzo","a":"P.Terricciola","r":"2 - 0","live":false},{"g":5,"d":"18/10","h":"Selvatelle","a":"A.Isola d'Elba","r":"2 - 1","live":false},{"g":6,"d":"25/10","h":"A.Isola d'Elba","a":"Capannoli S.B.","r":"0 - 2","live":false},{"g":6,"d":"25/10","h":"Atl. Etruria","a":"S.Vincenzo","r":"0 - 0","live":false},{"g":6,"d":"25/10","h":"Crespina Cal.","a":"Colli Maritt.","r":"2 - 2","live":false},{"g":6,"d":"25/10","h":"Donoratico","a":"Pomarance","r":"2 - 0","live":false},{"g":6,"d":"25/10","h":"Monterotondo","a":"P.Terricciola","r":"1 - 2","live":false},{"g":6,"d":"25/10","h":"Selvatelle","a":"Rosignano S.","r":"1 - 1","live":false},{"g":6,"d":"25/10","h":"Vada","a":"Pecciolese","r":"1 - 1","live":false},{"g":6,"d":"25/10","h":"Venturina","a":"Acciaiolo Cal.","r":"3 - 0","live":false},{"g":7,"d":"01/11","h":"Acciaiolo Cal.","a":"A.Isola d'Elba","r":"1 - 0","live":false},{"g":7,"d":"01/11","h":"Capannoli S.B.","a":"Crespina Cal.","r":"1 - 0","live":false},{"g":7,"d":"01/11","h":"Colli Maritt.","a":"Vada","r":"1 - 2","live":false},{"g":7,"d":"01/11","h":"P.Terricciola","a":"Donoratico","r":"1 - 0","live":false},{"g":7,"d":"01/11","h":"Pecciolese","a":"Atl. Etruria","r":"1 - 0","live":false},{"g":7,"d":"01/11","h":"Pomarance","a":"Selvatelle","r":"1 - 0","live":false},{"g":7,"d":"01/11","h":"Rosignano S.","a":"Venturina","r":"3 - 0","live":false},{"g":7,"d":"01/11","h":"S.Vincenzo","a":"Monterotondo","r":"1 - 1","live":false},{"g":8,"d":"08/11","h":"A.Isola d'Elba","a":"Pecciolese","r":"","live":false},{"g":8,"d":"08/11","h":"Atl. Etruria","a":"Donoratico","r":"","live":false},{"g":8,"d":"08/11","h":"Crespina Cal.","a":"S.Vincenzo","r":"","live":false},{"g":8,"d":"08/11","h":"Monterotondo","a":"Pomarance","r":"","live":false},{"g":8,"d":"08/11","h":"Rosignano S.","a":"Acciaiolo Cal.","r":"","live":false},{"g":8,"d":"08/11","h":"Selvatelle","a":"Capannoli S.B.","r":"","live":false},{"g":8,"d":"08/11","h":"Vada","a":"P.Terricciola","r":"","live":false},{"g":8,"d":"08/11","h":"Venturina","a":"Colli Maritt.","r":"","live":false},{"g":9,"d":"15/11","h":"Acciaiolo Cal.","a":"Selvatelle","r":"","live":false},{"g":9,"d":"15/11","h":"Capannoli S.B.","a":"Venturina","r":"","live":false},{"g":9,"d":"15/11","h":"Colli Maritt.","a":"A.Isola d'Elba","r":"","live":false},{"g":9,"d":"15/11","h":"Donoratico","a":"Monterotondo","r":"","live":false},{"g":9,"d":"15/11","h":"P.Terricciola","a":"Atl. Etruria","r":"","live":false},{"g":9,"d":"15/11","h":"Pecciolese","a":"Crespina Cal.","r":"","live":false},{"g":9,"d":"15/11","h":"Pomarance","a":"Rosignano S.","r":"","live":false},{"g":9,"d":"15/11","h":"S.Vincenzo","a":"Vada","r":"","live":false},{"g":10,"d":"22/11","h":"A.Isola d'Elba","a":"P.Terricciola","r":"","live":false},{"g":10,"d":"22/11","h":"Acciaiolo Cal.","a":"Capannoli S.B.","r":"","live":false},{"g":10,"d":"22/11","h":"Atl. Etruria","a":"Pomarance","r":"","live":false},{"g":10,"d":"22/11","h":"Crespina Cal.","a":"Donoratico","r":"","live":false},{"g":10,"d":"22/11","h":"Rosignano S.","a":"Colli Maritt.","r":"","live":false},{"g":10,"d":"22/11","h":"Selvatelle","a":"Pecciolese","r":"","live":false},{"g":10,"d":"22/11","h":"Vada","a":"Monterotondo","r":"","live":false},{"g":10,"d":"22/11","h":"Venturina","a":"S.Vincenzo","r":"","live":false},{"g":11,"d":"29/11","h":"Capannoli S.B.","a":"Rosignano S.","r":"","live":false},{"g":11,"d":"29/11","h":"Colli Maritt.","a":"Selvatelle","r":"","live":false},{"g":11,"d":"29/11","h":"Donoratico","a":"Vada","r":"","live":false},{"g":11,"d":"29/11","h":"Monterotondo","a":"Atl. Etruria","r":"","live":false},{"g":11,"d":"29/11","h":"P.Terricciola","a":"Crespina Cal.","r":"","live":false},{"g":11,"d":"29/11","h":"Pecciolese","a":"Venturina","r":"","live":false},{"g":11,"d":"29/11","h":"Pomarance","a":"Acciaiolo Cal.","r":"","live":false},{"g":11,"d":"29/11","h":"S.Vincenzo","a":"A.Isola d'Elba","r":"","live":false},{"g":12,"d":"06/12","h":"A.Isola d'Elba","a":"Monterotondo","r":"","live":false},{"g":12,"d":"06/12","h":"Acciaiolo Cal.","a":"Pecciolese","r":"","live":false},{"g":12,"d":"06/12","h":"Capannoli S.B.","a":"Colli Maritt.","r":"","live":false},{"g":12,"d":"06/12","h":"Crespina Cal.","a":"Atl. Etruria","r":"","live":false},{"g":12,"d":"06/12","h":"Rosignano S.","a":"S.Vincenzo","r":"","live":false},{"g":12,"d":"06/12","h":"Selvatelle","a":"P.Terricciola","r":"","live":false},{"g":12,"d":"06/12","h":"Vada","a":"Pomarance","r":"","live":false},{"g":12,"d":"06/12","h":"Venturina","a":"Donoratico","r":"","live":false},{"g":13,"d":"13/12","h":"Atl. Etruria","a":"Vada","r":"","live":false},{"g":13,"d":"13/12","h":"Colli Maritt.","a":"Acciaiolo Cal.","r":"","live":false},{"g":13,"d":"13/12","h":"Donoratico","a":"A.Isola d'Elba","r":"","live":false},{"g":13,"d":"13/12","h":"Monterotondo","a":"Crespina Cal.","r":"","live":false},{"g":13,"d":"13/12","h":"P.Terricciola","a":"Venturina","r":"","live":false},{"g":13,"d":"13/12","h":"Pecciolese","a":"Rosignano S.","r":"","live":false},{"g":13,"d":"13/12","h":"Pomarance","a":"Capannoli S.B.","r":"","live":false},{"g":13,"d":"13/12","h":"S.Vincenzo","a":"Selvatelle","r":"","live":false},{"g":14,"d":"20/12","h":"A.Isola d'Elba","a":"Vada","r":"","live":false},{"g":14,"d":"20/12","h":"Acciaiolo Cal.","a":"P.Terricciola","r":"","live":false},{"g":14,"d":"20/12","h":"Capannoli S.B.","a":"S.Vincenzo","r":"","live":false},{"g":14,"d":"20/12","h":"Colli Maritt.","a":"Pecciolese","r":"","live":false},{"g":14,"d":"20/12","h":"Crespina Cal.","a":"Pomarance","r":"","live":false},{"g":14,"d":"20/12","h":"Rosignano S.","a":"Donoratico","r":"","live":false},{"g":14,"d":"20/12","h":"Selvatelle","a":"Monterotondo","r":"","live":false},{"g":14,"d":"20/12","h":"Venturina","a":"Atl. Etruria","r":"","live":false},{"g":15,"d":"03/01","h":"Atl. Etruria","a":"A.Isola d'Elba","r":"","live":false},{"g":15,"d":"03/01","h":"Donoratico","a":"Selvatelle","r":"","live":false},{"g":15,"d":"03/01","h":"Monterotondo","a":"Venturina","r":"","live":false},{"g":15,"d":"03/01","h":"P.Terricciola","a":"Rosignano S.","r":"","live":false},{"g":15,"d":"03/01","h":"Pecciolese","a":"Capannoli S.B.","r":"","live":false},{"g":15,"d":"03/01","h":"Pomarance","a":"Colli Maritt.","r":"","live":false},{"g":15,"d":"03/01","h":"S.Vincenzo","a":"Acciaiolo Cal.","r":"","live":false},{"g":15,"d":"03/01","h":"Vada","a":"Crespina Cal.","r":"","live":false},{"g":16,"d":"10/01","h":"Atl. Etruria","a":"Rosignano S.","r":"","live":false},{"g":16,"d":"10/01","h":"Crespina Cal.","a":"Venturina","r":"","live":false},{"g":16,"d":"10/01","h":"Donoratico","a":"Capannoli S.B.","r":"","live":false},{"g":16,"d":"10/01","h":"Monterotondo","a":"Acciaiolo Cal.","r":"","live":false},{"g":16,"d":"10/01","h":"P.Terricciola","a":"Colli Maritt.","r":"","live":false},{"g":16,"d":"10/01","h":"Pomarance","a":"A.Isola d'Elba","r":"","live":false},{"g":16,"d":"10/01","h":"S.Vincenzo","a":"Pecciolese","r":"","live":false},{"g":16,"d":"10/01","h":"Vada","a":"Selvatelle","r":"","live":false},{"g":17,"d":"17/01","h":"A.Isola d'Elba","a":"Crespina Cal.","r":"","live":false},{"g":17,"d":"17/01","h":"Acciaiolo Cal.","a":"Donoratico","r":"","live":false},{"g":17,"d":"17/01","h":"Capannoli S.B.","a":"P.Terricciola","r":"","live":false},{"g":17,"d":"17/01","h":"Colli Maritt.","a":"S.Vincenzo","r":"","live":false},{"g":17,"d":"17/01","h":"Pecciolese","a":"Pomarance","r":"","live":false},{"g":17,"d":"17/01","h":"Rosignano S.","a":"Monterotondo","r":"","live":false},{"g":17,"d":"17/01","h":"Selvatelle","a":"Atl. Etruria","r":"","live":false},{"g":17,"d":"17/01","h":"Venturina","a":"Vada","r":"","live":false},{"g":18,"d":"24/01","h":"A.Isola d'Elba","a":"Venturina","r":"","live":false},{"g":18,"d":"24/01","h":"Atl. Etruria","a":"Acciaiolo Cal.","r":"","live":false},{"g":18,"d":"24/01","h":"Crespina Cal.","a":"Selvatelle","r":"","live":false},{"g":18,"d":"24/01","h":"Donoratico","a":"Colli Maritt.","r":"","live":false},{"g":18,"d":"24/01","h":"Monterotondo","a":"Capannoli S.B.","r":"","live":false},{"g":18,"d":"24/01","h":"P.Terricciola","a":"Pecciolese","r":"","live":false},{"g":18,"d":"24/01","h":"S.Vincenzo","a":"Pomarance","r":"","live":false},{"g":18,"d":"24/01","h":"Vada","a":"Rosignano S.","r":"","live":false},{"g":19,"d":"31/01","h":"Acciaiolo Cal.","a":"Crespina Cal.","r":"","live":false},{"g":19,"d":"31/01","h":"Capannoli S.B.","a":"Vada","r":"","live":false},{"g":19,"d":"31/01","h":"Colli Maritt.","a":"Atl. Etruria","r":"","live":false},{"g":19,"d":"31/01","h":"Pecciolese","a":"Monterotondo","r":"","live":false},{"g":19,"d":"31/01","h":"Pomarance","a":"P.Terricciola","r":"","live":false},{"g":19,"d":"31/01","h":"Rosignano S.","a":"A.Isola d'Elba","r":"","live":false},{"g":19,"d":"31/01","h":"S.Vincenzo","a":"Donoratico","r":"","live":false},{"g":19,"d":"31/01","h":"Selvatelle","a":"Venturina","r":"","live":false},{"g":20,"d":"07/02","h":"A.Isola d'Elba","a":"Selvatelle","r":"","live":false},{"g":20,"d":"07/02","h":"Atl. Etruria","a":"Capannoli S.B.","r":"","live":false},{"g":20,"d":"07/02","h":"Crespina Cal.","a":"Rosignano S.","r":"","live":false},{"g":20,"d":"07/02","h":"Donoratico","a":"Pecciolese","r":"","live":false},{"g":20,"d":"07/02","h":"Monterotondo","a":"Colli Maritt.","r":"","live":false},{"g":20,"d":"07/02","h":"P.Terricciola","a":"S.Vincenzo","r":"","live":false},{"g":20,"d":"07/02","h":"Vada","a":"Acciaiolo Cal.","r":"","live":false},{"g":20,"d":"07/02","h":"Venturina","a":"Pomarance","r":"","live":false},{"g":21,"d":"14/02","h":"Acciaiolo Cal.","a":"Venturina","r":"","live":false},{"g":21,"d":"14/02","h":"Capannoli S.B.","a":"A.Isola d'Elba","r":"","live":false},{"g":21,"d":"14/02","h":"Colli Maritt.","a":"Crespina Cal.","r":"","live":false},{"g":21,"d":"14/02","h":"P.Terricciola","a":"Monterotondo","r":"","live":false},{"g":21,"d":"14/02","h":"Pecciolese","a":"Vada","r":"","live":false},{"g":21,"d":"14/02","h":"Pomarance","a":"Donoratico","r":"","live":false},{"g":21,"d":"14/02","h":"Rosignano S.","a":"Selvatelle","r":"","live":false},{"g":21,"d":"14/02","h":"S.Vincenzo","a":"Atl. Etruria","r":"","live":false},{"g":22,"d":"21/02","h":"A.Isola d'Elba","a":"Acciaiolo Cal.","r":"","live":false},{"g":22,"d":"21/02","h":"Atl. Etruria","a":"Pecciolese","r":"","live":false},{"g":22,"d":"21/02","h":"Crespina Cal.","a":"Capannoli S.B.","r":"","live":false},{"g":22,"d":"21/02","h":"Donoratico","a":"P.Terricciola","r":"","live":false},{"g":22,"d":"21/02","h":"Monterotondo","a":"S.Vincenzo","r":"","live":false},{"g":22,"d":"21/02","h":"Selvatelle","a":"Pomarance","r":"","live":false},{"g":22,"d":"21/02","h":"Vada","a":"Colli Maritt.","r":"","live":false},{"g":22,"d":"21/02","h":"Venturina","a":"Rosignano S.","r":"","live":false},{"g":23,"d":"28/02","h":"Acciaiolo Cal.","a":"Rosignano S.","r":"","live":false},{"g":23,"d":"28/02","h":"Capannoli S.B.","a":"Selvatelle","r":"","live":false},{"g":23,"d":"28/02","h":"Colli Maritt.","a":"Venturina","r":"","live":false},{"g":23,"d":"28/02","h":"Donoratico","a":"Atl. Etruria","r":"","live":false},{"g":23,"d":"28/02","h":"P.Terricciola","a":"Vada","r":"","live":false},{"g":23,"d":"28/02","h":"Pecciolese","a":"A.Isola d'Elba","r":"","live":false},{"g":23,"d":"28/02","h":"Pomarance","a":"Monterotondo","r":"","live":false},{"g":23,"d":"28/02","h":"S.Vincenzo","a":"Crespina Cal.","r":"","live":false},{"g":24,"d":"07/03","h":"A.Isola d'Elba","a":"Colli Maritt.","r":"","live":false},{"g":24,"d":"07/03","h":"Atl. Etruria","a":"P.Terricciola","r":"","live":false},{"g":24,"d":"07/03","h":"Crespina Cal.","a":"Pecciolese","r":"","live":false},{"g":24,"d":"07/03","h":"Monterotondo","a":"Donoratico","r":"","live":false},{"g":24,"d":"07/03","h":"Rosignano S.","a":"Pomarance","r":"","live":false},{"g":24,"d":"07/03","h":"Selvatelle","a":"Acciaiolo Cal.","r":"","live":false},{"g":24,"d":"07/03","h":"Vada","a":"S.Vincenzo","r":"","live":false},{"g":24,"d":"07/03","h":"Venturina","a":"Capannoli S.B.","r":"","live":false},{"g":25,"d":"14/03","h":"Capannoli S.B.","a":"Acciaiolo Cal.","r":"","live":false},{"g":25,"d":"14/03","h":"Colli Maritt.","a":"Rosignano S.","r":"","live":false},{"g":25,"d":"14/03","h":"Donoratico","a":"Crespina Cal.","r":"","live":false},{"g":25,"d":"14/03","h":"Monterotondo","a":"Vada","r":"","live":false},{"g":25,"d":"14/03","h":"P.Terricciola","a":"A.Isola d'Elba","r":"","live":false},{"g":25,"d":"14/03","h":"Pecciolese","a":"Selvatelle","r":"","live":false},{"g":25,"d":"14/03","h":"Pomarance","a":"Atl. Etruria","r":"","live":false},{"g":25,"d":"14/03","h":"S.Vincenzo","a":"Venturina","r":"","live":false},{"g":26,"d":"04/04","h":"A.Isola d'Elba","a":"S.Vincenzo","r":"","live":false},{"g":26,"d":"04/04","h":"Acciaiolo Cal.","a":"Pomarance","r":"","live":false},{"g":26,"d":"04/04","h":"Atl. Etruria","a":"Monterotondo","r":"","live":false},{"g":26,"d":"04/04","h":"Crespina Cal.","a":"P.Terricciola","r":"","live":false},{"g":26,"d":"04/04","h":"Rosignano S.","a":"Capannoli S.B.","r":"","live":false},{"g":26,"d":"04/04","h":"Selvatelle","a":"Colli Maritt.","r":"","live":false},{"g":26,"d":"04/04","h":"Vada","a":"Donoratico","r":"","live":false},{"g":26,"d":"04/04","h":"Venturina","a":"Pecciolese","r":"","live":false},{"g":27,"d":"11/04","h":"Atl. Etruria","a":"Crespina Cal.","r":"","live":false},{"g":27,"d":"11/04","h":"Colli Maritt.","a":"Capannoli S.B.","r":"","live":false},{"g":27,"d":"11/04","h":"Donoratico","a":"Venturina","r":"","live":false},{"g":27,"d":"11/04","h":"Monterotondo","a":"A.Isola d'Elba","r":"","live":false},{"g":27,"d":"11/04","h":"P.Terricciola","a":"Selvatelle","r":"","live":false},{"g":27,"d":"11/04","h":"Pecciolese","a":"Acciaiolo Cal.","r":"","live":false},{"g":27,"d":"11/04","h":"Pomarance","a":"Vada","r":"","live":false},{"g":27,"d":"11/04","h":"S.Vincenzo","a":"Rosignano S.","r":"","live":false},{"g":28,"d":"18/04","h":"A.Isola d'Elba","a":"Donoratico","r":"","live":false},{"g":28,"d":"18/04","h":"Acciaiolo Cal.","a":"Colli Maritt.","r":"","live":false},{"g":28,"d":"18/04","h":"Capannoli S.B.","a":"Pomarance","r":"","live":false},{"g":28,"d":"18/04","h":"Crespina Cal.","a":"Monterotondo","r":"","live":false},{"g":28,"d":"18/04","h":"Rosignano S.","a":"Pecciolese","r":"","live":false},{"g":28,"d":"18/04","h":"Selvatelle","a":"S.Vincenzo","r":"","live":false},{"g":28,"d":"18/04","h":"Vada","a":"Atl. Etruria","r":"","live":false},{"g":28,"d":"18/04","h":"Venturina","a":"P.Terricciola","r":"","live":false},{"g":29,"d":"25/04","h":"Atl. Etruria","a":"Venturina","r":"","live":false},{"g":29,"d":"25/04","h":"Donoratico","a":"Rosignano S.","r":"","live":false},{"g":29,"d":"25/04","h":"Monterotondo","a":"Selvatelle","r":"","live":false},{"g":29,"d":"25/04","h":"P.Terricciola","a":"Acciaiolo Cal.","r":"","live":false},{"g":29,"d":"25/04","h":"Pecciolese","a":"Colli Maritt.","r":"","live":false},{"g":29,"d":"25/04","h":"Pomarance","a":"Crespina Cal.","r":"","live":false},{"g":29,"d":"25/04","h":"S.Vincenzo","a":"Capannoli S.B.","r":"","live":false},{"g":29,"d":"25/04","h":"Vada","a":"A.Isola d'Elba","r":"","live":false},{"g":30,"d":"02/05","h":"A.Isola d'Elba","a":"Atl. Etruria","r":"","live":false},{"g":30,"d":"02/05","h":"Acciaiolo Cal.","a":"S.Vincenzo","r":"","live":false},{"g":30,"d":"02/05","h":"Capannoli S.B.","a":"Pecciolese","r":"","live":false},{"g":30,"d":"02/05","h":"Colli Maritt.","a":"Pomarance","r":"","live":false},{"g":30,"d":"02/05","h":"Crespina Cal.","a":"Vada","r":"","live":false},{"g":30,"d":"02/05","h":"Rosignano S.","a":"P.Terricciola","r":"","live":false},{"g":30,"d":"02/05","h":"Selvatelle","a":"Donoratico","r":"","live":false},{"g":30,"d":"02/05","h":"Venturina","a":"Monterotondo","r":"","live":false}],"table":[{"team":"Acciaiolo Cal.","pt":18,"g":7,"v":6,"n":0,"p":1,"gf":11,"gs":4},{"team":"Capannoli S.B.","pt":16,"g":7,"v":5,"n":1,"p":1,"gf":12,"gs":5},{"team":"Pomarance","pt":14,"g":7,"v":4,"n":2,"p":1,"gf":7,"gs":4},{"team":"Rosignano S.","pt":13,"g":7,"v":4,"n":1,"p":2,"gf":15,"gs":6},{"team":"Selvatelle","pt":12,"g":7,"v":3,"n":3,"p":1,"gf":9,"gs":5},{"team":"Venturina","pt":11,"g":7,"v":3,"n":2,"p":2,"gf":8,"gs":8},{"team":"Pecciolese","pt":10,"g":7,"v":2,"n":4,"p":1,"gf":10,"gs":6},{"team":"S.Vincenzo","pt":10,"g":7,"v":2,"n":4,"p":1,"gf":5,"gs":3},{"team":"Donoratico","pt":8,"g":7,"v":2,"n":2,"p":3,"gf":8,"gs":8},{"team":"P.Terricciola","pt":8,"g":7,"v":2,"n":2,"p":3,"gf":7,"gs":10},{"team":"Atl. Etruria","pt":7,"g":7,"v":2,"n":1,"p":4,"gf":7,"gs":11},{"team":"Vada","pt":7,"g":7,"v":2,"n":1,"p":4,"gf":6,"gs":10},{"team":"Colli Maritt.","pt":6,"g":7,"v":1,"n":3,"p":3,"gf":11,"gs":14},{"team":"Crespina Cal.","pt":6,"g":7,"v":1,"n":3,"p":3,"gf":5,"gs":9},{"team":"A.Isola d'Elba","pt":3,"g":7,"v":0,"n":3,"p":4,"gf":7,"gs":15},{"team":"Monterotondo","pt":2,"g":7,"v":0,"n":2,"p":5,"gf":8,"gs":18}]};
+const SNAPTIME="7 nov 2026, 17:35";
+const SNAPISO="2026-11-07T17:35:56.030461+01:00";
+const CAL_URL="https://www.toscanagol.it/calendario-campionato/toscana/prima-categoria-girone-d-000041042026/2027/";
+const TAB_URL="https://www.toscanagol.it/classifica/toscana/prima-categoria-girone-d-000041042026/2027/";
+const ORARI={"8":"14:30"};
+const NOMI={"Acciaiolo Cal.":"Acciaiolo","Capannoli S.B.":"Capannoli S. B.","Rosignano S.":"Rosignano Solvay","S.Vincenzo":"San Vincenzo","P.Terricciola":"Terricciola","Atl. Etruria":"Atletico Etruria","Colli Maritt.":"Colli Marittimi","Crespina Cal.":"Crespina","A.Isola d'Elba":"Audace Isola d'Elba"};
+const MIA="Selvatelle";
+const KEY="tabellone-primaD-2026";
+const $=id=>document.getElementById(id);
+const nome=t=>NOMI[t]||t;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MESI=["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
+const GIORNI=["dom","lun","mar","mer","gio","ven","sab"];
+function dataDi(d,ora){const m=/^(\d{1,2})\/(\d{1,2})$/.exec(d||"");if(!m)return null;const mm=+m[2],y=mm>=7?2026:2027;const [h,mi]=(ora||"14:30").split(":").map(Number);return new Date(y,mm-1,+m[1],h,mi);}
+function fmtGiorno(dt){return GIORNI[dt.getDay()]+" "+dt.getDate()+" "+MESI[dt.getMonth()];}
+function fmtOra(dt){return String(dt.getHours()).padStart(2,"0")+":"+String(dt.getMinutes()).padStart(2,"0");}
+function fmtTs(dt){return dt.getDate()+" "+MESI[dt.getMonth()]+" "+dt.getFullYear()+", "+fmtOra(dt);}
+const isScore=r=>/^\d+\s*-\s*\d+$/.test(r||"");
+
+function parseCal(html){const doc=new DOMParser().parseFromString(html,"text/html");const out=[];
+ let g=0;doc.querySelectorAll("table.giornata_tbl b, table.giornata_tbl tr").forEach(el=>{if(el.tagName==="B"){const m=/(\d+)\s*Giornata/i.exec(el.textContent);if(m)g=+m[1];return;}
+  {const tr=el;if(!g)return;const tds=[...tr.children].filter(x=>x.tagName==="TD");if(tds.length<3)return;const sq=tds[1].querySelectorAll("a.classifica-squadra");if(sq.length!==2)return;
+   const a=tds[2].querySelector("a");let r=a?a.textContent.replace(/\s+/g," ").trim():"";const st=(a&&a.getAttribute("style")||"").toLowerCase();
+   const live=/color:\s*(red|#f00\b|#ff0000|#e00|#c00|#d00)/.test(st);
+   out.push({g,d:tds[0].textContent.trim(),h:sq[0].textContent.trim(),a:sq[1].textContent.trim(),r:r,live});}});
+ if(out.length<200)throw new Error("calendario incompleto ("+out.length+" partite)");return out;}
+function parseTab(html){const doc=new DOMParser().parseFromString(html,"text/html");const rows=[...doc.querySelectorAll("tr.classifica_riga")];const out=rows.map(tr=>{const td=[...tr.children].map(x=>x.textContent.trim());return {team:td[1],pt:+td[3],g:+td[4],v:+td[5],n:+td[6],p:+td[7],gf:+td[8],gs:+td[9]};});
+ if(out.length<10||out.some(x=>!x.team||[x.pt,x.g,x.v,x.n,x.p].some(isNaN)))throw new Error("classifica non leggibile");return out;}
+function calcola(cal){const T={};const add=t=>T[t]||(T[t]={team:t,pt:0,g:0,v:0,n:0,p:0,gf:0,gs:0});
+ cal.forEach(c=>{add(c.h);add(c.a);if(!isScore(c.r)||c.live)return;const [x,y]=c.r.split("-").map(s=>+s.trim());[[c.h,x,y],[c.a,y,x]].forEach(([t,f,s])=>{const o=T[t];o.g++;o.gf+=f;o.gs+=s;if(f>s){o.v++;o.pt+=3}else if(f===s){o.n++;o.pt+=1}else o.p++;});});
+ return Object.values(T).sort((a,b)=>b.pt-a.pt||(b.gf-b.gs)-(a.gf-a.gs)||b.gf-a.gf||a.team.localeCompare(b.team));}
+async function leggi(url){const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),25000);
+ try{const r=await fetch("https://r.jina.ai/"+url,{headers:{"X-Return-Format":"html","X-No-Cache":"true"},signal:ctl.signal});if(!r.ok)throw new Error("risposta "+r.status);return await r.text();}finally{clearTimeout(to);}}
+
+let D=null, cur=null;
+function giornate(){const m={};D.cal.forEach(c=>{(m[c.g]=m[c.g]||[]).push(c)});return m;}
+function dataGiornata(list){const cnt={};list.forEach(c=>cnt[c.d]=(cnt[c.d]||0)+1);return Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];}
+function giornataCorrente(G){const now=new Date();let best=1;Object.keys(G).map(Number).sort((a,b)=>a-b).forEach(g=>{const dt=dataDi(dataGiornata(G[g]));if(dt&&dt.getTime()<=now.getTime()+3*864e5)best=g;});return best;}
+function stato(c){const dt=dataDi(c.d,ORARI[c.g]);const now=Date.now();
+ if(isScore(c.r)&&c.live)return {gol:c.r.split("-").map(s=>s.trim()),note:"Risultato parziale, partita in corso o non ancora confermata"};
+ if(isScore(c.r))return {gol:c.r.split("-").map(s=>s.trim()),note:""};
+ if(c.r&&c.r!=="-")return {gol:["",""],note:"Indicazione della fonte: "+c.r};
+ if(dt&&now>dt.getTime()+2.5*36e5)return {gol:["",""],note:"Data passata: risultato non ancora pubblicato dalla fonte, oppure partita rinviata"};
+ if(dt&&now>dt.getTime())return {gol:["",""],note:"Si sta giocando o è appena finita: risultato non ancora disponibile"};
+ return {gol:["–","–"],note:""};}
+function riga(c,main){const s=stato(c);const dt=dataDi(c.d,ORARI[c.g]);let when=dt?fmtGiorno(dt):c.d;if(ORARI[c.g]&&dt)when+=", "+fmtOra(dt);if(main&&c.d!==main)when+=" · data diversa dal resto della giornata";
+ const mine=(c.h===MIA||c.a===MIA)?" mine":"";
+ return '<div class="match'+mine+'"><span class="when">'+esc(when)+'</span><span class="team">'+esc(nome(c.h))+'</span><span class="gol">'+esc(s.gol[0])+'</span><span class="team">'+esc(nome(c.a))+'</span><span class="gol">'+esc(s.gol[1])+'</span>'+(s.note?'<span class="note">'+esc(s.note)+'</span>':'')+'</div>';}
+function mostraGiornata(){const G=giornate();const keys=Object.keys(G).map(Number).sort((a,b)=>a-b);if(cur==null)cur=giornataCorrente(G);const list=G[cur]||[];const main=list.length?dataGiornata(list):"";const dt=dataDi(main);
+ const fatte=list.filter(c=>isScore(c.r)&&!c.live).length;
+ $("gtitle").textContent=cur+"ª giornata"+(dt?", "+fmtGiorno(dt):"");
+ $("gsub").textContent=fatte+" risultati su "+list.length+" partite"+(ORARI[cur]?"":". Orari non indicati dalla fonte");
+ $("partite").innerHTML=list.map(c=>riga(c,main)).join("");
+ $("prev").disabled=cur<=keys[0];$("next").disabled=cur>=keys[keys.length-1];
+ const oggi=Date.now();const rec=D.cal.filter(c=>c.g<cur&&!isScore(c.r)&&(()=>{const d=dataDi(c.d);return d&&d.getTime()<oggi})());
+ $("recuperi").innerHTML=rec.length?'<p class="gtitle">Recuperi e risultati mancanti</p><p class="gsub">Partite di giornate passate ancora senza risultato.</p>'+rec.map(c=>riga(Object.assign({},c),null)).join(""):"";}
+function mostraClassifica(){const t=D.table;$("cbody").innerHTML=t.map((r,i)=>'<tr'+(r.team===MIA?' class="mine"':'')+'><td>'+(i+1)+'</td><td class="sq">'+esc(nome(r.team))+'</td><td class="pt">'+r.pt+'</td><td>'+r.g+'</td><td>'+r.v+'</td><td>'+r.n+'</td><td>'+r.p+'</td></tr>').join("");
+ $("csub").textContent=D.tableNote;}
+function disegna(){mostraGiornata();mostraClassifica();}
+function setStato(cls,tit,txt){const s=$("stato");s.className=cls;s.innerHTML="<b>"+esc(tit)+"</b>"+esc(txt);}
+function controllo(cal,tab){const c=calcola(cal);const diff=tab.filter(r=>{const x=c.find(y=>y.team===r.team);return !x||x.pt!==r.pt||x.g!==r.g;});return diff.length?"Attenzione: per "+diff.map(r=>nome(r.team)).join(", ")+" la classifica di Toscanagol non coincide con i risultati (penalità o dati non ancora allineati).":"";}
+function usa(src){D={cal:src.cal,table:src.table||calcola(src.cal),tableNote:""};
+ D.tableNote=(src.table?"Classifica di Toscanagol":"Classifica calcolata dai risultati, a parità di punti per differenza reti")+", "+src.label+"."+(src.table?" "+controllo(src.cal,src.table):"");disegna();}
+
+async function aggiorna(){setStato("","Aggiornamento in corso…","Sto leggendo risultati e classifica da Toscanagol.");$("aggiorna").disabled=true;
+ const [rc,rt]=await Promise.allSettled([leggi(CAL_URL).then(parseCal),leggi(TAB_URL).then(parseTab)]);$("aggiorna").disabled=false;
+ const ora=new Date();
+ if(rc.status==="fulfilled"){const tab=rt.status==="fulfilled"?rt.value:null;const pack={cal:rc.value,table:tab,ts:ora.toISOString()};try{localStorage.setItem(KEY,JSON.stringify(pack))}catch(e){}
+  usa({cal:pack.cal,table:tab,label:"letta alle "+fmtOra(ora)});
+  setStato("","Aggiornato il "+fmtTs(ora),tab?"Risultati e classifica letti adesso da Toscanagol.":"Risultati letti adesso da Toscanagol. La classifica non è arrivata, quindi è calcolata dai risultati.");return;}
+ let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ const err=rc.reason&&rc.reason.message?rc.reason.message:"errore";
+ if(saved&&saved.cal&&new Date(saved.ts)>new Date(SNAPISO)){const t=new Date(saved.ts);usa({cal:saved.cal,table:saved.table,label:"del "+fmtTs(t)});setStato("vecchio","NON aggiornato: dati del "+fmtTs(t),"La lettura di adesso non è riuscita ("+err+"). Ti mostro l'ultima lettura riuscita su questo telefono. Riprova con «Aggiorna adesso».");return;}
+ usa({cal:SNAP.cal,table:SNAP.table,label:"del "+SNAPTIME});setStato("vecchio","NON aggiornato: dati del "+SNAPTIME,"La lettura di adesso non è riuscita ("+err+"). Ti mostro i dati salvati quando è stata fatta la pagina. Riprova con «Aggiorna adesso».");}
+$("prev").onclick=()=>{cur--;mostraGiornata();};$("next").onclick=()=>{cur++;mostraGiornata();};$("aggiorna").onclick=aggiorna;
+usa({cal:SNAP.cal,table:SNAP.table,label:"del "+SNAPTIME});aggiorna();
+})();
+</script>
+</body></html>
