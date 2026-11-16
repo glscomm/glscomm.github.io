@@ -177,10 +177,24 @@ html body #classifica tbody tr:nth-child(even){background:#f3ead8}
 html body #classifica tbody tr.mine{background:#fffdf8}
 html body .kicker,html body .updated,html body .lede,html body .gtitle,html body .gsub,html body .legenda,html body .sources{background:rgba(255,253,248,.94);border-radius:4px}
 html body h1,html body h2{text-shadow:0 1px 2px #fff,0 0 8px #fff}
+/* Rilievo 3D accentuato (16 nov 2026): solo ombre, luci e bordo inferiore in ombra; colori, testi, misure e disposizione invariati. */
+html body .match,html body .match.mine{box-shadow:inset 0 2px 0 #fff,inset 0 -3px 0 rgba(31,54,114,.10),0 3px 0 #b7c2dd,0 4px 3px rgba(31,54,114,.30),0 10px 18px rgba(31,54,114,.24)}
+html body .match.mine{box-shadow:inset 0 2px 0 #fff,inset 0 -3px 0 rgba(31,54,114,.12),0 3px 0 #1f3672,0 4px 3px rgba(31,54,114,.38),0 10px 18px rgba(31,54,114,.28)}
+html body #stato{box-shadow:inset 0 2px 0 #fff,0 3px 0 #b7c2dd,0 4px 3px rgba(31,54,114,.26),0 10px 18px rgba(31,54,114,.20)}
+html body .btnrow button{box-shadow:inset 0 2px 0 #fff,inset 0 -4px 0 rgba(31,54,114,.14),0 3px 0 #8e9fcb,0 5px 8px rgba(31,54,114,.28);transition:box-shadow .1s,transform .1s}
+html body .btnrow button:active:not(:disabled){transform:translateY(3px);box-shadow:inset 0 3px 6px rgba(31,54,114,.25)}
+html body #aggiorna{box-shadow:inset 0 2px 0 rgba(255,255,255,.30),inset 0 -4px 0 rgba(0,0,0,.22),0 3px 0 #14244d,0 5px 9px rgba(31,54,114,.40);transition:box-shadow .1s,transform .1s}
+html body #aggiorna:active{transform:translateY(3px);box-shadow:inset 0 3px 7px rgba(0,0,0,.35)}
+html body #classifica{box-shadow:0 3px 0 #b7c2dd,0 4px 3px rgba(31,54,114,.30),0 12px 22px rgba(31,54,114,.26)}
+html body #classifica th{box-shadow:inset 0 2px 0 #fff,inset 0 -1px 0 rgba(31,54,114,.15)}
+html body .kicker,html body .updated,html body .lede,html body .gtitle,html body .gsub,html body .legenda,html body .sources{box-shadow:0 1px 0 #c9d1e6,0 3px 8px rgba(31,54,114,.16)}
+/* Titolo (16 nov 2026): carattere +10% (inline 110% -> 121%), piu' stacco prima di "Calcio dilettanti", rilievo leggermente piu' marcato sulle lettere dei titoli. */
+html body h1+.kicker{margin-top:16px}
+html body h1,html body h2{text-shadow:0 1px 0 #fff,0 2px 0 #c9d1e6,0 3px 4px rgba(31,54,114,.30),0 0 8px #fff}
 </style>
 </head>
 <body><div class="wrap">
-<h1><span style="font-size:110%">Prima Categoria Toscana, girone D</span></h1>
+<h1><span style="font-size:121%">Prima Categoria Toscana, girone D</span></h1>
 <p class="kicker">Calcio dilettanti, stagione 2026/2027</p>
 <p class="updated">Stile aggiornato il 7 nov 2026, 18:12. Dati iniziali letti il 7 nov 2026, 17:35.</p>
 <div id="stato"><b>Aggiornamento in corso…</b>Sto leggendo risultati e classifica da Toscanagol.</div>
